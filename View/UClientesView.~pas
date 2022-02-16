@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, ComCtrls, StdCtrls, ExtCtrls, Buttons, Mask, UEnumerationUtil,
-  UCliente;
+  UCliente , UPessoaController;
 
 type
   TfrmClientes = class(TForm)
@@ -336,9 +336,10 @@ begin
      if ProcessaCliente then
      begin
        TMessageUtil.Informacao('Cliente cadastrado com sucesso.'#13+
-       'Código cadastrado: ');
+       'Código cadastrado: '+ IntToStr(vObjCliente.Id));
 
        vEstadoTela := etPadrao;
+       DefineEstadoTela;
        DefineEstadoTela;
 
        Result  := True;
@@ -362,7 +363,7 @@ begin
       (ProcessaEndereco) then
       begin
           // Gravação no BD
-          
+          TPessoaController.getInstancia.GravaPessoa(vObjCliente);
 
           Result := True;
       end;

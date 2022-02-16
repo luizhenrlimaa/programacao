@@ -78,6 +78,9 @@ type
 
    function ProcessaPessoa      : Boolean;
    function ProcessaEndereco    : Boolean;
+
+   function ValidaCliente       : Boolean;
+
   public
     { Public declarations }
   end;
@@ -383,8 +386,8 @@ begin
      try
        Result := False;
 
-//       if not ValidaCliente then
-//            Exit;
+     if not ValidaCliente then
+            Exit;
 
       if vEstadoTela = etIncluir then
       begin
@@ -423,7 +426,7 @@ end;
 function TfrmClientes.ProcessaEndereco: Boolean;
 begin
     try
-      Result := False;
+//      Result := False;
 
 
       Result := True;
@@ -436,6 +439,22 @@ begin
       end;
 
     end;
+end;
+
+function TfrmClientes.ValidaCliente: Boolean;
+begin
+   Result := False;
+
+   if (edtNome.Text = EmptyStr)  then
+   begin
+     TMessageUtil.Alerta('Nome do cliente não pode ficar em branco.');
+
+     if edtNome.CanFocus  then
+        edtNome.SetFocus;
+
+     Exit;
+   end;
+   Result := True;
 end;
 
 end.
