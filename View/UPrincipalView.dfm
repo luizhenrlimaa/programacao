@@ -1,7 +1,7 @@
 object frmPrincipal: TfrmPrincipal
-  Left = 2348
-  Top = 157
-  Width = 782
+  Left = 198
+  Top = 128
+  Width = 1151
   Height = 747
   Caption = 'Novo Sistema'
   Color = clBtnFace
@@ -21,7 +21,7 @@ object frmPrincipal: TfrmPrincipal
   object imgLogo: TImage
     Left = 0
     Top = 0
-    Width = 766
+    Width = 1135
     Height = 658
     Align = alClient
     Center = True
@@ -855,7 +855,7 @@ object frmPrincipal: TfrmPrincipal
   object stbBarraStatus: TStatusBar
     Left = 0
     Top = 658
-    Width = 766
+    Width = 1135
     Height = 30
     Panels = <
       item

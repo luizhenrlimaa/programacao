@@ -58,6 +58,7 @@ type
     procedure FormShow(Sender: TObject);
     procedure FormKeyUp(Sender: TObject; var Key: Word;
       Shift: TShiftState);
+    procedure edtCodigoExit(Sender: TObject);
 
 
   private
@@ -77,6 +78,7 @@ type
    procedure carregaDadosTela;
 
    function ProcessaConfirmacao : Boolean;
+   function ProcessaAlteracao   : Boolean;
    function ProcessaInclusao    : Boolean;
    function ProcessaConsulta    : Boolean;
    function ProcessaCliente     : Boolean;
@@ -235,6 +237,33 @@ begin
          edtNome.SetFocus;
     end;
 
+    etAlterar:
+    begin
+      stbBarraStatus.Panels[0].Text := 'Alteração';
+
+      if (edtCodigo.Text <> EmptyStr) then
+     begin
+        CamposEnabled(True);
+
+        edtCodigo.Enabled      := False;
+        btnAlterar.Enabled     := False;
+        btnConfirmar.Enabled   := True;
+
+
+      if (chkAtivo.CanFocus) then
+          chkAtivo.SetFocus;
+     end
+    else
+     begin
+
+       lblCodigo.Enabled := True;
+       edtCodigo.Enabled := True;
+
+       if(edtCodigo.CanFocus) then
+          edtCodigo.SetFocus;
+     end;
+    end;
+
     etConsultar:
     begin
      stbBarraStatus.Panels[0].Text := 'Consulta';
@@ -353,6 +382,7 @@ begin
   try
       case vEstadoTela of
         etIncluir:   Result := ProcessaInclusao;
+        etAlterar:   Result := ProcessaAlteracao;
         etConsultar: Result := ProcessaConsulta;
       end;
 
@@ -553,6 +583,42 @@ begin
   edtCPFCNPJ.Text         := vObjCliente.IdentificadorPessoa;
  end;
  end;
+function TfrmClientes.ProcessaAlteracao: Boolean;
+begin
+  try
+    Result := False;
+
+    if ProcessaCliente then
+    begin
+      TMessageUtil.Informacao('Dados alterados com sucesso.');
+
+      vEstadoTela := etPadrao;
+      DefineEstadoTela;
+      Result := True;
+
+    end;
+
+  except
+     on E:Exception do
+      begin
+        Raise Exception.Create(
+        'Falha ao alterar os dados do cliente [View]: '#13+
+        e.Message);
+      end;
+
+
+  end;
+ end;
+procedure TfrmClientes.edtCodigoExit(Sender: TObject);
+begin
+   if vKey = VK_RETURN then
+   ProcessaConsulta;
+
+   vKey := VK_CLEAR;
+
+
+end;
+
 end.
 
 
