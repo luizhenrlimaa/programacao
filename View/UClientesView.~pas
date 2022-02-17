@@ -79,6 +79,7 @@ type
 
    function ProcessaConfirmacao : Boolean;
    function ProcessaAlteracao   : Boolean;
+   function ProcessaExclusao    : Boolean;
    function ProcessaInclusao    : Boolean;
    function ProcessaConsulta    : Boolean;
    function ProcessaCliente     : Boolean;
@@ -262,6 +263,27 @@ begin
        if(edtCodigo.CanFocus) then
           edtCodigo.SetFocus;
      end;
+    end;
+
+    etExcluir:
+    begin
+      stbBarraStatus.Panels[0].Text := 'Exclusão';
+      if (edtCodigo.Text <> EmptyStr) then
+        ProcessaExclusao;
+      begin
+        lblCodigo.Enabled := True;
+        edtCodigo.Enabled := True;
+
+        if(edtCodigo.CanFocus) then
+           edtCodigo.SetFocus;
+
+      end;
+
+
+
+
+
+
     end;
 
     etConsultar:
@@ -605,10 +627,9 @@ begin
         'Falha ao alterar os dados do cliente [View]: '#13+
         e.Message);
       end;
-
-
   end;
  end;
+
 procedure TfrmClientes.edtCodigoExit(Sender: TObject);
 begin
    if vKey = VK_RETURN then
@@ -617,6 +638,56 @@ begin
    vKey := VK_CLEAR;
 
 
+end;
+
+function TfrmClientes.ProcessaExclusao: Boolean;
+begin
+  try
+    Result := False;
+    if (vObjCliente = nil) then
+     begin
+       TMessageUtil.Alerta(
+        'Não foi possivel carregar todos os dados cadastrados do cliente');
+
+       LimpaTela;
+       vEstadoTela := etPadrao;
+       DefineEstadoTela;
+       Exit;
+     end;
+     try
+       if TMessageUtil.Pergunta('Confirma a exclusão do cliente?') then
+       begin
+          Screen.Cursor := crHourGlass;
+          TPessoaController.getInstancia.ExcluiPessoa(vObjCliente);
+       end
+       else
+       begin
+         LimpaTela;
+         vEstadoTela := etPadrao;
+         DefineEstadoTela;
+         Exit;
+       end;
+
+     finally
+        Screen.Cursor := crDefault;
+        Application.ProcessMessages;
+     end;
+
+     Result := True;
+     TMessageUtil.Informacao('Cliente exluido com sucesso.');
+     LimpaTela;
+     vEstadoTela := etPadrao;
+     DefineEstadoTela;
+     Exit;
+     
+  except
+      on E:Exception do
+      begin
+        Raise Exception.Create(
+        'Falha ao excluir os dados do cliente [View]: '#13+
+        e.Message);
+      end;
+  end;
 end;
 
 end.
