@@ -193,6 +193,11 @@ begin
       // Então , define seu padrão desmarcado
       (Components[i] as TCheckBox).Checked := False;
   end;
+   if(vObjCliente <> nil) then
+   FreeAndNil(vObjCliente);
+
+   if(vObjColEndereco <> nil) then
+   FreeAndNil(vObjColEndereco);
 
 end;
 
@@ -407,6 +412,7 @@ begin
       case vEstadoTela of
         etIncluir:   Result := ProcessaInclusao;
         etAlterar:   Result := ProcessaAlteracao;
+        etExluir:    Result := ProcessaExclusao;
         etConsultar: Result := ProcessaConsulta;
       end;
 
@@ -695,7 +701,9 @@ function TfrmClientes.ProcessaExclusao: Boolean;
 begin
   try
     Result := False;
-    if (vObjCliente = nil) then
+
+    if (vObjCliente = nil) or
+       (vObjColEndereco = nil) then
      begin
        TMessageUtil.Alerta(
         'Não foi possivel carregar todos os dados cadastrados do cliente');

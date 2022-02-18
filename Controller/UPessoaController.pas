@@ -102,6 +102,7 @@ end;
 function TPessoaController.ExcluiPessoa(pPessoa: TPessoa): Boolean;
 var
   XPessoaDAO : TPessoaDAO;
+  XEnderecoDAO : TEnderecoDAO;
 begin
   try
     try
@@ -111,11 +112,16 @@ begin
 
        XPessoaDAO := TPessoaDAO.Create(TConexao.get.getConn);
 
+       XEnderecoDAO := TEnderecoDAO.Create(TConexao.get.getConn);
+
        if(pPessoa.Id =0) then
             Exit
        else
        begin
          XPessoaDAO.Deleta(RetornaCondicaoPessoa(pPessoa.Id));
+
+         XEnderecoDAO.Deleta(RetornaCondicaoPessoa(pPessoa.Id, True));
+
        end;
 
        TConexao.get.confirmaTransacao;
@@ -125,6 +131,9 @@ begin
     finally
       if (XPessoaDAO <> nil) then
           FreeAndNil(XPessoaDAO);
+
+      if (XEnderecoDAO <> nil) then
+          FreeAndNil(XEnderecoDAO);
     end;
   except
     on E : Exception do
@@ -178,6 +187,8 @@ begin
             else
             begin
                xPessoaDAO.Atualiza(pPessoa, RetornaCondicaoPessoa(pPessoa.Id));
+               xEnderecoDAO.Deleta(RetornaCondicaoPessoa(pPessoa.Id, True));
+               xEnderecoDAO.InsereLista(pColEndereco);
             end;
 
             TConexao.get.confirmaTransacao;
