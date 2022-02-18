@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, ComCtrls, StdCtrls, ExtCtrls, Buttons, Mask, UEnumerationUtil,
-  UCliente , UPessoaController;
+  UCliente , UPessoaController, UEndereco;
 
 type
   TfrmClientes = class(TForm)
@@ -68,6 +68,7 @@ type
    // Variaveis de Classes
    vEstadoTela : TEstadoTela;
    vObjCliente : TCliente;
+   vObjColEndereco : TColEndereco;
 
    procedure CamposEnabled(pOpcao : Boolean);
    procedure LimpaTela;
@@ -88,6 +89,7 @@ type
    function ProcessaEndereco    : Boolean;
 
    function ValidaCliente       : Boolean;
+   function ValidaEndereco      : Boolean;
 
   public
     { Public declarations }
@@ -454,7 +456,8 @@ begin
       (ProcessaEndereco) then
       begin
           // Gravação no BD
-          TPessoaController.getInstancia.GravaPessoa(vObjCliente);
+          TPessoaController.getInstancia.GravaPessoa(
+              vObjCliente, vObjColEndereco);
 
           Result := True;
       end;
@@ -512,9 +515,38 @@ begin
 end;
 
 function TfrmClientes.ProcessaEndereco: Boolean;
+var
+  xEndereco  : TEndereco;
+  xID_Pessoa : Integer;
 begin
     try
-//      Result := False;
+      Result := False;
+
+      xEndereco := nil;
+      xID_Pessoa := 0;
+
+      if (not validaEndereco) then
+         Exit;
+
+      if (vObjColEndereco <> nil) then
+        FreeAndNil(vObjColEndereco);
+
+      vObjColEndereco := TColEndereco.Create;
+
+      if vEstadoTela = etAlterar then
+         xID_Pessoa := StrToIntDef(edtCodigo.Text , 0);
+
+      xEndereco               := TEndereco.Create;
+      xEndereco.ID_pessoa     := xID_Pessoa;
+      xEndereco.Tipo_Endereco := 0;
+      xEndereco.Endereco      := edtEndereco.Text;
+      xEndereco.Numero        := edtNumero.Text;
+      xEndereco.Complemento   := edtComplemento.Text;
+      xEndereco.Bairro        := edtBairro.Text;
+      xEndereco.UF            := cmbUF.Text;
+      xEndereco.Cidade        := edtCidade.Text;
+
+      vObjColEndereco.Add(xEndereco);
 
 
       Result := True;
@@ -564,6 +596,10 @@ begin
          TCliente(TPessoaController.getInstancia.BuscaPessoa(
             StrToIntDef(edtCodigo.Text, 0)));
 
+      vObjColEndereco :=
+        TPessoaController.getInstancia.BuscaEnderecoPessoa(
+            StrToIntDef(edtCodigo.Text, 0));
+
           if (vObjCliente <> nil) then
             CarregaDadosTela
           else
@@ -593,18 +629,33 @@ begin
 end;
 
 procedure TfrmClientes.carregaDadosTela;
-begin
+var
+  i : Integer;
+  xEndereco : TEndereco;
  begin
   if (vObjCliente = nil) then
-  Exit;
+     Exit;
 
   edtCodigo.Text          := IntToStr(vObjCliente.Id);
   rdgTipoPessoa.ItemIndex := vObjCliente.Fisica_Juridica;
   edtNome.Text            := vObjCliente.Nome;
   chkAtivo.Checked        := vObjCliente.Ativo;
   edtCPFCNPJ.Text         := vObjCliente.IdentificadorPessoa;
+
+  if (vObjColEndereco <> nil) then
+  begin
+    for  i:= 0 to pred(vObjColEndereco.Count) do
+    begin
+      edtEndereco.Text      := vObjColEndereco.Retorna(i).Endereco;
+      edtNumero.Text        := vObjColEndereco.Retorna(i).Numero;
+      edtComplemento.Text   := vObjColEndereco.Retorna(i).Complemento;
+      edtBairro.Text        := vObjColEndereco.Retorna(i).Bairro;
+      cmbUF.Text            := vObjColEndereco.Retorna(i).UF;
+      edtcidade.Text        := vObjColEndereco.Retorna(i).Cidade;
+    end;
+  end;
  end;
- end;
+
 function TfrmClientes.ProcessaAlteracao: Boolean;
 begin
   try
@@ -688,6 +739,60 @@ begin
         e.Message);
       end;
   end;
+end;
+
+function TfrmClientes.ValidaEndereco: Boolean;
+begin
+   Result  := False;
+
+    if (Trim(edtEndereco.Text) = EmptyStr) then
+    begin
+       TMessageUtil.Alerta('Endereço do cliente não pode ficar em branco.');
+
+       if (edtEndereco.CanFocus) then
+           edtEndereco.SetFocus;
+      Exit;
+    end;
+
+    if (Trim(edtNumero.Text) = EmptyStr)then
+    begin
+       TMessageUtil.Alerta('Número de endereço do cliente não pode ficar em branco.');
+
+       if (edtNumero.CanFocus) then
+           edtNumero.SetFocus;
+      Exit;
+    end;
+
+    if (Trim(edtBairro.Text) = EmptyStr)then
+    begin
+       TMessageUtil.Alerta('Bairro não pode ficar em branco.');
+
+       if (edtBairro.CanFocus) then
+           edtBairro.SetFocus;
+      Exit;
+    end;
+
+      if (Trim(cmbUF.Text) = EmptyStr)then
+    begin
+       TMessageUtil.Alerta('UF não pode ficar em branco.');
+
+       if (cmbUF.CanFocus) then
+           cmbUF.SetFocus;
+      Exit;
+    end;
+
+       if (Trim(edtCidade.Text) = EmptyStr)then
+    begin
+       TMessageUtil.Alerta('Cidade não pode ficar em branco.');
+
+       if (edtCidade.CanFocus) then
+           edtCidade.SetFocus;
+      Exit;
+    end;
+
+
+
+   Result  := True;
 end;
 
 end.

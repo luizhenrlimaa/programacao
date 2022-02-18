@@ -2,19 +2,23 @@ unit UPessoaController;
 
 interface
 
-uses SysUtils, Math, StrUtils, UConexao, UPessoa;
+uses SysUtils, Math, StrUtils, UConexao, UPessoa, UEndereco;
 
 type
   TPessoaController = class
       public
         constructor Create;
         function GravaPessoa(
-                      pPessoa : TPessoa) : Boolean;
+                      pPessoa : TPessoa;
+                      pColEndereco : TColEndereco) : Boolean;
         function ExcluiPessoa(
                       pPessoa : TPessoa) : Boolean;
 
         function BuscaPessoa(pID : Integer) : TPessoa;
-        function RetornaCondicaoPessoa(pID_Pessoa: Integer) : String;
+        function BuscaEnderecoPessoa(pID_Pessoa : Integer) : TColEndereco;
+        function RetornaCondicaoPessoa(
+                   pID_Pessoa: Integer;
+                   pRelacionada : Boolean = False) : String;
 
       published
         class function getInstancia : TPessoaController;
@@ -24,12 +28,44 @@ type
 
 implementation
 
-uses UPessoaDAO;
+uses UPessoaDAO , UEnderecoDAO;
 
 var
   _instance: TPessoaController;
 
 { TPessoaController }
+
+function TPessoaController.BuscaEnderecoPessoa(
+  pID_Pessoa: Integer): TColEndereco;
+var
+  xEnderecoDAO : TEnderecoDAO;
+begin
+  try
+    try
+       Result := nil;
+
+       xEnderecoDAO :=
+            TEnderecoDAO.Create(TConexao.getInstance.getConn);
+
+       Result :=
+            xEnderecoDAO.RetornaLista(RetornaCondicaoPessoa(pID_Pessoa, True));
+
+    finally
+      if(xEnderecoDAO <> nil) then
+       FreeAndNil(xEnderecoDAO);
+
+
+    end;
+  except
+    on E : Exception do
+    begin
+      Raise Exception.Create(
+        'Falha ao retornar dados do endereço da pessoa [Controller]'#13+
+        e.Message);
+    end;
+  end;
+
+end;
 
 function TPessoaController.BuscaPessoa(pID: Integer): TPessoa;
 var
@@ -109,10 +145,13 @@ begin
    Result := _instance;
 end;
 
-function TPessoaController.GravaPessoa(pPessoa: TPessoa): Boolean;
+function TPessoaController.GravaPessoa(
+           pPessoa : TPessoa;
+                      pColEndereco : TColEndereco) : Boolean;
 var
-   xPessoaDAO : TPessoaDAO;
-   xAux       : Integer;
+   xPessoaDAO   : TPessoaDAO;
+   xEnderecoDAO : TEnderecoDAO;
+   xAux         : Integer;
 begin
      try
         try
@@ -120,12 +159,21 @@ begin
 
             Result := False;
 
-            xPessoaDAO :=
+            xPessoaDAO   :=
               TPessoaDAO.Create(TConexao.get.getConn);
+
+            xEnderecoDAO :=
+              TEnderecoDAO.Create(TConexao.get.getConn);
 
             if pPessoa.Id = 0 then
             begin
                xPessoaDAO.Insere(pPessoa);
+
+              for xAux := 0 to pred(pColEndereco.Count) do
+                pColEndereco.Retorna(xAux).ID_pessoa := pPessoa.Id;
+
+
+               xEnderecoDAO.InsereLista(pColEndereco)
             end
             else
             begin
@@ -149,12 +197,16 @@ begin
 end;
 
 function TPessoaController.RetornaCondicaoPessoa(
-  pID_Pessoa: Integer): String;
+  pID_Pessoa: Integer; pRelacionada : Boolean): String;
 var
   xChave : string;
 
 begin
-  xChave := 'ID';
+  if (pRelacionada) then
+      xChave := 'ID_PESSOA'
+
+  else
+      xChave := 'ID';
 
   Result :=
   'WHERE                                                 '#13+
