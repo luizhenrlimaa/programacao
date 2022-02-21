@@ -102,7 +102,7 @@ var
 implementation
 
 Uses
-  uMessageUtil;
+  uMessageUtil, UClientesPesqView;
 
 {$R *.dfm}
 
@@ -286,12 +286,6 @@ begin
            edtCodigo.SetFocus;
 
       end;
-
-
-
-
-
-
     end;
 
     etConsultar:
@@ -322,6 +316,34 @@ begin
 
 
     end;
+     etPesquisar:
+     begin
+       stbBarraStatus.Panels[0].Text := 'Pesquisa';
+
+       if (frmClientesPesq = nil) then
+           frmClientesPesq := TfrmClientesPesq.Create(Application);
+
+       frmClientesPesq.ShowModal;
+
+       if (frmClientesPesq.mClienteID <> 0) then
+       begin
+          edtCodigo.Text := IntToStr(frmClientesPesq.mClienteID);
+          vEstadoTela    := etConsultar;
+          ProcessaConsulta;
+       end
+       else
+       begin
+          vEstadoTela := etPadrao;
+          DefineEstadoTela;
+       end;
+
+       frmClientesPesq.mClienteID := 0;
+       frmClientesPesq.mClienteNome := EmptyStr;
+
+       if edtNome.CanFocus then
+          edtNome.SetFocus;
+
+     end;
 
   end;
 end;
@@ -808,9 +830,15 @@ end;
 procedure TfrmClientes.rdgTipoPessoaClick(Sender: TObject);
 begin
   if rdgTipoPessoa.ItemIndex = 1 then
+  begin
+     edtCPFCNPJ.Clear;
      edtCPFCNPJ.EditMask := '00\.000\.000\/0000\-00;1_;'
+  end
   else
+  begin
+     edtCPFCNPJ.Clear;
      edtCPFCNPJ.EditMask :=  '000\.000\.000\.00;1;_';
+  end;
 
 end;
 

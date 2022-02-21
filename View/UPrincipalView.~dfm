@@ -1,6 +1,6 @@
 object frmPrincipal: TfrmPrincipal
-  Left = 198
-  Top = 128
+  Left = 220
+  Top = 113
   Width = 1151
   Height = 747
   Caption = 'Novo Sistema'

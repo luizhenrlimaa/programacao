@@ -15,6 +15,7 @@ type
                       pPessoa : TPessoa) : Boolean;
 
         function BuscaPessoa(pID : Integer) : TPessoa;
+        function PesquisaPessoa(pNome : string) : TColPessoa;
         function BuscaEnderecoPessoa(pID_Pessoa : Integer) : TColEndereco;
         function RetornaCondicaoPessoa(
                    pID_Pessoa: Integer;
@@ -101,7 +102,7 @@ end;
 
 function TPessoaController.ExcluiPessoa(pPessoa: TPessoa): Boolean;
 var
-  XPessoaDAO : TPessoaDAO;
+  XPessoaDAO   : TPessoaDAO;
   XEnderecoDAO : TEnderecoDAO;
 begin
   try
@@ -205,6 +206,41 @@ begin
             e.Message);
         end;
     end;
+end;
+
+function TPessoaController.PesquisaPessoa(pNome: string): TColPessoa;
+var
+  xPessoaDAO  : TPessoaDAO;
+  xCondicao   : string;
+begin
+   try
+      try
+
+        Result := nil;
+        xPessoaDAO := TPessoaDAO.Create(TConexao.get.getConn);
+
+        xCondicao :=  IfThen(pNome <> EmptyStr,
+                  'WHERE                                   '#13+
+                  '    (NOME LIKE UPPER(''%'+ pNome +'%''))'#13+
+                  'ORDER BY NOME, ID', EmptyStr);
+
+        Result := xPessoaDAO.RetornaLista(xCondicao);
+        
+      finally
+          if (xPessoaDAO <> nil) then
+          FreeAndNil(xPessoaDAO);
+
+      end;
+   except
+     on E : Exception do
+        begin
+          TConexao.get.cancelaTransacao;
+          Raise Exception.Create(
+            'Falha ao buscar os dados da pessoa [Controller]. '#13+
+            e.Message);
+        end;
+   end;
+
 end;
 
 function TPessoaController.RetornaCondicaoPessoa(

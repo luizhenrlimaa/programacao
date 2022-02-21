@@ -1,7 +1,7 @@
 object frmClientes: TfrmClientes
   Left = 410
   Top = 216
-  Width = 612
+  Width = 614
   Height = 393
   Caption = 'Clientes'
   Color = clBtnFace
@@ -25,7 +25,7 @@ object frmClientes: TfrmClientes
   object stbBarraStatus: TStatusBar
     Left = 0
     Top = 335
-    Width = 596
+    Width = 598
     Height = 19
     Panels = <
       item
@@ -38,7 +38,7 @@ object frmClientes: TfrmClientes
   object pnlBotoes: TPanel
     Left = 0
     Top = 248
-    Width = 596
+    Width = 598
     Height = 87
     Align = alBottom
     TabOrder = 1
@@ -373,7 +373,7 @@ object frmClientes: TfrmClientes
   object pnlArea: TPanel
     Left = 0
     Top = 0
-    Width = 596
+    Width = 598
     Height = 248
     Align = alClient
     TabOrder = 2
@@ -385,7 +385,7 @@ object frmClientes: TfrmClientes
       Caption = 'C'#243'digo'
     end
     object lblCPFCNPJ: TLabel
-      Left = 448
+      Left = 408
       Top = 24
       Width = 52
       Height = 13
@@ -421,7 +421,7 @@ object frmClientes: TfrmClientes
       TabOrder = 1
     end
     object rdgTipoPessoa: TRadioGroup
-      Left = 232
+      Left = 208
       Top = 16
       Width = 185
       Height = 27
@@ -435,9 +435,9 @@ object frmClientes: TfrmClientes
       OnClick = rdgTipoPessoaClick
     end
     object edtCPFCNPJ: TMaskEdit
-      Left = 509
+      Left = 464
       Top = 24
-      Width = 84
+      Width = 121
       Height = 21
       EditMask = '000\.000\.000\.00;1;_'
       MaxLength = 14
@@ -449,6 +449,7 @@ object frmClientes: TfrmClientes
       Top = 64
       Width = 545
       Height = 21
+      CharCase = ecUpperCase
       TabOrder = 4
     end
     object grbEndereco: TGroupBox
@@ -535,6 +536,7 @@ object frmClientes: TfrmClientes
         Top = 24
         Width = 497
         Height = 21
+        CharCase = ecUpperCase
         TabOrder = 0
       end
       object edtNumero: TEdit
@@ -556,6 +558,7 @@ object frmClientes: TfrmClientes
         Top = 88
         Width = 497
         Height = 21
+        CharCase = ecUpperCase
         TabOrder = 3
       end
       object cmbUF: TComboBox
@@ -574,6 +577,7 @@ object frmClientes: TfrmClientes
         Top = 120
         Width = 361
         Height = 21
+        CharCase = ecUpperCase
         TabOrder = 5
       end
     end
