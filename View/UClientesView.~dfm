@@ -1104,9 +1104,11 @@ object frmClientes: TfrmClientes
     Top = 256
   end
   object frxPDF: TfrxPDFExport
+    FileName = 'Listagem de Cliente'
     UseFileCache = True
     ShowProgress = True
     OverwritePrompt = False
+    OpenAfterExport = True
     PrintOptimized = False
     Outline = False
     Background = False
