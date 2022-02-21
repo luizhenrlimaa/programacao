@@ -5,7 +5,8 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, ComCtrls, StdCtrls, ExtCtrls, Buttons, Mask, UEnumerationUtil,
-  UCliente , UPessoaController, UEndereco;
+  UCliente , UPessoaController, UEndereco, frxClass, DB, DBClient, frxDBSet,
+  frxExportXLS, frxExportPDF;
 
 type
   TfrmClientes = class(TForm)
@@ -42,6 +43,20 @@ type
     btnConfirmar: TBitBtn;
     btnCancelar: TBitBtn;
     btnSair: TBitBtn;
+    frxListagemCliente: TfrxReport;
+    cdsCliente: TClientDataSet;
+    cdsClienteID: TStringField;
+    cdsClienteNome: TStringField;
+    cdsClienteCPFCNPJ: TStringField;
+    cdsClienteAtivo: TStringField;
+    cdsClienteEndereco: TStringField;
+    cdsClienteNumero: TStringField;
+    cdsClienteComplemento: TStringField;
+    cdsClienteBairro: TStringField;
+    cdsClienteCidadeUF: TStringField;
+    frxDBDCliente: TfrxDBDataset;
+    frxPDF: TfrxPDFExport;
+    frxXLS: TfrxXLSExport;
     procedure FormKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
@@ -84,6 +99,7 @@ type
    function ProcessaExclusao    : Boolean;
    function ProcessaInclusao    : Boolean;
    function ProcessaConsulta    : Boolean;
+   function ProcessaListagem    : Boolean;
    function ProcessaCliente     : Boolean;
 
    function ProcessaPessoa      : Boolean;
@@ -102,7 +118,7 @@ var
 implementation
 
 Uses
-  uMessageUtil, UClientesPesqView;
+  uMessageUtil, UClientesPesqView, StrUtils;
 
 {$R *.dfm}
 
@@ -316,6 +332,24 @@ begin
 
 
     end;
+
+    etListar:
+    begin
+      stbBarraStatus.Panels[0].Text := 'Listagem';
+
+      if (edtCodigo.Text <> EmptyStr) then
+         ProcessaListagem
+      else
+      begin
+        lblCodigo.Enabled := True;
+        edtCodigo.Enabled := True;
+
+        if edtCodigo.CanFocus then
+           edtCodigo.SetFocus;
+      end;
+    end;
+
+
      etPesquisar:
      begin
        stbBarraStatus.Panels[0].Text := 'Pesquisa';
@@ -742,6 +776,7 @@ begin
        begin
           Screen.Cursor := crHourGlass;
           TPessoaController.getInstancia.ExcluiPessoa(vObjCliente);
+          TMessageUtil.Informacao('Cliente exluido com sucesso.');
        end
        else
        begin
@@ -757,7 +792,6 @@ begin
      end;
 
      Result := True;
-     TMessageUtil.Informacao('Cliente exluido com sucesso.');
      LimpaTela;
      vEstadoTela := etPadrao;
      DefineEstadoTela;
@@ -839,6 +873,41 @@ begin
      edtCPFCNPJ.Clear;
      edtCPFCNPJ.EditMask :=  '000\.000\.000\.00;1;_';
   end;
+
+end;
+
+function TfrmClientes.ProcessaListagem: Boolean;
+begin
+    try
+      if (not cdsCliente.Active) then
+      Exit;
+
+
+      cdsCliente.Append;
+      cdsClienteID.Value          := edtCodigo.Text;
+      cdsClienteNome.Value        := edtNome.Text;
+      cdsClienteCPFCNPJ.Value     := edtCPFCNPJ.Text;
+      cdsClienteAtivo.Value       := IfThen(chkAtivo.checked, 'Sim', 'Não');
+      cdsClienteEndereco.Value    := edtEndereco.Text;
+      cdsClienteNumero.Value      := edtNumero.Text;
+      cdsClienteComplemento.Value := edtComplemento.Text;
+      cdsClienteBairro.Value      := edtBairro.Text;
+      cdsClienteCidadeUF.Value    := edtCidade.Text + '/' + cmbUF.Text;
+      cdsCliente.Post;
+      frxListagemCliente.Variables['DATAHORA']    :=
+        QuotedStr(FormatDateTime('DD/MM/YYYY hh:mm', Date + Time));
+      frxListagemCliente.Variables['NOMEEMPRESA'] :=
+        QuotedStr('Nome da empresa');
+
+      frxXLS.FileName := 'Listagem de Cliente';
+      frxXLS.Wysiwyg  := False;
+      frxListagemCliente.ShowReport();
+
+    finally
+       vEstadoTela      := etPadrao;
+       DefineEstadoTela;
+       cdsCliente.EmptyDataSet;
+    end;
 
 end;
 
