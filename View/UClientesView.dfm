@@ -436,7 +436,7 @@ object frmClientes: TfrmClientes
     object edtCPFCNPJ: TMaskEdit
       Left = 464
       Top = 24
-      Width = 120
+      Width = 113
       Height = 21
       EditMask = '000\.000\.000\.00;1;_'
       MaxLength = 14
@@ -551,6 +551,7 @@ object frmClientes: TfrmClientes
         Top = 56
         Width = 337
         Height = 21
+        CharCase = ecUpperCase
         TabOrder = 2
       end
       object edtBairro: TEdit
