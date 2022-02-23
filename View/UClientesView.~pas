@@ -936,9 +936,8 @@ end;
 
 function TfrmClientes.ValidaCPF(CPF: string)  : Boolean;
 var
-xDig10, xDig11, xAux: string;
-
-xS, xI, xR, xPeso : integer;
+  xDig10, xDig11, xAux: string;
+  xS, xI, xR, xPeso : integer;
 begin
       xAux := TFuncoes.SoNumero(edtCPFCNPJ.Text);
 
@@ -947,12 +946,12 @@ begin
       (xAux = '44444444444') or (xAux = '55555555555') or
       (xAux = '66666666666') or (xAux = '77777777777') or
       (xAux = '88888888888') or (xAux = '99999999999'))//or
-      //(length(CPF) <> 11))
+//      (length(CPF) <> 11))
     then
-     begin
+      begin
         ValidaCPF := False;
         Exit;
-     end;
+      end;
 
 // try - protege o código para eventuais erros de conversão de tipo na função StrToInt
   try
@@ -966,39 +965,41 @@ begin
       xPeso := xPeso - 1;
     end;
     xR := 11 - (xS mod 11);
-    if ((xR = 10) or (xR = 11))
-       then xDig10 := '0'
-    else str(xR:1, xDig10); // converte um número no respectivo caractere numérico
+    if ((xR = 10) or (xR = 11))then
+        xDig10 := '0'
+    else
+       str(xR:1, xDig10); // converte um número no respectivo caractere numérico
 
     { *-- Cálculo do 2o. Digito Verificador --* }
     xS := 0;
     xPeso := 11;
+
     for xI := 1 to 10 do
     begin
       xS := xS + (StrToInt(xAux[xI]) * xPeso);
       xPeso := xPeso - 1;
     end;
     xR := 11 - (xS mod 11);
-    if ((xR = 10) or (xR = 11))
-       then xDig11 := '0'
-    else str(xR:1, xDig11);
+    if ((xR = 10) or (xR = 11))then
+       xDig11 := '0'
+    else
+       str(xR:1, xDig11);
 
     { Verifica se os digitos calculados conferem com os digitos informados. }
-    if ((xDig10 = xAux[10]) and (xDig11 = xAux[11]))
-       then ValidaCPF := True
-    else ValidaCPF := False;
+    if ((xDig10 = xAux[10]) and (xDig11 = xAux[11]))  then
+       ValidaCPF := True
+    else
+       ValidaCPF := False;
   except
-    ValidaCPF := False
+       ValidaCPF := False
   end;
 end;
 
-
 function TfrmClientes.ValidaCNPJ(CNPJ: string): Boolean;
 var
-   dig13, dig14, xAux: string;
-   sm, i, r, peso: integer;
+   xDig13, xDig14, xAux: string;
+   xSm, xI, xR, xPeso: Integer;
 begin
-
       xAux := TFuncoes.SoNumero(edtCPFCNPJ.Text);
 // length - retorna o tamanho da string do CNPJ (CNPJ é um número formado por 14 dígitos)
   if ((xAux = '00000000000000') or (xAux = '11111111111111') or
@@ -1006,54 +1007,55 @@ begin
       (xAux = '44444444444444') or (xAux = '55555555555555') or
       (xAux = '66666666666666') or (xAux = '77777777777777') or
       (xAux = '88888888888888') or (xAux = '99999999999999')) // or
-      //(length(CNPJ) <> 14))
-     then begin
-            ValidaCNPJ := false;
-            exit;
-          end;
-
+//     (length(CNPJ) <> 14))
+     then
+     begin
+        ValidaCNPJ := False;
+        Exit;
+     end;
 // "try" - protege o código para eventuais erros de conversão de tipo através da função "StrToInt"
   try
 { *-- Cálculo do 1o. Digito Verificador --* }
-    sm := 0;
-    peso := 2;
-    for i := 12 downto 1 do
+    xSm := 0;
+    xPeso := 2;
+    for xI := 12 downto 1 do
     begin
 // StrToInt converte o i-ésimo caractere do CNPJ em um número
-      sm := sm + (StrToInt(xAux[i]) * peso);
-      peso := peso + 1;
-      if (peso = 10)
-         then peso := 2;
+      xSm := xSm + (StrToInt(xAux[xI]) * xPeso);
+      xPeso := xPeso + 1;
+      if (xPeso = 10)
+         then xPeso := 2;
     end;
-    r := sm mod 11;
-    if ((r = 0) or (r = 1))
-       then dig13 := '0'
-    else str((11-r):1, dig13); // converte um número no respectivo caractere numérico
+    xR := xSm mod 11;
+    if ((xR = 0) or (xR = 1)) then
+        xDig13 := '0'
+    else
+        str((11-xR):1, xDig13); // converte um número no respectivo caractere numérico
 
 { *-- Cálculo do 2o. Digito Verificador --* }
-    sm := 0;
-    peso := 2;
-    for i := 13 downto 1 do
+    xSm := 0;
+    xPeso := 2;
+    for xI := 13 downto 1 do
     begin
-      sm := sm + (StrToInt(xAux[i]) * peso);
-      peso := peso + 1;
-      if (peso = 10)
-         then peso := 2;
+      xSm := xSm + (StrToInt(xAux[xI]) * xPeso);
+      xPeso := xPeso + 1;
+      if (xPeso = 10) then
+          xPeso := 2;
     end;
-    r := sm mod 11;
-    if ((r = 0) or (r = 1))
-       then dig14 := '0'
-    else str((11-r):1, dig14);
+    xR := xSm mod 11;
+    if ((xR = 0) or (xR = 1)) then
+        xDig14 := '0'
+    else
+       str((11-xR):1, xDig14);
 
 { Verifica se os digitos calculados conferem com os digitos informados. }
-    if ((dig13 = xAux[13]) and (dig14 = xAux[14]))
-       then ValidaCNPJ := true
-    else ValidaCNPJ := false;
+    if ((xDig13 = xAux[13]) and (xDig14 = xAux[14])) then
+         ValidaCNPJ := True
+    else
+    ValidaCNPJ := False;
   except
-    ValidaCNPJ := false
-
-end;
-
+    ValidaCNPJ := False
+  end;
 end;
 
 end.
