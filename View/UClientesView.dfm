@@ -436,12 +436,13 @@ object frmClientes: TfrmClientes
     object edtCPFCNPJ: TMaskEdit
       Left = 464
       Top = 24
-      Width = 121
+      Width = 120
       Height = 21
       EditMask = '000\.000\.000\.00;1;_'
       MaxLength = 14
       TabOrder = 3
       Text = '   .   .   .  '
+      OnExit = edtCPFCNPJExit
     end
     object edtNome: TEdit
       Left = 48

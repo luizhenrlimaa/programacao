@@ -75,6 +75,7 @@ type
       Shift: TShiftState);
     procedure edtCodigoExit(Sender: TObject);
     procedure rdgTipoPessoaClick(Sender: TObject);
+    procedure edtCPFCNPJExit(Sender: TObject);
 
 
   private
@@ -105,8 +106,11 @@ type
    function ProcessaPessoa      : Boolean;
    function ProcessaEndereco    : Boolean;
 
-   function ValidaCliente       : Boolean;
-   function ValidaEndereco      : Boolean;
+   function ValidaCliente                           : Boolean;
+   function ValidaEndereco                          : Boolean;
+   function ValidaCPF (CPF: string)                 : Boolean;
+   function ValidaCNPJ(CNPJ: string)                : Boolean;
+
 
   public
     { Public declarations }
@@ -118,7 +122,7 @@ var
 implementation
 
 Uses
-  uMessageUtil, UClientesPesqView, StrUtils;
+  uMessageUtil, UClientesPesqView, StrUtils, UClassFuncoes;
 
 {$R *.dfm}
 
@@ -542,7 +546,6 @@ begin
 
      if not ValidaCliente then
             Exit;
-
       if vEstadoTela = etIncluir then
       begin
         if vObjCliente = nil then
@@ -562,7 +565,7 @@ begin
         vObjCliente.Nome                      := edtNome.Text;
         vObjCliente.Fisica_Juridica           := rdgTipoPessoa.ItemIndex;
         vObjCliente.Ativo                     := chkAtivo.Checked;
-        vObjCliente.IdentificadorPessoa       :=  edtCPFCNPJ.Text;
+        vObjCliente.IdentificadorPessoa       := edtCPFCNPJ.Text;
 
        Result := True;
      except
@@ -866,7 +869,7 @@ begin
   if rdgTipoPessoa.ItemIndex = 1 then
   begin
      edtCPFCNPJ.Clear;
-     edtCPFCNPJ.EditMask := '00\.000\.000\/0000\-00;1_;'
+     edtCPFCNPJ.EditMask := '00\.000\.000\/0000\-00;1;_';
   end
   else
   begin
@@ -908,6 +911,148 @@ begin
        DefineEstadoTela;
        cdsCliente.EmptyDataSet;
     end;
+
+end;
+
+procedure TfrmClientes.edtCPFCNPJExit(Sender: TObject);
+begin
+ If edtCPFCNPJ.Text<> '' Then
+
+
+  if rdgTipoPessoa.ItemIndex <> 1 then
+  If ValidaCPF(edtCPFCNPJ.Text) = False Then
+  begin
+     	TMessageUtil.Alerta('CPF Inválido.');
+      edtCPFCNPJ.Clear;
+  end;
+
+  If  rdgTipoPessoa.ItemIndex = 1 then
+  If ValidaCNPJ(edtCPFCNPJ.Text) = False Then
+  begin
+     TMessageUtil.Alerta('CNPJ Inválido.');
+     edtCPFCNPJ.Clear;
+  end;
+end;
+
+function TfrmClientes.ValidaCPF(CPF: string)  : Boolean;
+var
+xDig10, xDig11, xAux: string;
+
+xS, xI, xR, xPeso : integer;
+begin
+      xAux := TFuncoes.SoNumero(edtCPFCNPJ.Text);
+
+  if ((xAux = '00000000000') or (xAux = '11111111111') or
+      (xAux = '22222222222') or (xAux = '33333333333') or
+      (xAux = '44444444444') or (xAux = '55555555555') or
+      (xAux = '66666666666') or (xAux = '77777777777') or
+      (xAux = '88888888888') or (xAux = '99999999999'))//or
+      //(length(CPF) <> 11))
+    then
+     begin
+        ValidaCPF := False;
+        Exit;
+     end;
+
+// try - protege o código para eventuais erros de conversão de tipo na função StrToInt
+  try
+      { *-- Cálculo do 1o. Digito Verificador --* }
+    xS := 0;
+    xPeso := 10;
+    for xI := 1 to 9 do
+    begin
+      // StrToInt converte o i-ésimo caractere do CPF em um número
+      xS := xS + (StrToInt(xAux[xI]) * xPeso);
+      xPeso := xPeso - 1;
+    end;
+    xR := 11 - (xS mod 11);
+    if ((xR = 10) or (xR = 11))
+       then xDig10 := '0'
+    else str(xR:1, xDig10); // converte um número no respectivo caractere numérico
+
+    { *-- Cálculo do 2o. Digito Verificador --* }
+    xS := 0;
+    xPeso := 11;
+    for xI := 1 to 10 do
+    begin
+      xS := xS + (StrToInt(xAux[xI]) * xPeso);
+      xPeso := xPeso - 1;
+    end;
+    xR := 11 - (xS mod 11);
+    if ((xR = 10) or (xR = 11))
+       then xDig11 := '0'
+    else str(xR:1, xDig11);
+
+    { Verifica se os digitos calculados conferem com os digitos informados. }
+    if ((xDig10 = xAux[10]) and (xDig11 = xAux[11]))
+       then ValidaCPF := True
+    else ValidaCPF := False;
+  except
+    ValidaCPF := False
+  end;
+end;
+
+
+function TfrmClientes.ValidaCNPJ(CNPJ: string): Boolean;
+var
+   dig13, dig14, xAux: string;
+   sm, i, r, peso: integer;
+begin
+
+      xAux := TFuncoes.SoNumero(edtCPFCNPJ.Text);
+// length - retorna o tamanho da string do CNPJ (CNPJ é um número formado por 14 dígitos)
+  if ((xAux = '00000000000000') or (xAux = '11111111111111') or
+      (xAux = '22222222222222') or (xAux = '33333333333333') or
+      (xAux = '44444444444444') or (xAux = '55555555555555') or
+      (xAux = '66666666666666') or (xAux = '77777777777777') or
+      (xAux = '88888888888888') or (xAux = '99999999999999')) // or
+      //(length(CNPJ) <> 14))
+     then begin
+            ValidaCNPJ := false;
+            exit;
+          end;
+
+// "try" - protege o código para eventuais erros de conversão de tipo através da função "StrToInt"
+  try
+{ *-- Cálculo do 1o. Digito Verificador --* }
+    sm := 0;
+    peso := 2;
+    for i := 12 downto 1 do
+    begin
+// StrToInt converte o i-ésimo caractere do CNPJ em um número
+      sm := sm + (StrToInt(xAux[i]) * peso);
+      peso := peso + 1;
+      if (peso = 10)
+         then peso := 2;
+    end;
+    r := sm mod 11;
+    if ((r = 0) or (r = 1))
+       then dig13 := '0'
+    else str((11-r):1, dig13); // converte um número no respectivo caractere numérico
+
+{ *-- Cálculo do 2o. Digito Verificador --* }
+    sm := 0;
+    peso := 2;
+    for i := 13 downto 1 do
+    begin
+      sm := sm + (StrToInt(xAux[i]) * peso);
+      peso := peso + 1;
+      if (peso = 10)
+         then peso := 2;
+    end;
+    r := sm mod 11;
+    if ((r = 0) or (r = 1))
+       then dig14 := '0'
+    else str((11-r):1, dig14);
+
+{ Verifica se os digitos calculados conferem com os digitos informados. }
+    if ((dig13 = xAux[13]) and (dig14 = xAux[14]))
+       then ValidaCNPJ := true
+    else ValidaCNPJ := false;
+  except
+    ValidaCNPJ := false
+
+end;
 
 end;
 
