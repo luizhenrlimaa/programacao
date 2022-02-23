@@ -567,6 +567,7 @@ object frmClientes: TfrmClientes
         Top = 120
         Width = 73
         Height = 21
+        Style = csDropDownList
         ItemHeight = 13
         TabOrder = 4
         Items.Strings = (
