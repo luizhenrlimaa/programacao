@@ -205,10 +205,10 @@ begin
       (Components[i] as TMaskEdit).Text := EmptyStr;
       // Se o compo for do tipo RADIOGROUP
       if (Components[i] is TRadioGroup)  then  // Então , define seu padrão
-      (Components[i] as TRadioGroup).ItemIndex := 0;
+      (Components[i] as TRadioGroup).ItemIndex := -1;
       // Se o compo for do tipo COMBOBOX
       if (Components[i] is TComboBox)  then    // Então , define seu padrão -1
-      (Components[i] as TComboBox).ItemIndex := -1;
+      (Components[i] as TComboBox).Text := '';
       // Se o compo for do tipo CHECKBOX
       if (Components[i] is TCheckBox)  then
       // Então , define seu padrão desmarcado
@@ -231,6 +231,7 @@ begin
   btnListar.Enabled     := (vEstadoTela in [etPadrao]);
   btnPesquisar.Enabled  := (vEstadoTela in [etPadrao]);
 
+
   btnConfirmar.Enabled :=
      vEstadoTela in [etIncluir, etAlterar, etExcluir, etConsultar];
   btnCancelar.Enabled :=
@@ -240,8 +241,8 @@ begin
     etPadrao:
     begin
         CamposEnabled(False);
+        cmbUF.ItemIndex := -1;
         LimpaTela;
-
         stbBarraStatus.Panels[0].Text := EmptyStr;
         stbBarraStatus.Panels[1].Text := EmptyStr;
 
@@ -257,7 +258,7 @@ begin
     begin
       stbBarraStatus.Panels[0].Text := 'Inclusão';
       CamposEnabled(True);
-
+      cmbUF.Style :=  csDropDownList;
       edtCodigo.Enabled := False;
 
       chkAtivo.Checked := True;
@@ -295,6 +296,7 @@ begin
 
     etExcluir:
     begin
+      cmbUF.Style :=  csDropDown;
       stbBarraStatus.Panels[0].Text := 'Exclusão';
       if (edtCodigo.Text <> EmptyStr) then
         ProcessaExclusao;
@@ -311,7 +313,7 @@ begin
     etConsultar:
     begin
      stbBarraStatus.Panels[0].Text := 'Consulta';
-
+     cmbUF.Style :=  csDropDown;
      CamposEnabled(False);
 
      if (edtCodigo.Text <> EmptyStr) then
@@ -497,10 +499,10 @@ begin
      begin
        TMessageUtil.Informacao('Cliente cadastrado com sucesso.'#13+
        'Código cadastrado: '+ IntToStr(vObjCliente.Id));
-
        vEstadoTela := etPadrao;
        DefineEstadoTela;
        DefineEstadoTela;
+
 
        Result  := True;
      end;
@@ -868,13 +870,14 @@ procedure TfrmClientes.rdgTipoPessoaClick(Sender: TObject);
 begin
   if rdgTipoPessoa.ItemIndex = 1 then
   begin
-     edtCPFCNPJ.Clear;
-     edtCPFCNPJ.EditMask := '00\.000\.000\/0000\-00;1;_';
+      edtCPFCNPJ.Clear;
+      edtCPFCNPJ.EditMask := '00\.000\.000\/0000\-00;1;_';
+
   end
   else
   begin
-     edtCPFCNPJ.Clear;
-     edtCPFCNPJ.EditMask :=  '000\.000\.000\.00;1;_';
+       edtCPFCNPJ.Clear;
+       edtCPFCNPJ.EditMask :=  '000\.000\.000\.00;1;_';
   end;
 
 end;
@@ -916,21 +919,21 @@ end;
 
 procedure TfrmClientes.edtCPFCNPJExit(Sender: TObject);
 begin
- If edtCPFCNPJ.Text<> '' Then
 
-
-  if rdgTipoPessoa.ItemIndex <> 1 then
+  if rdgTipoPessoa.ItemIndex <> 1  then
   If ValidaCPF(edtCPFCNPJ.Text) = False Then
   begin
-     	TMessageUtil.Alerta('CPF Inválido.');
       edtCPFCNPJ.Clear;
+     	TMessageUtil.Alerta('CPF Inválido.');
+
   end;
 
   If  rdgTipoPessoa.ItemIndex = 1 then
   If ValidaCNPJ(edtCPFCNPJ.Text) = False Then
   begin
-     TMessageUtil.Alerta('CNPJ Inválido.');
      edtCPFCNPJ.Clear;
+     TMessageUtil.Alerta('CNPJ Inválido.');
+
   end;
 end;
 
@@ -952,6 +955,7 @@ begin
         Result := False;
         Exit;
       end;
+
 
   // try - protege o código para eventuais erros de conversão de tipo na função StrToInt
     try
