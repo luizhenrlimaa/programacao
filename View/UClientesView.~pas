@@ -918,22 +918,30 @@ begin
 end;
 
 procedure TfrmClientes.edtCPFCNPJExit(Sender: TObject);
+var
+   xAux: string;
 begin
+
+  xAux := TFuncoes.SoNumero(edtCPFCNPJ.Text);
 
   if rdgTipoPessoa.ItemIndex <> 1  then
   If ValidaCPF(edtCPFCNPJ.Text) = False Then
   begin
+   if (length(xAux) = 11) then
+   begin
       edtCPFCNPJ.Clear;
      	TMessageUtil.Alerta('CPF Inválido.');
-
+   end;
   end;
 
   If  rdgTipoPessoa.ItemIndex = 1 then
   If ValidaCNPJ(edtCPFCNPJ.Text) = False Then
   begin
-     edtCPFCNPJ.Clear;
-     TMessageUtil.Alerta('CNPJ Inválido.');
-
+   if (length(xAux) = 14) then
+   begin
+      edtCPFCNPJ.Clear;
+     	TMessageUtil.Alerta('CPF Inválido.');
+   end;
   end;
 end;
 
