@@ -6,7 +6,7 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, StdCtrls, Math, UMessageUtil, UPessoa, ExtCtrls, Grids, DBGrids,
   Provider, DB, DBClient, ComCtrls, CheckLst, Mask, Buttons, Gauges,
-  pngimage, NumEdit, ExtDlgs;
+  pngimage, ExtDlgs;
 
 type
   TfrmGenesis = class(TForm)
@@ -483,9 +483,9 @@ begin
       cdsClientDataSetTexto.Value     := edtTexto.Text;
 
       // Outra forma de passar informações para o ClientDataSet é:
-      cdsClientDataSet.FieldByName('ValorReal').AsFloat := edtValorReal.Value;
+      //      cdsClientDataSet.FieldByName('ValorReal').AsFloat := edtValorReal.Value;
 
-      cdsClientDataSetValorPercentual.Value := edtValorPercentual.Value;
+      //      cdsClientDataSetValorPercentual.Value := edtValorPercentual.Value;
 
       // Sempre antes de converter, temos que validar se o campo não está em
       // branco, pois caso esteja em brancc e o sistema tente converter um valor

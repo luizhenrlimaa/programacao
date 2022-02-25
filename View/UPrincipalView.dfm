@@ -891,9 +891,11 @@ object frmPrincipal: TfrmPrincipal
       Caption = 'Utilit'#225'rios'
       object menGenesis: TMenuItem
         Caption = 'Genesis'
+        OnClick = menGenesisClick
       end
       object menApocalipse: TMenuItem
         Caption = 'Apocalipse'
+        OnClick = menApocalipseClick
       end
     end
     object menSair: TMenuItem
