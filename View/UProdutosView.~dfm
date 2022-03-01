@@ -17,6 +17,7 @@ object frmProdutos: TfrmProdutos
   OnClose = FormClose
   OnKeyDown = FormKeyDown
   OnKeyUp = FormKeyUp
+  OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
   object stbBarraStatus: TStatusBar

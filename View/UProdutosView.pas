@@ -34,11 +34,13 @@ type
     procedure btnConsultarClick(Sender: TObject);
     procedure btnPesquisarClick(Sender: TObject);
     procedure btnCancelarClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
     procedure FormKeyUp(Sender: TObject; var Key: Word;
       Shift: TShiftState);
+    procedure FormShow(Sender: TObject);
 
   private
        { Private declarations }
@@ -299,6 +301,16 @@ procedure TfrmProdutos.FormKeyUp(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 begin
      vKey := VK_CLEAR;
+end;
+
+procedure TfrmProdutos.FormCreate(Sender: TObject);
+begin
+   vEstadoTela := etPadrao;
+end;
+
+procedure TfrmProdutos.FormShow(Sender: TObject);
+begin
+    DefineEstadoTela;
 end;
 
 end.
