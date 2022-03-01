@@ -41,6 +41,7 @@ type
     procedure FormKeyUp(Sender: TObject; var Key: Word;
       Shift: TShiftState);
     procedure FormShow(Sender: TObject);
+    procedure edtCodigoExit(Sender: TObject);
 
   private
        { Private declarations }
@@ -311,6 +312,14 @@ end;
 procedure TfrmProdutos.FormShow(Sender: TObject);
 begin
     DefineEstadoTela;
+end;
+
+procedure TfrmProdutos.edtCodigoExit(Sender: TObject);
+begin
+  if vKey = VK_RETURN then
+//   ProcessaConsulta;
+
+   vKey := VK_CLEAR;
 end;
 
 end.

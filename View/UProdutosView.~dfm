@@ -11,6 +11,7 @@ object frmProdutos: TfrmProdutos
   Font.Name = 'MS Sans Serif'
   Font.Style = []
   FormStyle = fsMDIChild
+  KeyPreview = True
   OldCreateOrder = False
   Position = poScreenCenter
   Visible = True
