@@ -17,7 +17,10 @@ uses
   UPessoaController in 'Controller\UPessoaController.pas',
   UEndereco in 'Model\UEndereco.pas',
   UEnderecoDAO in 'Model\UEnderecoDAO.pas',
-  UClientesPesqView in 'View\UClientesPesqView.pas' {frmClientesPesq};
+  UClientesPesqView in 'View\UClientesPesqView.pas' {frmClientesPesq},
+  UGenesisView in 'View\UGenesisView.pas' {frmGenesis},
+  UApocalipseView in 'View\UApocalipseView.pas' {frmApocalipse},
+  UProdutosView in 'View\UProdutosView.pas' {frmProdutos};
 
 {$R *.res}
 
@@ -26,3 +29,4 @@ begin
   Application.CreateForm(TfrmPrincipal, frmPrincipal);
   Application.Run;
 end.
+

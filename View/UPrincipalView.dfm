@@ -1,6 +1,6 @@
 object frmPrincipal: TfrmPrincipal
-  Left = 117
-  Top = 179
+  Left = 204
+  Top = 63
   Width = 1151
   Height = 747
   Caption = 'Novo Sistema'
@@ -873,6 +873,7 @@ object frmPrincipal: TfrmPrincipal
       end
       object menProdutos: TMenuItem
         Caption = 'Produtos'
+        OnClick = menProdutosClick
       end
     end
     object menRelatorios: TMenuItem

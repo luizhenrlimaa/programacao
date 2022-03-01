@@ -32,6 +32,7 @@ type
     procedure menClientesClick(Sender: TObject);
     procedure menGenesisClick(Sender: TObject);
     procedure menApocalipseClick(Sender: TObject);
+    procedure menProdutosClick(Sender: TObject);
 
 
 
@@ -47,7 +48,7 @@ var
 implementation
 
 uses
-  UConexao , UClientesView , UGenesisView, UApocalipseView;
+  UConexao , UClientesView , UGenesisView, UApocalipseView, UProdutosView;
 
 {$R *.dfm}
 
@@ -105,6 +106,20 @@ begin
           frmApocalipse := TfrmApocalipse.Create(Application);
 
        frmApocalipse.Show;
+   finally
+        Screen.Cursor := crDefault;
+   end;
+end;
+
+procedure TfrmPrincipal.menProdutosClick(Sender: TObject);
+begin
+   try
+       Screen.Cursor := crHourGlass;
+
+       if frmProdutos  = nil then
+          frmProdutos := TfrmProdutos.Create(Application);
+
+       frmProdutos.Show;
    finally
         Screen.Cursor := crDefault;
    end;
