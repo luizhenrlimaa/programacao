@@ -13,7 +13,7 @@ type
 //        function ExcluiProduto(
 //                      pProduto : TProduto) : Boolean;
 //
-//        function BuscaPessoa(pID : Integer) : TProduto;
+        function BuscaProduto(pID : Integer) : TProduto;
 //        function PesquisaPessoa(pNome : string) : TColPessoa;
 //        function BuscaEnderecoPessoa(pID_Pessoa : Integer) : TColEndereco;
 //        function RetornaCondicaoProduto(
@@ -67,32 +67,32 @@ var
 //
 //end;
 
-//function TPessoaController.BuscaPessoa(pID: Integer): TProduto;
-//var
-//  XPessoaDAO : TPessoaDAO;
-//begin
-//  try
-//    try
-//       Result := nil;
-//
-//       xPessoaDAO := TPessoaDAO.Create(TConexao.getInstance.getConn);
-//       Result := XPessoaDAO.Retorna(RetornaCondicaoProduto(pID));
-//
-//    finally
-//      if(xPessoaDAO <> nil) then
-//       FreeAndNil(XPessoaDAO);
-//
-//
-//    end;
-//  except
-//        on E : Exception do
-//        begin
-//          Raise Exception.Create(
-//            'Falha ao buscar os dados da pessoa. [Controller]'#13+
-//            e.Message);
-//        end;
-//  end;
-//end;
+function TProdutoController.BuscaProduto(pID: Integer): TProduto;
+var
+  XProdutoDAO : TProdutoDAO;
+begin
+  try
+    try
+       Result := nil;
+
+       XProdutoDAO := TProdutoDAO.Create(TConexao.getInstance.getConn);
+       Result := XProdutoDAO.Retorna(RetornaCondicaoProduto(pID));
+
+    finally
+      if(XProdutoDAO <> nil) then
+       FreeAndNil(XProdutoDAO);
+
+
+    end;
+  except
+        on E : Exception do
+        begin
+          Raise Exception.Create(
+            'Falha ao buscar os dados do produto. [Controller]'#13+
+            e.Message);
+        end;
+  end;
+end;
 
 constructor TProdutoController.Create;
 begin

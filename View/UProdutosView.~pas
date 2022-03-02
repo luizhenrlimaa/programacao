@@ -55,9 +55,13 @@ type
    procedure LimpaTela;
    procedure DefineEstadoTela;
 
+     // Carrega dados padrão na tela
+
+   procedure carregaDadosTela;
+
 
    function ProcessaConfirmacao : Boolean;
-   function ProcessaAlteracao   : Boolean;
+   function ProcessaConsulta    : Boolean;
    function ProcessaInclusao    : Boolean;
    function ProcessaProduto     : Boolean; //ProcessaCliente
 
@@ -347,9 +351,9 @@ begin
   try
       case vEstadoTela of
           etIncluir:   Result := ProcessaInclusao;
-          etAlterar:   Result := ProcessaAlteracao;
+//          etAlterar:   Result := ProcessaAlteracao;
 //        etExcluir:   Result := ProcessaExclusao;
-//        etConsultar: Result := ProcessaConsulta;
+          etConsultar: Result := ProcessaConsulta;
       end;
 
       if not Result then
@@ -458,6 +462,7 @@ begin
    Result := False;
 
    if (edtUnidade.Text = EmptyStr)  then
+   if vEstadoTela = etIncluir then
    begin
      TMessageUtil.Alerta('Unidade não pode ficar em branco.');
 
@@ -465,9 +470,11 @@ begin
         edtUnidade.SetFocus;
 
      Exit;
+
    end;
 
    if (edtDescricao.Text = EmptyStr)  then
+   if vEstadoTela = etIncluir then
    begin
      TMessageUtil.Alerta('Descrição não pode ficar em branco.');
 
@@ -480,29 +487,63 @@ begin
    Result := True;
 end;
 
-function TfrmProdutos.ProcessaAlteracao: Boolean;
+function TfrmProdutos.ProcessaConsulta: Boolean;
 begin
-  try
-    Result := False;
+   try
+       Result := False;
 
-    if ProcessaProduto then
-    begin
-      TMessageUtil.Informacao('Dados alterados com sucesso.');
+       if (edtCodigo.Text = EmptyStr) then
+       begin
+            TMessageUtil.Alerta('Código do produto não pode ficar em branco');
 
-      vEstadoTela := etPadrao;
-      DefineEstadoTela;
-      Result := True;
+            if (edtCodigo.CanFocus) then
+                edtCodigo.SetFocus;
 
-    end;
+            Exit;
+       end;
 
-  except
-     on E:Exception do
+      vObjUnidade :=
+         TUnidade(TProdutoController.getInstancia.BuscaProduto(
+            StrToIntDef(edtCodigo.Text, 0)));
+
+
+          if (vObjUnidade <> nil) then
+            CarregaDadosTela
+          else
+          begin
+            TMessageUtil.Alerta(
+                'Nenhum cliente encontrado para o código informado.');
+            LimpaTela;
+
+            if (edtCodigo.CanFocus) then
+                edtCodigo.SetFocus;
+
+            Exit;
+          end;
+
+          DefineEstadoTela;
+          Result := True;
+
+   except
+      on E:Exception do
       begin
         Raise Exception.Create(
-        'Falha ao alterar os dados do produto [View]: '#13+
+        'Falha ao consultar os dados do cliente [View]: '#13+
         e.Message);
       end;
-  end;
+   end;
 end;
+
+procedure TfrmProdutos.carregaDadosTela;
+var
+  i : Integer;
+   begin
+     if (vObjUnidade = nil) then
+        Exit;
+        edtCodigo.Text          := IntToStr(vObjUnidade.Id);
+        chkAtivo.Checked        := vObjUnidade.Ativo;
+        edtUnidade.Text         := vObjUnidade.Unidade;
+        edtDescricao.Text       := vObjUnidade.Descricao;
+   end;
 
 end.
