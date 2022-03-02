@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, ComCtrls, StdCtrls, ExtCtrls, Buttons, Mask, UEnumerationUtil,
-  DB;
+  UUnidade, UProdutoController;
 
 type
   TfrmProdutos = class(TForm)
@@ -42,12 +42,21 @@ type
       Shift: TShiftState);
     procedure FormShow(Sender: TObject);
     procedure edtCodigoExit(Sender: TObject);
+    procedure btnConfirmarClick(Sender: TObject);
 
   private
        { Private declarations }
     vKey : Word;
    // Variaveis de Classes
    vEstadoTela : TEstadoTela;
+   vObjUnidade : TUnidade;
+
+   function ProcessaConfirmacao : Boolean;
+   function ProcessaInclusao    : Boolean;
+   function ProcessaProduto     : Boolean;
+
+
+   function ProcessaUnidade     : Boolean; //ProcessaPessoa
 
 
    procedure CamposEnabled(pOpcao : Boolean);
@@ -321,5 +330,124 @@ begin
 
    vKey := VK_CLEAR;
 end;
+
+procedure TfrmProdutos.btnConfirmarClick(Sender: TObject);
+begin
+   ProcessaConfirmacao;
+end;
+
+function TfrmProdutos.ProcessaConfirmacao: Boolean;
+begin
+   Result := False;
+
+  try
+      case vEstadoTela of
+          etIncluir:   Result := ProcessaInclusao;
+//        etAlterar:   Result := ProcessaAlteracao;
+//        etExcluir:   Result := ProcessaExclusao;
+//        etConsultar: Result := ProcessaConsulta;
+      end;
+
+      if not Result then
+        Exit;
+  except
+      on E: Exception do
+      TMessageUtil.Alerta(E.Message);
+  end;
+
+
+  Result := True;
+end;
+
+function TfrmProdutos.ProcessaInclusao: Boolean;
+begin
+   try
+
+     Result := False;
+
+     if ProcessaProduto then
+     begin
+       TMessageUtil.Informacao('Produto cadastrado com sucesso.'#13+
+       'Código cadastrado: '+ IntToStr(vObjUnidade.Id));
+       vEstadoTela := etPadrao;
+       DefineEstadoTela;
+       DefineEstadoTela;
+
+       Result  := True;
+     end;
+   except
+      on E: Exception do
+      begin
+          Raise Exception.Create(
+          'Falha ao incluir os dados do produto [View]: '#13+
+          e.Message);
+      end;
+
+   end;
+
+
+
+end;
+
+function TfrmProdutos.ProcessaProduto: Boolean;
+begin
+  try
+       Result := False;
+     if(ProcessaUnidade) then
+      begin
+          // Gravação no BD
+          TProdutoController.getInstancia.GravaProduto(vObjUnidade);
+
+          Result := True;
+      end;
+
+  except
+       on E : Exception do
+       begin
+         Raise Exception.Create(
+              'Falha ao gravar os dados do produto [View]: '#13+
+              e.Message);
+       end;
+  end;
+end;
+
+function TfrmProdutos.ProcessaUnidade: Boolean;
+begin
+  try
+       Result := False;
+
+//     if not ValidaCliente then
+//            Exit;
+      if vEstadoTela = etIncluir then
+      begin
+        if vObjUnidade = nil then
+           vObjUnidade := TUnidade.Create;
+      end
+      else
+      if  vEstadoTela = etAlterar then
+      begin
+         if vObjUnidade = nil then
+            Exit;
+      end;
+
+      if (vObjUnidade = nil) then
+         Exit;
+
+        vObjUnidade.Unidade                      := edtUnidade.Text;
+        vObjUnidade.Ativo                        := chkAtivo.Checked;
+        vObjUnidade.Descricao                    := edtDescricao.Text;
+
+       Result := True;
+  except
+       on E : Exception do
+       begin
+          Raise Exception.Create(
+          'Falha ao processar os dados do Produto [View]'#13+
+          e.Message);
+       end;
+
+  end;
+end;
+
 
 end.
