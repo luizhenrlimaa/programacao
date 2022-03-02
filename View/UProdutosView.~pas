@@ -51,6 +51,11 @@ type
    vEstadoTela : TEstadoTela;
    vObjUnidade : TUnidade;
 
+   procedure CamposEnabled(pOpcao : Boolean);
+   procedure LimpaTela;
+   procedure DefineEstadoTela;
+
+
    function ProcessaConfirmacao : Boolean;
    function ProcessaInclusao    : Boolean;
    function ProcessaProduto     : Boolean;
@@ -58,10 +63,8 @@ type
 
    function ProcessaUnidade     : Boolean; //ProcessaPessoa
 
-
-   procedure CamposEnabled(pOpcao : Boolean);
-   procedure LimpaTela;
-   procedure DefineEstadoTela;
+   
+   function ValidaUnidade       : Boolean;
 
   public
     { Public declarations }
@@ -416,8 +419,8 @@ begin
   try
        Result := False;
 
-//     if not ValidaCliente then
-//            Exit;
+     if not ValidaUnidade then
+            Exit;
       if vEstadoTela = etIncluir then
       begin
         if vObjUnidade = nil then
@@ -449,5 +452,31 @@ begin
   end;
 end;
 
+function TfrmProdutos.ValidaUnidade: Boolean;
+begin
+   Result := False;
+
+   if (edtUnidade.Text = EmptyStr)  then
+   begin
+     TMessageUtil.Alerta('Unidade não pode ficar em branco.');
+
+     if edtUnidade.CanFocus  then
+        edtUnidade.SetFocus;
+
+     Exit;
+   end;
+
+   if (edtDescricao.Text = EmptyStr)  then
+   begin
+     TMessageUtil.Alerta('Descrição não pode ficar em branco.');
+
+     if edtDescricao.CanFocus  then
+        edtDescricao.SetFocus;
+
+     Exit;
+   end;
+
+   Result := True;
+end;
 
 end.
