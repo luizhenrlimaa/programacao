@@ -20,7 +20,12 @@ uses
   UClientesPesqView in 'View\UClientesPesqView.pas' {frmClientesPesq},
   UGenesisView in 'View\UGenesisView.pas' {frmGenesis},
   UApocalipseView in 'View\UApocalipseView.pas' {frmApocalipse},
-  UProdutosView in 'View\UProdutosView.pas' {frmProdutos};
+  UProdutosView in 'View\UProdutosView.pas' {frmProdutos},
+  UProduto in 'Model\UProduto.pas',
+  UProdutoDAO in 'Model\UProdutoDAO.pas',
+  UUnidade in 'Model\UUnidade.pas',
+  UProdutoController in 'Controller\UProdutoController.pas',
+  UProdutoPesqView in 'View\UProdutoPesqView.pas' {Form1};
 
 {$R *.res}
 

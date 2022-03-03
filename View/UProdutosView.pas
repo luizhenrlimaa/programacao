@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, ComCtrls, StdCtrls, ExtCtrls, Buttons, Mask, UEnumerationUtil,
-  UUnidade, UProdutoController;
+  UUnidade, UProduto, UProdutoController;
 
 type
   TfrmProdutos = class(TForm)
@@ -61,7 +61,9 @@ type
 
 
    function ProcessaConfirmacao : Boolean;
+   function ProcessaAlteracao   : Boolean;
    function ProcessaConsulta    : Boolean;
+   function ProcessaExclusao    : Boolean;
    function ProcessaInclusao    : Boolean;
    function ProcessaProduto     : Boolean; //ProcessaCliente
 
@@ -185,7 +187,7 @@ begin
     begin
       stbBarraStatus.Panels[0].Text := 'Exclusão';
       if (edtCodigo.Text <> EmptyStr) then
-//        ProcessaExclusao;
+        ProcessaExclusao;
       begin
         lblCodigo.Enabled := True;
         edtCodigo.Enabled := True;
@@ -334,7 +336,7 @@ end;
 procedure TfrmProdutos.edtCodigoExit(Sender: TObject);
 begin
   if vKey = VK_RETURN then
-//   ProcessaConsulta;
+   ProcessaConsulta;
 
    vKey := VK_CLEAR;
 end;
@@ -351,8 +353,8 @@ begin
   try
       case vEstadoTela of
           etIncluir:   Result := ProcessaInclusao;
-//          etAlterar:   Result := ProcessaAlteracao;
-//        etExcluir:   Result := ProcessaExclusao;
+          etAlterar:   Result := ProcessaAlteracao;
+          etExcluir:   Result := ProcessaExclusao;
           etConsultar: Result := ProcessaConsulta;
       end;
 
@@ -462,7 +464,6 @@ begin
    Result := False;
 
    if (edtUnidade.Text = EmptyStr)  then
-   if vEstadoTela = etIncluir then
    begin
      TMessageUtil.Alerta('Unidade não pode ficar em branco.');
 
@@ -474,7 +475,6 @@ begin
    end;
 
    if (edtDescricao.Text = EmptyStr)  then
-   if vEstadoTela = etIncluir then
    begin
      TMessageUtil.Alerta('Descrição não pode ficar em branco.');
 
@@ -535,8 +535,8 @@ begin
 end;
 
 procedure TfrmProdutos.carregaDadosTela;
-var
-  i : Integer;
+//var
+//  i : Integer;
    begin
      if (vObjUnidade = nil) then
         Exit;
@@ -545,5 +545,82 @@ var
         edtUnidade.Text         := vObjUnidade.Unidade;
         edtDescricao.Text       := vObjUnidade.Descricao;
    end;
+
+function TfrmProdutos.ProcessaExclusao: Boolean;
+begin
+  try
+    Result := False;
+
+       if (vObjUnidade = nil) then
+
+       begin
+         TMessageUtil.Alerta(
+          'Não foi possivel carregar todos os dados cadastrados do produto');
+
+         LimpaTela;
+         vEstadoTela := etPadrao;
+         DefineEstadoTela;
+         Exit;
+       end;
+       try
+         if TMessageUtil.Pergunta('Confirma a exclusão do produto?') then
+         begin
+            Screen.Cursor := crHourGlass;
+            TProdutoController.getInstancia.ExcluiProduto(vObjUnidade);
+            TMessageUtil.Informacao('Produto exluido com sucesso.');
+         end
+         else
+         begin
+           LimpaTela;
+           vEstadoTela := etPadrao;
+           DefineEstadoTela;
+           Exit;
+         end;
+
+       finally
+          Screen.Cursor := crDefault;
+          Application.ProcessMessages;
+       end;
+
+     Result := True;
+     LimpaTela;
+     vEstadoTela := etPadrao;
+     DefineEstadoTela;
+     Exit;
+     
+  except
+      on E:Exception do
+      begin
+        Raise Exception.Create(
+        'Falha ao excluir os dados do produto [View]: '#13+
+        e.Message);
+      end;
+  end;
+end;
+
+function TfrmProdutos.ProcessaAlteracao: Boolean;
+
+begin
+  try
+    Result := False;
+    if ProcessaProduto  then
+    begin
+      TMessageUtil.Informacao('Dados alterados com sucesso.');
+
+      vEstadoTela := etPadrao;
+      DefineEstadoTela;
+      Result := True;
+
+    end;
+
+  except
+     on E:Exception do
+      begin
+        Raise Exception.Create(
+        'Falha ao alterar os dados do produto [View]: '#13+
+        e.Message);
+      end;
+  end;
+end;
 
 end.

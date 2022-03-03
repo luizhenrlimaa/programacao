@@ -779,6 +779,7 @@ begin
      try
        if TMessageUtil.Pergunta('Confirma a exclusão do cliente?') then
        begin
+          carregaDadosTela;
           Screen.Cursor := crHourGlass;
           TPessoaController.getInstancia.ExcluiPessoa(vObjCliente);
           TMessageUtil.Informacao('Cliente exluido com sucesso.');

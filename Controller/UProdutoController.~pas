@@ -10,15 +10,15 @@ type
         constructor Create;
         function GravaProduto(
                       pProduto : TProduto) : Boolean;
-//        function ExcluiProduto(
-//                      pProduto : TProduto) : Boolean;
-//
+        function ExcluiProduto(
+                      pProduto : TProduto) : Boolean;
+
         function BuscaProduto(pID : Integer) : TProduto;
 //        function PesquisaPessoa(pNome : string) : TColPessoa;
 //        function BuscaEnderecoPessoa(pID_Pessoa : Integer) : TColEndereco;
-//        function RetornaCondicaoProduto(
-//                   pID_Pessoa: Integer;
-//                   pRelacionada : Boolean = False) : String;
+        function RetornaCondicaoProduto(
+                   pID_Produto: Integer;
+                   pRelacionada : Boolean = False) : String;
 
       published
         class function getInstancia : TProdutoController;
@@ -99,45 +99,45 @@ begin
    inherited Create;
 end;
 
-//function TProdutoController.ExcluiProduto(pProduto: TProduto): Boolean;
-//var
-//  XProdutoaDAO   : TPessoaDAO;
-//begin
-//  try
-//    try
-//       Result := False;
-//
-//       TConexao.get.iniciaTransacao;
-//
-//       XProdutoaDAO := TPessoaDAO.Create(TConexao.get.getConn);
-//
-//
-//       if(pProduto.Id =0) then
-//            Exit
-//       else
-//       begin
-//         XProdutoaDAO.Deleta(RetornaCondicaoProduto(pProduto.Id));
-//       end;
-//
-//       TConexao.get.confirmaTransacao;
-//
-//       Result := True;
-//
-//    finally
-//      if (XProdutoaDAO <> nil) then
-//          FreeAndNil(XProdutoaDAO);
-//
-//    end;
-//  except
-//    on E : Exception do
-//      begin
-//         TConexao.get.cancelaTransacao;
-//         Raise Exception.Create(
-//         'Falha ao excluir os dados do produto [Controller]. '#13+
-//          e.Message);
-//      end;
-//  end;
-//end;
+function TProdutoController.ExcluiProduto(pProduto: TProduto): Boolean;
+var
+  XProdutoDAO   : TProdutoDAO;
+begin
+  try
+    try
+       Result := False;
+
+       TConexao.get.iniciaTransacao;
+
+       XProdutoDAO := TProdutoDAO.Create(TConexao.get.getConn);
+
+
+       if(pProduto.Id =0) then
+            Exit
+       else
+       begin
+         XProdutoDAO.Deleta(RetornaCondicaoProduto(pProduto.Id));
+       end;
+
+       TConexao.get.confirmaTransacao;
+
+       Result := True;
+
+    finally
+      if (XProdutoDAO <> nil) then
+          FreeAndNil(XProdutoDAO);
+
+    end;
+  except
+    on E : Exception do
+      begin
+         TConexao.get.cancelaTransacao;
+         Raise Exception.Create(
+         'Falha ao excluir os dados do produto [Controller]. '#13+
+          e.Message);
+      end;
+  end;
+end;
 
 class function TProdutoController.getInstancia: TProdutoController;
 begin
@@ -151,7 +151,7 @@ function TProdutoController.GravaProduto(
            pProduto : TProduto) : Boolean;
 var
    xProdutoDAO   : TProdutoDAO;
-   xAux          : Integer;
+//   xAux          : Integer;
 begin
     try
         try
@@ -167,18 +167,18 @@ begin
             begin
                xProdutoDAO.Insere(pProduto);
 
-//              for xAux := 0 to pred(pColEndereco.Count) do
-//                pColEndereco.Retorna(xAux).ID_pessoa := pProduto.Id;
+//             for xAux := 0 to pred(pColEndereco.Count) do
+//                pColEndereco.Retorna(xAux).ID_pessoa := pPessoa.Id;
 //
 //
 //               xEnderecoDAO.InsereLista(pColEndereco)
-            end;
-//            else
-//            begin
-//               xProdutoDAO.Atualiza(pProduto, RetornaCondicaoProduto(pProduto.Id));
-//               xEnderecoDAO.Deleta(RetornaCondicaoProduto(pProduto.Id, True));
+            end
+            else
+            begin
+               xProdutoDAO.Atualiza(pProduto, RetornaCondicaoProduto(pProduto.Id));
+//               xProdutoDAO.Deleta(RetornaCondicaoProduto(pProduto.Id, True));
 //               xEnderecoDAO.InsereLista(pColEndereco);
-//            end;
+            end;
 
             TConexao.get.confirmaTransacao;
         finally
@@ -190,7 +190,7 @@ begin
         begin
           TConexao.get.cancelaTransacao;
           Raise Exception.Create(
-            'Falha ao gravar os dados da pessoa [Controller]. '#13+
+            'Falha ao gravar os dados do produto [Controller]. '#13+
             e.Message);
         end;
     end;
@@ -231,21 +231,21 @@ end;
 //
 //end;
 
-//function TPessoaController.RetornaCondicaoProduto(
-//  pID_Pessoa: Integer; pRelacionada : Boolean): String;
-//var
-//  xChave : string;
-//
-//begin
-//  if (pRelacionada) then
-//      xChave := 'ID_PESSOA'
-//
-//  else
-//      xChave := 'ID';
-//
-//  Result :=
-//  'WHERE                                                 '#13+
-//  '  '+xChave+ ' = '+ QuotedStr(IntToStr(pID_Pessoa))+ ' '#13;
-//end;
+function TProdutoController.RetornaCondicaoProduto(
+  pID_Produto: Integer; pRelacionada : Boolean): String;
+var
+  xChave : string;
+
+begin
+  if (pRelacionada) then
+      xChave := 'ID_PRODUTO'
+
+  else
+      xChave := 'ID';
+
+  Result :=
+  'WHERE                                                  '#13+
+  '  '+xChave+ ' = '+ QuotedStr(IntToStr(pID_Produto))+ ' '#13;
+end;
 
 end.
