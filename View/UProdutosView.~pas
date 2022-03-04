@@ -50,6 +50,7 @@ type
    // Variaveis de Classes
    vEstadoTela : TEstadoTela;
    vObjUnidade : TUnidade;
+   vObjColProduto : TColProduto;
 
    procedure CamposEnabled(pOpcao : Boolean);
    procedure LimpaTela;
@@ -84,7 +85,7 @@ implementation
 
 {$R *.dfm}
 Uses
-  uMessageUtil, StrUtils, UClassFuncoes, UClientesView;
+  uMessageUtil, StrUtils, UClassFuncoes, UClientesView, UProdutoPesqView;
 
 
 procedure TfrmProdutos.btnSairClick(Sender: TObject);
@@ -162,6 +163,7 @@ begin
 
       if (edtCodigo.Text <> EmptyStr) then
      begin
+     
         CamposEnabled(True);
 
         edtCodigo.Enabled      := False;
@@ -222,8 +224,40 @@ begin
           edtCodigo.SetFocus;
      end;
     end;
+    etPesquisar:
+     begin
+       stbBarraStatus.Panels[0].Text := 'Pesquisa';
+
+       if (frmProdutoPesq = nil) then
+           frmProdutoPesq := TfrmProdutoPesq.Create(Application);
+
+       frmProdutoPesq.ShowModal;
+
+//       if (frmProdutoPesq.mClienteID <> 0) then
+//       begin
+//          edtCodigo.Text := IntToStr(frmProdutoPesq.mClienteID);
+//          vEstadoTela    := etConsultar;
+//          ProcessaConsulta;
+//       end
+//       else
+//       begin
+//          vEstadoTela := etPadrao;
+//          DefineEstadoTela;
+//       end;
+//
+//       frmProdutoPesq.mClienteID := 0;
+//       frmProdutoPesq.mClienteNome := EmptyStr;
+//
+//       if edtNome.CanFocus then
+//          edtNome.SetFocus;
+
+     end;
   end;
-end;
+
+
+
+  end;
+
 
 procedure TfrmProdutos.btnIncluirClick(Sender: TObject);
 begin
@@ -275,6 +309,10 @@ begin
       // Então , define seu padrão desmarcado
       (Components[i] as TCheckBox).Checked := False;
   end;
+    if(vObjUnidade <> nil) then
+   FreeAndNil(vObjUnidade);
+   if(vObjColProduto <> nil) then
+   FreeAndNil(vObjColProduto);
 end;
 
 
@@ -406,7 +444,8 @@ begin
      if(ProcessaUnidade) then
       begin
           // Gravação no BD
-          TProdutoController.getInstancia.GravaProduto(vObjUnidade);
+          TProdutoController.getInstancia.GravaProduto(
+                                      vObjUnidade, vObjColProduto);
 
           Result := True;
       end;
@@ -428,6 +467,10 @@ begin
 
      if not ValidaUnidade then
             Exit;
+     if (vObjColProduto <> nil) then
+        FreeAndNil(vObjColProduto);
+
+      vObjColProduto := TColProduto.Create;
       if vEstadoTela = etIncluir then
       begin
         if vObjUnidade = nil then
@@ -551,36 +594,37 @@ begin
   try
     Result := False;
 
-       if (vObjUnidade = nil) then
+     if (vObjUnidade = nil) then
 
+     begin
+       TMessageUtil.Alerta(
+        'Não foi possivel carregar todos os dados cadastrados do produto');
+
+       LimpaTela;
+       vEstadoTela := etPadrao;
+       DefineEstadoTela;
+       Exit;
+     end;
+     try
+       if TMessageUtil.Pergunta('Confirma a exclusão do produto?') then
        begin
-         TMessageUtil.Alerta(
-          'Não foi possivel carregar todos os dados cadastrados do produto');
-
+          carregaDadosTela;
+          Screen.Cursor := crHourGlass;
+          TProdutoController.getInstancia.ExcluiProduto(vObjUnidade);
+          TMessageUtil.Informacao('Produto exluido com sucesso.');
+       end
+       else
+       begin
          LimpaTela;
          vEstadoTela := etPadrao;
          DefineEstadoTela;
          Exit;
        end;
-       try
-         if TMessageUtil.Pergunta('Confirma a exclusão do produto?') then
-         begin
-            Screen.Cursor := crHourGlass;
-            TProdutoController.getInstancia.ExcluiProduto(vObjUnidade);
-            TMessageUtil.Informacao('Produto exluido com sucesso.');
-         end
-         else
-         begin
-           LimpaTela;
-           vEstadoTela := etPadrao;
-           DefineEstadoTela;
-           Exit;
-         end;
 
-       finally
-          Screen.Cursor := crDefault;
-          Application.ProcessMessages;
-       end;
+     finally
+        Screen.Cursor := crDefault;
+        Application.ProcessMessages;
+     end;
 
      Result := True;
      LimpaTela;
@@ -592,7 +636,7 @@ begin
       on E:Exception do
       begin
         Raise Exception.Create(
-        'Falha ao excluir os dados do produto [View]: '#13+
+        'Falha ao excluir os dados do cliente [View]: '#13+
         e.Message);
       end;
   end;
@@ -603,6 +647,7 @@ function TfrmProdutos.ProcessaAlteracao: Boolean;
 begin
   try
     Result := False;
+
     if ProcessaProduto  then
     begin
       TMessageUtil.Informacao('Dados alterados com sucesso.');

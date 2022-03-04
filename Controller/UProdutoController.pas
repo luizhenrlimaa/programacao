@@ -9,7 +9,8 @@ type
       public
         constructor Create;
         function GravaProduto(
-                      pProduto : TProduto) : Boolean;
+                      pProduto : TProduto;
+                      pColProduto : TColProduto) : Boolean;
         function ExcluiProduto(
                       pProduto : TProduto) : Boolean;
 
@@ -17,7 +18,7 @@ type
 //        function PesquisaPessoa(pNome : string) : TColPessoa;
 //        function BuscaEnderecoPessoa(pID_Pessoa : Integer) : TColEndereco;
         function RetornaCondicaoProduto(
-                   pID_Produto: Integer;
+                   pID: Integer;
                    pRelacionada : Boolean = False) : String;
 
       published
@@ -76,7 +77,7 @@ begin
        Result := nil;
 
        XProdutoDAO := TProdutoDAO.Create(TConexao.getInstance.getConn);
-       Result := XProdutoDAO.Retorna(RetornaCondicaoProduto(pID));
+       Result      := XProdutoDAO.Retorna(RetornaCondicaoProduto(pID));
 
     finally
       if(XProdutoDAO <> nil) then
@@ -148,10 +149,11 @@ begin
 end;
 
 function TProdutoController.GravaProduto(
-           pProduto : TProduto) : Boolean;
+           pProduto : TProduto;
+                      pColProduto : TColProduto) : Boolean;
 var
    xProdutoDAO   : TProdutoDAO;
-//   xAux          : Integer;
+   xAux          : Integer;
 begin
     try
         try
@@ -167,17 +169,17 @@ begin
             begin
                xProdutoDAO.Insere(pProduto);
 
-//             for xAux := 0 to pred(pColEndereco.Count) do
-//                pColEndereco.Retorna(xAux).ID_pessoa := pPessoa.Id;
-//
-//
-//               xEnderecoDAO.InsereLista(pColEndereco)
+             for xAux := 0 to pred(pColProduto.Count) do
+                pColProduto.Retorna(xAux).Id := pProduto.Id;
+
+
+                xProdutoDAO.InsereLista(pColProduto)
             end
             else
             begin
                xProdutoDAO.Atualiza(pProduto, RetornaCondicaoProduto(pProduto.Id));
-//               xProdutoDAO.Deleta(RetornaCondicaoProduto(pProduto.Id, True));
-//               xEnderecoDAO.InsereLista(pColEndereco);
+//               xProdutoDAO.Deleta(RetornaCondicaoProduto(pProduto.Id));
+//               xProdutoDAO.InsereLista(pColProduto);
             end;
 
             TConexao.get.confirmaTransacao;
@@ -232,20 +234,20 @@ end;
 //end;
 
 function TProdutoController.RetornaCondicaoProduto(
-  pID_Produto: Integer; pRelacionada : Boolean): String;
+  pID: Integer; pRelacionada : Boolean): String;
 var
   xChave : string;
 
 begin
   if (pRelacionada) then
-      xChave := 'ID_PRODUTO'
+      xChave := 'ID'
 
   else
       xChave := 'ID';
 
   Result :=
   'WHERE                                                  '#13+
-  '  '+xChave+ ' = '+ QuotedStr(IntToStr(pID_Produto))+ ' '#13;
+  '  '+xChave+ ' = '+ QuotedStr(IntToStr(pID))+ ' '#13;
 end;
 
 end.
