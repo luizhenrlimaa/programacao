@@ -233,23 +233,23 @@ begin
 
        frmProdutoPesq.ShowModal;
 
-//       if (frmProdutoPesq.mClienteID <> 0) then
-//       begin
-//          edtCodigo.Text := IntToStr(frmProdutoPesq.mClienteID);
-//          vEstadoTela    := etConsultar;
-//          ProcessaConsulta;
-//       end
-//       else
-//       begin
-//          vEstadoTela := etPadrao;
-//          DefineEstadoTela;
-//       end;
-//
-//       frmProdutoPesq.mClienteID := 0;
-//       frmProdutoPesq.mClienteNome := EmptyStr;
-//
-//       if edtNome.CanFocus then
-//          edtNome.SetFocus;
+       if (frmProdutoPesq.mProdutoID <> 0) then
+       begin
+          edtCodigo.Text := IntToStr(frmProdutoPesq.mProdutoID);
+          vEstadoTela    := etConsultar;
+          ProcessaConsulta;
+       end
+       else
+       begin
+          vEstadoTela := etPadrao;
+          DefineEstadoTela;
+       end;
+
+       frmProdutoPesq.mProdutoID := 0;
+       frmProdutoPesq.mProdutoDescricao := EmptyStr;
+
+       if edtUnidade.CanFocus then
+          edtUnidade.SetFocus;
 
      end;
   end;

@@ -1,8 +1,8 @@
 object frmProdutoPesq: TfrmProdutoPesq
   Left = 442
   Top = 256
-  Width = 604
-  Height = 287
+  Width = 520
+  Height = 329
   Caption = 'Pesquisa de Unidade de Produto'
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -19,7 +19,7 @@ object frmProdutoPesq: TfrmProdutoPesq
   object grbFiltrar: TGroupBox
     Left = 0
     Top = 0
-    Width = 588
+    Width = 504
     Height = 57
     Align = alTop
     Caption = 'Filtrar'
@@ -47,12 +47,13 @@ object frmProdutoPesq: TfrmProdutoPesq
       TabOrder = 0
     end
     object btnFiltrar: TBitBtn
-      Left = 497
-      Top = 16
+      Left = 426
+      Top = 18
       Width = 77
       Height = 25
       Caption = '&Filtrar'
       TabOrder = 1
+      OnClick = btnFiltrarClick
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100
         18000000000000030000C40E0000C40E00000000000000000000FFFFFFFFFFFF
@@ -85,17 +86,18 @@ object frmProdutoPesq: TfrmProdutoPesq
   object grbGrid: TGroupBox
     Left = 0
     Top = 57
-    Width = 588
-    Height = 191
+    Width = 504
+    Height = 233
     Align = alClient
     Caption = 'Resultado da Busca'
     TabOrder = 1
-    object dbgCliente: TDBGrid
+    object dbgProduto: TDBGrid
       Left = 2
       Top = 15
-      Width = 591
-      Height = 170
+      Width = 497
+      Height = 158
       Align = alCustom
+      DataSource = dtsProduto
       Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgCancelOnExit]
       TabOrder = 0
       TitleFont.Charset = DEFAULT_CHARSET
@@ -103,11 +105,13 @@ object frmProdutoPesq: TfrmProdutoPesq
       TitleFont.Height = -11
       TitleFont.Name = 'MS Sans Serif'
       TitleFont.Style = []
+      OnDblClick = dbgProdutoDblClick
       Columns = <
         item
           Expanded = False
           FieldName = 'ID'
           Title.Caption = 'C'#243'digo'
+          Width = 49
           Visible = True
         end
         item
@@ -118,32 +122,35 @@ object frmProdutoPesq: TfrmProdutoPesq
         end
         item
           Expanded = False
-          FieldName = 'Descri'#231#227'o'
-          Width = 399
+          FieldName = 'Descricao'
+          Title.Caption = 'Descri'#231#227'o'
+          Width = 327
           Visible = True
         end
         item
           Expanded = False
-          FieldName = 'Ativo'
+          FieldName = 'DescricaoAtivo'
+          Title.Caption = 'Ativo'
           Width = 46
           Visible = True
         end>
     end
     object pnlBotoes: TPanel
       Left = 2
-      Top = 135
-      Width = 584
-      Height = 54
+      Top = 178
+      Width = 500
+      Height = 53
       Align = alBottom
       Caption = #39
       TabOrder = 1
       object btnConfirmar: TBitBtn
-        Left = 313
-        Top = 8
+        Left = 257
+        Top = 6
         Width = 77
         Height = 25
         Caption = 'C&onfirmar'
         TabOrder = 0
+        OnClick = btnConfirmarClick
         Glyph.Data = {
           36030000424D3603000000000000360000002800000010000000100000000100
           18000000000000030000C40E0000C40E00000000000000000000FFFFFFFFFFFF
@@ -173,8 +180,8 @@ object frmProdutoPesq: TfrmProdutoPesq
           8637288637247C3267A567B7CDB7FFFFFFFFFFFFFFFFFFFFFFFF}
       end
       object btnLimpar: TBitBtn
-        Left = 405
-        Top = 8
+        Left = 341
+        Top = 5
         Width = 75
         Height = 25
         Caption = '&Limpar'
@@ -209,8 +216,8 @@ object frmProdutoPesq: TfrmProdutoPesq
           AF8DC2AA84AA9161A98B5DFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF}
       end
       object btnSair: TBitBtn
-        Left = 493
-        Top = 8
+        Left = 422
+        Top = 5
         Width = 75
         Height = 25
         Caption = '&Sair'
@@ -246,11 +253,47 @@ object frmProdutoPesq: TfrmProdutoPesq
       end
       object stbBarraStatus: TStatusBar
         Left = 1
-        Top = 34
-        Width = 582
+        Top = 33
+        Width = 498
         Height = 19
         Panels = <>
       end
     end
+  end
+  object cdsProduto: TClientDataSet
+    Active = True
+    Aggregates = <>
+    Params = <>
+    BeforeDelete = cdsProdutoBeforeDelete
+    Left = 48
+    Top = 97
+    Data = {
+      900000009619E0BD010000001800000005000000000003000000900002494404
+      0001000000000007556E69646164650100490000000100055749445448020002
+      0002000944657363726963616F01004900000001000557494454480200020014
+      0005417469766F04000100000000000E44657363726963616F417469766F0100
+      4900000001000557494454480200020003000000}
+    object cdsProdutoID: TIntegerField
+      FieldName = 'ID'
+    end
+    object cdsProdutoUnidade: TStringField
+      FieldName = 'Unidade'
+      Size = 2
+    end
+    object cdsProdutoDescricao: TStringField
+      FieldName = 'Descricao'
+    end
+    object cdsProdutoAtivo: TIntegerField
+      FieldName = 'Ativo'
+    end
+    object cdsProdutoDescricaoAtivo: TStringField
+      FieldName = 'DescricaoAtivo'
+      Size = 3
+    end
+  end
+  object dtsProduto: TDataSource
+    DataSet = cdsProduto
+    Left = 16
+    Top = 97
   end
 end

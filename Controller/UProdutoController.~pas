@@ -15,7 +15,7 @@ type
                       pProduto : TProduto) : Boolean;
 
         function BuscaProduto(pID : Integer) : TProduto;
-//        function PesquisaPessoa(pNome : string) : TColPessoa;
+        function PesquisaProduto(pNome : string) : TColProduto;
 //        function BuscaEnderecoPessoa(pID_Pessoa : Integer) : TColEndereco;
         function RetornaCondicaoProduto(
                    pID: Integer;
@@ -196,40 +196,39 @@ begin
     end;
 end;
 
-//function TPessoaController.PesquisaPessoa(pNome: string): TColPessoa;
-//var
-//  xPessoaDAO  : TPessoaDAO;
-//  xCondicao   : string;
-//begin
-//   try
-//      try
-//
-//        Result := nil;
-//        xPessoaDAO := TPessoaDAO.Create(TConexao.get.getConn);
-//
-//        xCondicao :=  IfThen(pNome <> EmptyStr,
-//                  'WHERE                                   '#13+
-//                  '    (NOME LIKE UPPER(''%'+ pNome +'%''))'#13+
-//                  'ORDER BY NOME, ID', EmptyStr);
-//
-//        Result := xPessoaDAO.RetornaLista(xCondicao);
-//
-//      finally
-//          if (xPessoaDAO <> nil) then
-//          FreeAndNil(xPessoaDAO);
-//
-//      end;
-//   except
-//     on E : Exception do
-//        begin
-//          TConexao.get.cancelaTransacao;
-//          Raise Exception.Create(
-//            'Falha ao buscar os dados da pessoa [Controller]. '#13+
-//            e.Message);
-//        end;
-//   end;
-//
-//end;
+function TProdutoController.PesquisaProduto(pNome: string): TColProduto;
+var
+  xProdutoDAO  : TProdutoDAO;
+  xCondicao   : string;
+begin
+  try
+      try
+        Result := nil;
+        xProdutoDAO := TProdutoDAO.Create(TConexao.get.getConn);
+
+        xCondicao :=  IfThen(pNome <> EmptyStr,
+                  'WHERE                                        '#13+
+                  '    (DESCRICAO LIKE UPPER(''%'+ pNome +'%''))'#13+
+                  'ORDER BY DESCRICAO, ID', EmptyStr);
+
+        Result := xProdutoDAO.RetornaLista(xCondicao);
+
+      finally
+          if (xProdutoDAO <> nil) then
+          FreeAndNil(xProdutoDAO);
+
+      end;
+  except
+     on E : Exception do
+        begin
+          TConexao.get.cancelaTransacao;
+          Raise Exception.Create(
+            'Falha ao buscar os dados do produto [Controller]. '#13+
+            e.Message);
+        end;
+  end;
+
+end;
 
 function TProdutoController.RetornaCondicaoProduto(
   pID: Integer; pRelacionada : Boolean): String;
