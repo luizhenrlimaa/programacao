@@ -79,6 +79,7 @@ object frmProdutos: TfrmProdutos
       Width = 52
       Height = 21
       TabOrder = 0
+      OnExit = edtCodigoExit
     end
     object chkAtivo: TCheckBox
       Left = 128

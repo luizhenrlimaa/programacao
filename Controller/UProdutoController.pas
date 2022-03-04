@@ -171,8 +171,6 @@ begin
 
              for xAux := 0 to pred(pColProduto.Count) do
                 pColProduto.Retorna(xAux).Id := pProduto.Id;
-
-
                 xProdutoDAO.InsereLista(pColProduto)
             end
             else
