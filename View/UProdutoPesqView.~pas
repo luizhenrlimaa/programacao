@@ -79,9 +79,9 @@ begin
   end;
 
    if(not cdsProduto.IsEmpty) then
-   cdsProduto.EmptyDataSet;
+       cdsProduto.EmptyDataSet;
 
-  if (edtNome.CanFocus) then
+   if (edtNome.CanFocus) then
       edtNome.SetFocus ;
 end;
 
@@ -212,7 +212,7 @@ end;
 
 procedure TfrmProdutoPesq.btnConfirmarClick(Sender: TObject);
 begin
-      ProcessaConfirmacao;
+   ProcessaConfirmacao;
 end;
 
 procedure TfrmProdutoPesq.cdsProdutoBeforeDelete(DataSet: TDataSet);
@@ -222,7 +222,7 @@ end;
 
 procedure TfrmProdutoPesq.dbgProdutoDblClick(Sender: TObject);
 begin
-    ProcessaConfirmacao;
+   ProcessaConfirmacao;
 end;
 
 end.

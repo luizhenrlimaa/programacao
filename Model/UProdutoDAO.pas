@@ -35,8 +35,6 @@ begin
     vClass    := TProduto;
 end;
 
-
-
 function TProdutoDAO.Insere(pProduto: TProduto): Boolean;
 begin
     Result := inherited Insere(pProduto, 'ID');

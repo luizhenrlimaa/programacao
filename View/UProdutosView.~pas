@@ -66,10 +66,10 @@ type
    function ProcessaConsulta    : Boolean;
    function ProcessaExclusao    : Boolean;
    function ProcessaInclusao    : Boolean;
-   function ProcessaProduto     : Boolean; //ProcessaCliente
+   function ProcessaProduto     : Boolean; 
 
 
-   function ProcessaUnidade     : Boolean; //ProcessaPessoa
+   function ProcessaUnidade     : Boolean;
 
    
    function ValidaUnidade       : Boolean;
@@ -148,13 +148,13 @@ begin
 
     etIncluir:
     begin
-      stbBarraStatus.Panels[0].Text := 'Inclusão';
-      CamposEnabled(True);
-      edtCodigo.Enabled := False;
-      chkAtivo.Checked := True;
+        stbBarraStatus.Panels[0].Text := 'Inclusão';
+        CamposEnabled(True);
+        edtCodigo.Enabled := False;
+        chkAtivo.Checked := True;
 
-      if edtUnidade.CanFocus then
-         edtUnidade.SetFocus;
+        if edtUnidade.CanFocus then
+           edtUnidade.SetFocus;
     end;
 
     etAlterar:
@@ -163,7 +163,7 @@ begin
 
       if (edtCodigo.Text <> EmptyStr) then
      begin
-     
+
         CamposEnabled(True);
 
         edtCodigo.Enabled      := False;
@@ -253,10 +253,7 @@ begin
 
      end;
   end;
-
-
-
-  end;
+end;
 
 
 procedure TfrmProdutos.btnIncluirClick(Sender: TObject);
@@ -314,7 +311,6 @@ begin
    if(vObjColProduto <> nil) then
    FreeAndNil(vObjColProduto);
 end;
-
 
 procedure TfrmProdutos.FormClose(Sender: TObject;
   var Action: TCloseAction);
@@ -432,9 +428,6 @@ begin
       end;
 
    end;
-
-
-
 end;
 
 function TfrmProdutos.ProcessaProduto: Boolean;
@@ -578,16 +571,14 @@ begin
 end;
 
 procedure TfrmProdutos.carregaDadosTela;
-//var
-//  i : Integer;
-   begin
+begin
      if (vObjUnidade = nil) then
         Exit;
         edtCodigo.Text          := IntToStr(vObjUnidade.Id);
         chkAtivo.Checked        := vObjUnidade.Ativo;
         edtUnidade.Text         := vObjUnidade.Unidade;
         edtDescricao.Text       := vObjUnidade.Descricao;
-   end;
+end;
 
 function TfrmProdutos.ProcessaExclusao: Boolean;
 begin
@@ -643,7 +634,6 @@ begin
 end;
 
 function TfrmProdutos.ProcessaAlteracao: Boolean;
-
 begin
   try
     Result := False;
@@ -667,5 +657,4 @@ begin
       end;
   end;
 end;
-
 end.

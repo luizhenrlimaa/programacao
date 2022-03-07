@@ -13,10 +13,8 @@ type
                       pColProduto : TColProduto) : Boolean;
         function ExcluiProduto(
                       pProduto : TProduto) : Boolean;
-
         function BuscaProduto(pID : Integer) : TProduto;
         function PesquisaProduto(pNome : string) : TColProduto;
-//        function BuscaEnderecoPessoa(pID_Pessoa : Integer) : TColEndereco;
         function RetornaCondicaoProduto(
                    pID: Integer;
                    pRelacionada : Boolean = False) : String;
@@ -25,8 +23,6 @@ type
         class function getInstancia : TProdutoController;
   end;
 
-
-
 implementation
 
 uses UProdutoDAO ;
@@ -34,39 +30,6 @@ uses UProdutoDAO ;
 var
   _instance: TProdutoController;
 
-{ TPessoaController }
-
-//function TPessoaController.BuscaEnderecoPessoa(
-//  pID_Pessoa: Integer): TColEndereco;
-//var
-//  xEnderecoDAO : TEnderecoDAO;
-//begin
-//  try
-//    try
-//       Result := nil;
-//
-//       xEnderecoDAO :=
-//            TEnderecoDAO.Create(TConexao.getInstance.getConn);
-//
-//       Result :=
-//            xEnderecoDAO.RetornaLista(RetornaCondicaoProduto(pID_Pessoa, True));
-//
-//    finally
-//      if(xEnderecoDAO <> nil) then
-//       FreeAndNil(xEnderecoDAO);
-//
-//
-//    end;
-//  except
-//    on E : Exception do
-//    begin
-//      Raise Exception.Create(
-//        'Falha ao retornar dados do endereço da pessoa [Controller]'#13+
-//        e.Message);
-//    end;
-//  end;
-//
-//end;
 
 function TProdutoController.BuscaProduto(pID: Integer): TProduto;
 var
@@ -176,8 +139,6 @@ begin
             else
             begin
                xProdutoDAO.Atualiza(pProduto, RetornaCondicaoProduto(pProduto.Id));
-//               xProdutoDAO.Deleta(RetornaCondicaoProduto(pProduto.Id));
-//               xProdutoDAO.InsereLista(pColProduto);
             end;
 
             TConexao.get.confirmaTransacao;
