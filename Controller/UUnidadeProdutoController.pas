@@ -204,7 +204,7 @@ begin
       xChave := 'ID';
 
   Result :=
-  'WHERE                                                  '#13+
+  'WHERE                                          '#13+
   '  '+xChave+ ' = '+ QuotedStr(IntToStr(pID))+ ' '#13;
 end;
 

@@ -25,6 +25,8 @@ type
     mainUtilitarios: TMenuItem;
     menGenesis: TMenuItem;
     menApocalipse: TMenuItem;
+    P1: TMenuItem;
+    U1: TMenuItem;
 
     // Métodos do formulário
     procedure menSairClick(Sender: TObject);
@@ -32,7 +34,8 @@ type
     procedure menClientesClick(Sender: TObject);
     procedure menGenesisClick(Sender: TObject);
     procedure menApocalipseClick(Sender: TObject);
-    procedure menProdutosClick(Sender: TObject);
+    procedure U1Click(Sender: TObject);
+    procedure P1Click(Sender: TObject);
 
 
 
@@ -48,7 +51,8 @@ var
 implementation
 
 uses
-  UConexao , UClientesView , UGenesisView, UApocalipseView, UUnidadeProdutosView;
+  UConexao , UClientesView , UGenesisView, UApocalipseView, UUnidadeProdutosView,
+  UProdutosView;
 
 {$R *.dfm}
 
@@ -111,7 +115,7 @@ begin
    end;
 end;
 
-procedure TfrmPrincipal.menProdutosClick(Sender: TObject);
+procedure TfrmPrincipal.U1Click(Sender: TObject);
 begin
    try
        Screen.Cursor := crHourGlass;
@@ -120,6 +124,20 @@ begin
           frmUnidadeProdutos := TfrmUnidadeProdutos.Create(Application);
 
        frmUnidadeProdutos.Show;
+   finally
+        Screen.Cursor := crDefault;
+   end;
+end;
+
+procedure TfrmPrincipal.P1Click(Sender: TObject);
+begin
+   try
+       Screen.Cursor := crHourGlass;
+
+       if frmProdutos  = nil then
+          frmProdutos := TfrmProduto.Create(Application);
+
+       frmProdutos.Show;
    finally
         Screen.Cursor := crDefault;
    end;

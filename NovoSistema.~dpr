@@ -20,12 +20,17 @@ uses
   UClientesPesqView in 'View\UClientesPesqView.pas' {frmClientesPesq},
   UGenesisView in 'View\UGenesisView.pas' {frmGenesis},
   UApocalipseView in 'View\UApocalipseView.pas' {frmApocalipse},
-  UProdutosView in 'View\UProdutosView.pas' {frmProdutos},
-  UProduto in 'Model\UProduto.pas',
-  UProdutoDAO in 'Model\UProdutoDAO.pas',
   UUnidade in 'Model\UUnidade.pas',
-  UProdutoController in 'Controller\UProdutoController.pas',
-  UProdutoPesqView in 'View\UProdutoPesqView.pas' {frmProdutoPesq};
+  UUnidadeProduto in 'Model\UUnidadeProduto.pas',
+  UUnidadeProdutoDAO in 'Model\UUnidadeProdutoDAO.pas',
+  UUnidadeProdutoController in 'Controller\UUnidadeProdutoController.pas',
+  UUnidadeProdutoPesqView in 'View\UUnidadeProdutoPesqView.pas' {frmUnidadeProdutoPesq},
+  UUnidadeProdutosView in 'View\UUnidadeProdutosView.pas' {frmUnidadeProdutos},
+  UProdutosView in 'View\UProdutosView.pas' {frmProduto},
+  UProdutoDAO in 'Model\UProdutoDAO.pas',
+  UProduto in 'Model\UProduto.pas',
+  UProdutoCad in 'Model\UProdutoCad.pas',
+  UProdutoController in 'Controller\UProdutoController.pas';
 
 {$R *.res}
 
