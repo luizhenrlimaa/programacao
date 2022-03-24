@@ -1,11 +1,11 @@
-unit UProduto;
+unit UUnidadeProduto;
 
 interface
 
 uses SysUtils, Classes;
 
 type
-    TProduto = Class(TPersistent)
+    TUnidadeProduto = Class(TPersistent)
 
     private
       vId                 : Integer;
@@ -25,16 +25,16 @@ type
 
     end;
 
-    TColProduto = class(TList)
+    TColUnidadeProduto = class(TList)
       public
-           function   Retorna (pIndex : Integer) : TProduto;
-           procedure  Adiciona(pProduto : TProduto);
+           function   Retorna (pIndex : Integer) : TUnidadeProduto;
+           procedure  Adiciona(pUnidadeProduto : TUnidadeProduto);
     end;
 implementation
 
 { TProduto }
 
-constructor TProduto.Create;
+constructor TUnidadeProduto.Create;
 begin
   Self.vId                  := 0;
   Self.vAtivo               := False;
@@ -44,14 +44,14 @@ end;
 
 { TColProduto }
 
-procedure TColProduto.Adiciona(pProduto: TProduto);
+procedure TColUnidadeProduto.Adiciona(pUnidadeProduto: TUnidadeProduto);
 begin
-    Self.Add(TProduto(pProduto));
+    Self.Add(TUnidadeProduto(pUnidadeProduto));
 end;
 
-function TColProduto.Retorna(pIndex: Integer): TProduto;
+function TColUnidadeProduto.Retorna(pIndex: Integer): TUnidadeProduto;
 begin
-   Result := TProduto(Self[pIndex]);
+   Result := TUnidadeProduto(Self[pIndex]);
 end;
 
 end.

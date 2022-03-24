@@ -1,14 +1,14 @@
-unit UProdutosView;
+unit UUnidadeProdutosView;
 
 interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, ComCtrls, StdCtrls, ExtCtrls, Buttons, Mask, UEnumerationUtil,
-  UUnidade, UProduto, UProdutoController;
+  UUnidade, UUnidadeProduto, UUnidadeProdutoController;
 
 type
-  TfrmProdutos = class(TForm)
+  TfrmUnidadeProdutos = class(TForm)
     stbBarraStatus: TStatusBar;
     pnlPrincipal: TPanel;
     lblCodigo: TLabel;
@@ -50,7 +50,7 @@ type
    // Variaveis de Classes
    vEstadoTela : TEstadoTela;
    vObjUnidade : TUnidade;
-   vObjColProduto : TColProduto;
+   vObjColProduto : TColUnidadeProduto;
 
    procedure CamposEnabled(pOpcao : Boolean);
    procedure LimpaTela;
@@ -79,16 +79,16 @@ type
   end;
 
 var
-  frmProdutos: TfrmProdutos;
+  frmUnidadeProdutos: TfrmUnidadeProdutos;
 
 implementation
 
 {$R *.dfm}
 Uses
-  uMessageUtil, StrUtils, UClassFuncoes, UClientesView, UProdutoPesqView;
+  uMessageUtil, StrUtils, UClassFuncoes, UClientesView, UUnidadeProdutoPesqView;
 
 
-procedure TfrmProdutos.btnSairClick(Sender: TObject);
+procedure TfrmUnidadeProdutos.btnSairClick(Sender: TObject);
 begin
     if (vEstadoTela <> etPadrao) then
     begin
@@ -102,7 +102,7 @@ begin
       Close;
 end;
 
-procedure TfrmProdutos.CamposEnabled(pOpcao: Boolean);
+procedure TfrmUnidadeProdutos.CamposEnabled(pOpcao: Boolean);
 var
   i : Integer; // Variaável para auxiliar o comando de repetição
 begin
@@ -116,7 +116,7 @@ begin
       (Components[i] as TCheckBox).Enabled := pOpcao;
   end;
 end;
-procedure TfrmProdutos.DefineEstadoTela;
+procedure TfrmUnidadeProdutos.DefineEstadoTela;
 begin
   btnIncluir.Enabled    := (vEstadoTela in [etPadrao]);
   btnAlterar.Enabled    := (vEstadoTela in [etPadrao]);
@@ -138,8 +138,8 @@ begin
         stbBarraStatus.Panels[0].Text := EmptyStr;
         stbBarraStatus.Panels[1].Text := EmptyStr;
 
-        if (frmProdutos <> nil) and
-            (frmProdutos.Active) and
+        if (frmUnidadeProdutos <> nil) and
+            (frmUnidadeProdutos.Active) and
             (btnIncluir.CanFocus) then
             btnIncluir.SetFocus;
 
@@ -228,14 +228,14 @@ begin
      begin
        stbBarraStatus.Panels[0].Text := 'Pesquisa';
 
-       if (frmProdutoPesq = nil) then
-           frmProdutoPesq := TfrmProdutoPesq.Create(Application);
+       if (frmUnidadeProdutoPesq = nil) then
+           frmUnidadeProdutoPesq := TfrmUnidadeProdutoPesq.Create(Application);
 
-       frmProdutoPesq.ShowModal;
+       frmUnidadeProdutoPesq.ShowModal;
 
-       if (frmProdutoPesq.mProdutoID <> 0) then
+       if (frmUnidadeProdutoPesq.mUnidadeProdutoID <> 0) then
        begin
-          edtCodigo.Text := IntToStr(frmProdutoPesq.mProdutoID);
+          edtCodigo.Text := IntToStr(frmUnidadeProdutoPesq.mUnidadeProdutoID);
           vEstadoTela    := etConsultar;
           ProcessaConsulta;
        end
@@ -245,8 +245,8 @@ begin
           DefineEstadoTela;
        end;
 
-       frmProdutoPesq.mProdutoID := 0;
-       frmProdutoPesq.mProdutoDescricao := EmptyStr;
+       frmUnidadeProdutoPesq.mUnidadeProdutoID := 0;
+       frmUnidadeProdutoPesq.mUnidadeProdutoDescricao := EmptyStr;
 
        if edtUnidade.CanFocus then
           edtUnidade.SetFocus;
@@ -256,43 +256,43 @@ begin
 end;
 
 
-procedure TfrmProdutos.btnIncluirClick(Sender: TObject);
+procedure TfrmUnidadeProdutos.btnIncluirClick(Sender: TObject);
 begin
       vEstadoTela := etIncluir;
       DefineEstadoTela;
 end;
 
-procedure TfrmProdutos.btnAlterarClick(Sender: TObject);
+procedure TfrmUnidadeProdutos.btnAlterarClick(Sender: TObject);
 begin
       vEstadoTela := etAlterar;
       DefineEstadoTela;
 end;
 
-procedure TfrmProdutos.btnExcluirClick(Sender: TObject);
+procedure TfrmUnidadeProdutos.btnExcluirClick(Sender: TObject);
 begin
       vEstadoTela := etExcluir;
       DefineEstadoTela;
 end;
 
-procedure TfrmProdutos.btnConsultarClick(Sender: TObject);
+procedure TfrmUnidadeProdutos.btnConsultarClick(Sender: TObject);
 begin
       vEstadoTela := etConsultar;
       DefineEstadoTela;
 end;
 
-procedure TfrmProdutos.btnPesquisarClick(Sender: TObject);
+procedure TfrmUnidadeProdutos.btnPesquisarClick(Sender: TObject);
 begin
       vEstadoTela := etPesquisar;
       DefineEstadoTela;
 end;
 
-procedure TfrmProdutos.btnCancelarClick(Sender: TObject);
+procedure TfrmUnidadeProdutos.btnCancelarClick(Sender: TObject);
 begin
       vEstadoTela := etPadrao;
       DefineEstadoTela;
 end;
 
-procedure TfrmProdutos.LimpaTela;
+procedure TfrmUnidadeProdutos.LimpaTela;
 var
   i: Integer;
 begin
@@ -312,14 +312,14 @@ begin
    FreeAndNil(vObjColProduto);
 end;
 
-procedure TfrmProdutos.FormClose(Sender: TObject;
+procedure TfrmUnidadeProdutos.FormClose(Sender: TObject;
   var Action: TCloseAction);
 begin
    Action := caFree;
-   frmProdutos := nil;
+   frmUnidadeProdutos := nil;
 end;
 
-procedure TfrmProdutos.FormKeyDown(Sender: TObject; var Key: Word;
+procedure TfrmUnidadeProdutos.FormKeyDown(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 begin
    vKey := Key;
@@ -351,23 +351,23 @@ begin
    end;
 end;
 
-procedure TfrmProdutos.FormKeyUp(Sender: TObject; var Key: Word;
+procedure TfrmUnidadeProdutos.FormKeyUp(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 begin
      vKey := VK_CLEAR;
 end;
 
-procedure TfrmProdutos.FormCreate(Sender: TObject);
+procedure TfrmUnidadeProdutos.FormCreate(Sender: TObject);
 begin
    vEstadoTela := etPadrao;
 end;
 
-procedure TfrmProdutos.FormShow(Sender: TObject);
+procedure TfrmUnidadeProdutos.FormShow(Sender: TObject);
 begin
     DefineEstadoTela;
 end;
 
-procedure TfrmProdutos.edtCodigoExit(Sender: TObject);
+procedure TfrmUnidadeProdutos.edtCodigoExit(Sender: TObject);
 begin
   if vKey = VK_RETURN then
    ProcessaConsulta;
@@ -375,12 +375,12 @@ begin
    vKey := VK_CLEAR;
 end;
 
-procedure TfrmProdutos.btnConfirmarClick(Sender: TObject);
+procedure TfrmUnidadeProdutos.btnConfirmarClick(Sender: TObject);
 begin
    ProcessaConfirmacao;
 end;
 
-function TfrmProdutos.ProcessaConfirmacao: Boolean;
+function TfrmUnidadeProdutos.ProcessaConfirmacao: Boolean;
 begin
    Result := False;
 
@@ -403,7 +403,7 @@ begin
   Result := True;
 end;
 
-function TfrmProdutos.ProcessaInclusao: Boolean;
+function TfrmUnidadeProdutos.ProcessaInclusao: Boolean;
 begin
    try
 
@@ -430,14 +430,14 @@ begin
    end;
 end;
 
-function TfrmProdutos.ProcessaProduto: Boolean;
+function TfrmUnidadeProdutos.ProcessaProduto: Boolean;
 begin
   try
        Result := False;
      if(ProcessaUnidade) then
       begin
           // Gravação no BD
-          TProdutoController.getInstancia.GravaProduto(
+          TUnidadeProdutoController.getInstancia.GravaProduto(
                                       vObjUnidade, vObjColProduto);
 
           Result := True;
@@ -453,7 +453,7 @@ begin
   end;
 end;
 
-function TfrmProdutos.ProcessaUnidade: Boolean;
+function TfrmUnidadeProdutos.ProcessaUnidade: Boolean;
 begin
   try
        Result := False;
@@ -463,7 +463,7 @@ begin
      if (vObjColProduto <> nil) then
         FreeAndNil(vObjColProduto);
 
-      vObjColProduto := TColProduto.Create;
+      vObjColProduto := TColUnidadeProduto.Create;
       if vEstadoTela = etIncluir then
       begin
         if vObjUnidade = nil then
@@ -495,7 +495,7 @@ begin
   end;
 end;
 
-function TfrmProdutos.ValidaUnidade: Boolean;
+function TfrmUnidadeProdutos.ValidaUnidade: Boolean;
 begin
    Result := False;
 
@@ -523,7 +523,7 @@ begin
    Result := True;
 end;
 
-function TfrmProdutos.ProcessaConsulta: Boolean;
+function TfrmUnidadeProdutos.ProcessaConsulta: Boolean;
 begin
    try
        Result := False;
@@ -539,7 +539,7 @@ begin
        end;
 
       vObjUnidade :=
-         TUnidade(TProdutoController.getInstancia.BuscaProduto(
+         TUnidade(TUnidadeProdutoController.getInstancia.BuscaProduto(
             StrToIntDef(edtCodigo.Text, 0)));
 
 
@@ -570,7 +570,7 @@ begin
    end;
 end;
 
-procedure TfrmProdutos.carregaDadosTela;
+procedure TfrmUnidadeProdutos.carregaDadosTela;
 begin
      if (vObjUnidade = nil) then
         Exit;
@@ -580,7 +580,7 @@ begin
         edtDescricao.Text       := vObjUnidade.Descricao;
 end;
 
-function TfrmProdutos.ProcessaExclusao: Boolean;
+function TfrmUnidadeProdutos.ProcessaExclusao: Boolean;
 begin
   try
     Result := False;
@@ -601,7 +601,7 @@ begin
        begin
           carregaDadosTela;
           Screen.Cursor := crHourGlass;
-          TProdutoController.getInstancia.ExcluiProduto(vObjUnidade);
+          TUnidadeProdutoController.getInstancia.ExcluiProduto(vObjUnidade);
           TMessageUtil.Informacao('Produto exluido com sucesso.');
        end
        else
@@ -633,7 +633,7 @@ begin
   end;
 end;
 
-function TfrmProdutos.ProcessaAlteracao: Boolean;
+function TfrmUnidadeProdutos.ProcessaAlteracao: Boolean;
 begin
   try
     Result := False;

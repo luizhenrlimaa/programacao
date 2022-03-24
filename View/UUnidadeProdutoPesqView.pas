@@ -1,14 +1,14 @@
-unit UProdutoPesqView;
+unit UUnidadeProdutoPesqView;
 
 interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, ComCtrls, ExtCtrls, Grids, DBGrids, StdCtrls, Buttons, uMessageUtil,
-  UProduto, UProdutoController, UClassFuncoes,OleServer, DB, DBClient;
+  UUnidadeProduto, UUnidadeProdutoController, UClassFuncoes,OleServer, DB, DBClient;
 
 type
-  TfrmProdutoPesq = class(TForm)
+  TfrmUnidadeProdutoPesq = class(TForm)
     grbFiltrar: TGroupBox;
     lblNome: TLabel;
     lblInfo: TLabel;
@@ -48,13 +48,13 @@ type
      
   public
     { Public declarations }
-    mProdutoID   : Integer;
-    mProdutoDescricao : string;
+    mUnidadeProdutoID   : Integer;
+    mUnidadeProdutoDescricao : string;
     mProdutoUnidade : string;
   end;
 
 var
-  frmProdutoPesq: TfrmProdutoPesq;
+  frmUnidadeProdutoPesq: TfrmUnidadeProdutoPesq;
 
 implementation
 
@@ -62,13 +62,13 @@ uses Math, StrUtils, ComObj;
 
 {$R *.dfm}
 
-procedure TfrmProdutoPesq.btnSairClick(Sender: TObject);
+procedure TfrmUnidadeProdutoPesq.btnSairClick(Sender: TObject);
 begin
      LimparTela;
      Close;
 end;
 
-procedure TfrmProdutoPesq.LimparTela;
+procedure TfrmUnidadeProdutoPesq.LimparTela;
 var
     i: Integer;
 begin
@@ -85,15 +85,15 @@ begin
       edtNome.SetFocus ;
 end;
 
-procedure TfrmProdutoPesq.btnLimparClick(Sender: TObject);
+procedure TfrmUnidadeProdutoPesq.btnLimparClick(Sender: TObject);
 begin
-    mProdutoID        := 0;
-    mProdutoDescricao := EmptyStr;
+    mUnidadeProdutoID        := 0;
+    mUnidadeProdutoDescricao := EmptyStr;
     mProdutoUnidade   := EmptyStr;
     LimparTela;
 end;
 
-procedure TfrmProdutoPesq.FormKeyDown(Sender: TObject; var Key: Word;
+procedure TfrmUnidadeProdutoPesq.FormKeyDown(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 begin
  vKey := Key;
@@ -122,17 +122,17 @@ begin
    end;
 end;
 
-procedure TfrmProdutoPesq.ProcessaPesquisa;
+procedure TfrmUnidadeProdutoPesq.ProcessaPesquisa;
 var
-  xListaProduto : TColProduto;
+  xListaProduto : TColUnidadeProduto;
   xAux          : Integer;
 begin
  begin
     try
         try
-          xListaProduto := TColProduto.Create;
+          xListaProduto := TColUnidadeProduto.Create;
           xListaProduto :=
-              TProdutoController.getInstancia.PesquisaProduto(Trim(edtNome.Text));
+              TUnidadeProdutoController.getInstancia.PesquisaProduto(Trim(edtNome.Text));
 
           cdsProduto.EmptyDataSet;
 
@@ -180,13 +180,13 @@ begin
  end;
 end;
 
-procedure TfrmProdutoPesq.ProcessaConfirmacao;
+procedure TfrmUnidadeProdutoPesq.ProcessaConfirmacao;
 begin
 begin
    if not (cdsProduto.IsEmpty) then
    begin
-      mProdutoID            := cdsProdutoID.Value;
-      mProdutoDescricao     := cdsProdutoDescricao.Value;
+      mUnidadeProdutoID            := cdsProdutoID.Value;
+      mUnidadeProdutoDescricao     := cdsProdutoDescricao.Value;
       mProdutoUnidade       := cdsProdutoUnidade.Value;
       Self.ModalResult      := mrOk;
       LimparTela;
@@ -202,25 +202,25 @@ begin
 end;
 end;
 
-procedure TfrmProdutoPesq.btnFiltrarClick(Sender: TObject);
+procedure TfrmUnidadeProdutoPesq.btnFiltrarClick(Sender: TObject);
 begin
-    mProdutoID        := 0;
-    mProdutoDescricao := EmptyStr;
+    mUnidadeProdutoID        := 0;
+    mUnidadeProdutoDescricao := EmptyStr;
     mProdutoUnidade   := EmptyStr;
     ProcessaPesquisa;
 end;
 
-procedure TfrmProdutoPesq.btnConfirmarClick(Sender: TObject);
+procedure TfrmUnidadeProdutoPesq.btnConfirmarClick(Sender: TObject);
 begin
    ProcessaConfirmacao;
 end;
 
-procedure TfrmProdutoPesq.cdsProdutoBeforeDelete(DataSet: TDataSet);
+procedure TfrmUnidadeProdutoPesq.cdsProdutoBeforeDelete(DataSet: TDataSet);
 begin
     Abort;
 end;
 
-procedure TfrmProdutoPesq.dbgProdutoDblClick(Sender: TObject);
+procedure TfrmUnidadeProdutoPesq.dbgProdutoDblClick(Sender: TObject);
 begin
    ProcessaConfirmacao;
 end;

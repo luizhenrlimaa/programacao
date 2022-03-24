@@ -48,7 +48,7 @@ var
 implementation
 
 uses
-  UConexao , UClientesView , UGenesisView, UApocalipseView, UProdutosView;
+  UConexao , UClientesView , UGenesisView, UApocalipseView, UUnidadeProdutosView;
 
 {$R *.dfm}
 
@@ -116,10 +116,10 @@ begin
    try
        Screen.Cursor := crHourGlass;
 
-       if frmProdutos  = nil then
-          frmProdutos := TfrmProdutos.Create(Application);
+       if frmUnidadeProdutos  = nil then
+          frmUnidadeProdutos := TfrmUnidadeProdutos.Create(Application);
 
-       frmProdutos.Show;
+       frmUnidadeProdutos.Show;
    finally
         Screen.Cursor := crDefault;
    end;

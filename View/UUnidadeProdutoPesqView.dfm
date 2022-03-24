@@ -1,4 +1,4 @@
-object frmProdutoPesq: TfrmProdutoPesq
+object frmUnidadeProdutoPesq: TfrmUnidadeProdutoPesq
   Left = 442
   Top = 256
   Width = 520
