@@ -30,7 +30,9 @@ uses
   UProdutoDAO in 'Model\UProdutoDAO.pas',
   UProduto in 'Model\UProduto.pas',
   UProdutoCad in 'Model\UProdutoCad.pas',
-  UProdutoController in 'Controller\UProdutoController.pas';
+  UProdutoController in 'Controller\UProdutoController.pas',
+  UProdutosPesqView in 'View\UProdutosPesqView.pas' {frmProdutosPesq},
+  UVendaView in 'View\UVendaView.pas' {frmVenda};
 
 {$R *.res}
 

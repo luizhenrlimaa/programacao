@@ -118,11 +118,11 @@ begin
 end;
 procedure TfrmUnidadeProdutos.DefineEstadoTela;
 begin
-  btnIncluir.Enabled    := (vEstadoTela in [etPadrao]);
-  btnAlterar.Enabled    := (vEstadoTela in [etPadrao]);
-  btnExcluir.Enabled    := (vEstadoTela in [etPadrao]);
-  btnConsultar.Enabled  := (vEstadoTela in [etPadrao]);
-  btnPesquisar.Enabled  := (vEstadoTela in [etPadrao]);
+   btnIncluir.Enabled    := (vEstadoTela in [etPadrao]);
+   btnAlterar.Enabled    := (vEstadoTela in [etPadrao]);
+   btnExcluir.Enabled    := (vEstadoTela in [etPadrao]);
+   btnConsultar.Enabled  := (vEstadoTela in [etPadrao]);
+   btnPesquisar.Enabled  := (vEstadoTela in [etPadrao]);
 
 
   btnConfirmar.Enabled :=
@@ -354,7 +354,7 @@ end;
 procedure TfrmUnidadeProdutos.FormKeyUp(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 begin
-     vKey := VK_CLEAR;
+   vKey := VK_CLEAR;
 end;
 
 procedure TfrmUnidadeProdutos.FormCreate(Sender: TObject);
@@ -455,7 +455,7 @@ end;
 
 function TfrmUnidadeProdutos.ProcessaUnidade: Boolean;
 begin
-  try
+   try
        Result := False;
 
      if not ValidaUnidade then
@@ -484,7 +484,7 @@ begin
         vObjUnidade.Descricao                    := edtDescricao.Text;
 
        Result := True;
-  except
+   except
        on E : Exception do
        begin
           Raise Exception.Create(
@@ -492,7 +492,7 @@ begin
           e.Message);
        end;
 
-  end;
+   end;
 end;
 
 function TfrmUnidadeProdutos.ValidaUnidade: Boolean;

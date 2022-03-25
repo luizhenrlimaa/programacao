@@ -1,6 +1,6 @@
 object frmProduto: TfrmProduto
-  Left = 438
-  Top = 164
+  Left = 455
+  Top = 287
   Width = 460
   Height = 312
   Caption = 'Produto'

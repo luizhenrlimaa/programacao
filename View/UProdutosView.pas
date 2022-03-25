@@ -49,8 +49,9 @@ type
     { Private declarations }
     
      vKey : Word;
+     
   // Variaveis de Classes
-   vEstadoTela : TEstadoTela;
+   vEstadoTela    : TEstadoTela;
    vObjProdutoCad : TProdutoCad;
    vObjColProduto : TColProduto;
 
@@ -62,17 +63,16 @@ type
 
    procedure carregaDadosTela;
 
-   function ProcessaConfirmacao : Boolean;
-   function ProcessaAlteracao   : Boolean;
-   function ProcessaConsulta    : Boolean;
-   function ProcessaExclusao    : Boolean;
-   function ProcessaInclusao    : Boolean;
-   function ProcessaProduto     : Boolean;
+   function ProcessaConfirmacao     : Boolean;
+   function ProcessaAlteracao       : Boolean;
+   function ProcessaConsulta        : Boolean;
+   function ProcessaExclusao        : Boolean;
+   function ProcessaInclusao        : Boolean;
+   function ProcessaProduto         : Boolean;
 
-   function ProcessaProdutoCad    : Boolean;
+   function ProcessaProdutoCad      : Boolean;
 
-
-   function ValidaProdutoCad      : Boolean;
+   function ValidaProdutoCad        : Boolean;
  
 
   public
@@ -86,7 +86,7 @@ implementation
 
 {$R *.dfm}
 Uses
-  uMessageUtil, StrUtils;
+   uMessageUtil, StrUtils , UProdutosPesqView;
 
 
 procedure TfrmProduto.btnSairClick(Sender: TObject);
@@ -198,34 +198,34 @@ begin
           edtCodigo.SetFocus;
      end;
     end;
-//    etPesquisar:
-//     begin
-//       stbBarraStatus.Panels[0].Text := 'Pesquisa';
-//
-//       if (frmUnidadeProdutoPesq = nil) then
-//           frmUnidadeProdutoPesq := TfrmUnidadeProdutoPesq.Create(Application);
-//
-//       frmUnidadeProdutoPesq.ShowModal;
-//
-//       if (frmUnidadeProdutoPesq.mUnidadeProdutoID <> 0) then
-//       begin
-//          edtCodigo.Text := IntToStr(frmUnidadeProdutoPesq.mUnidadeProdutoID);
-//          vEstadoTela    := etConsultar;
-//          ProcessaConsulta;
-//       end
-//       else
-//       begin
-//          vEstadoTela := etPadrao;
-//          DefineEstadoTela;
-//       end;
-//
-//       frmUnidadeProdutoPesq.mUnidadeProdutoID := 0;
-//       frmUnidadeProdutoPesq.mUnidadeProdutoDescricao := EmptyStr;
-//
-//       if edtUnidade.CanFocus then
-//          edtUnidade.SetFocus;
-//
-//     end;
+    etPesquisar:
+    begin
+       stbBarraStatus.Panels[0].Text := 'Pesquisa';
+
+       if (frmProdutosPesq = nil) then
+           frmProdutosPesq := TfrmProdutosPesq.Create(Application);
+
+       frmProdutosPesq.ShowModal;
+
+       if (frmProdutosPesq.mProdutoID <> 0) then
+       begin
+          edtCodigo.Text := IntToStr(frmProdutosPesq.mProdutoID);
+          vEstadoTela    := etConsultar;
+          ProcessaConsulta;
+       end
+       else
+       begin
+          vEstadoTela := etPadrao;
+          DefineEstadoTela;
+       end;
+
+       frmProdutosPesq.mProdutoID := 0;
+       frmProdutosPesq.mProdutoDescricao := EmptyStr;
+
+       if edtDescricao.CanFocus then
+          edtDescricao.SetFocus;
+
+    end;
    end;
 end;
 
@@ -260,8 +260,6 @@ begin
       end;
    end;
 end;
-
-
 
 procedure TfrmProduto.FormClose(Sender: TObject;
 var Action: TCloseAction);
@@ -571,7 +569,7 @@ begin
       else
       if  vEstadoTela = etAlterar then
       begin
-         if vObjProdutoCad = nil then
+         if (vObjProdutoCad = nil) then
             Exit;
       end;
 
