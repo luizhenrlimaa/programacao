@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, StdCtrls, ExtCtrls, ComCtrls, DB, DBClient, Grids, DBGrids,
-  UEnumerationUtil, Buttons;
+  UEnumerationUtil, Buttons, UClientesPesqView;
 
 type
   TfrmVenda = class(TForm)
@@ -17,7 +17,6 @@ type
     edtVenda: TEdit;
     edtData: TEdit;
     edtCliente: TEdit;
-    btnIncluirCliente: TBitBtn;
     Produtos: TGroupBox;
     DBGrid1: TDBGrid;
     cdsVenda: TClientDataSet;
@@ -33,10 +32,10 @@ type
     btnAlterar: TBitBtn;
     btnConsultar: TBitBtn;
     btnPesquisar: TBitBtn;
-    btnConfirmar: TBitBtn;
-    btnCancelar: TBitBtn;
     btnSair: TBitBtn;
     edtCodCliente: TEdit;
+    btnCancelar: TBitBtn;
+    btnIncluirCliente: TBitBtn;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
@@ -86,7 +85,7 @@ begin
   btnConsultar.Enabled        := (vEstadoTela in [etPadrao]);
   btnPesquisar.Enabled        := (vEstadoTela in [etPadrao]);
 
-  btnConfirmar.Enabled :=
+  btnConfirmarVenda.Enabled :=
      vEstadoTela in [etIncluir, etAlterar, etExcluir, etConsultar];
   btnCancelar.Enabled :=
      vEstadoTela in [etIncluir, etAlterar, etExcluir, etConsultar];
@@ -96,13 +95,14 @@ begin
     begin
         CamposEnabled(False);
         LimpaTela;
+        edtData.Text := DateToStr(Date());
         stbBarraStatus.Panels[0].Text := EmptyStr;
         stbBarraStatus.Panels[1].Text := EmptyStr;
 
         if (frmVenda <> nil) and
             (frmVenda.Active) and
             (btnIncluir.CanFocus) then
-            btnIncluir.SetFocus;
+             btnIncluir.SetFocus;
 
        Application.ProcessMessages;
     end;
@@ -127,7 +127,7 @@ begin
 
         edtVenda.Enabled      := False;
         btnAlterar.Enabled     := False;
-        btnConfirmar.Enabled   := True;
+        btnConfirmarVenda.Enabled   := True;
 
      end
      else
@@ -166,7 +166,7 @@ begin
        edtVenda.Enabled    := False;
        btnAlterar.Enabled   := True;
        btnCancelar.Enabled   := True;
-       btnConfirmar.Enabled := False;
+       btnConfirmarVenda.Enabled := False;
 
         if(btnAlterar.CanFocus) then
           btnAlterar.SetFocus;
@@ -273,7 +273,7 @@ begin
    for i:= 0 to pred(ComponentCount)do
   begin
        // Se o compo for do tipo EDIT
-      if (Components[i] is TEdit)  then
+      if (Components[i] is TEdit)   then
       (Components[i] as TEdit).Text := EmptyStr;
   end;
 end;
@@ -282,6 +282,10 @@ procedure TfrmVenda.FormShow(Sender: TObject);
 begin
    DefineEstadoTela;
    edtData.Text := DateToStr(Date());
+
+   if(btnIncluir.CanFocus) then
+       btnIncluir.SetFocus;
+
 end;
 
 procedure TfrmVenda.FormKeyUp(Sender: TObject; var Key: Word;
