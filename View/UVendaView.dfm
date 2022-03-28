@@ -1,7 +1,7 @@
 object frmVenda: TfrmVenda
-  Left = 426
+  Left = 432
   Top = 155
-  Width = 468
+  Width = 466
   Height = 546
   Caption = 'Venda'
   Color = clBtnFace
@@ -24,7 +24,7 @@ object frmVenda: TfrmVenda
   object stbBarraStatus: TStatusBar
     Left = 0
     Top = 483
-    Width = 452
+    Width = 450
     Height = 24
     Panels = <
       item
@@ -86,6 +86,7 @@ object frmVenda: TfrmVenda
       Width = 69
       Height = 21
       CharCase = ecUpperCase
+      Enabled = False
       TabOrder = 1
     end
     object edtCliente: TEdit
@@ -101,7 +102,9 @@ object frmVenda: TfrmVenda
       Top = 72
       Width = 22
       Height = 22
+      Enabled = False
       TabOrder = 3
+      OnClick = btnIncluirClienteClick
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100
         18000000000000030000C40E0000C40E00000000000000000000FFFFFFFFFFFF
@@ -138,6 +141,7 @@ object frmVenda: TfrmVenda
       CharCase = ecUpperCase
       Enabled = False
       TabOrder = 2
+      OnKeyPress = edtCodClienteKeyPress
     end
   end
   object Produtos: TGroupBox
@@ -147,18 +151,20 @@ object frmVenda: TfrmVenda
     Height = 161
     Caption = 'Produtos'
     TabOrder = 2
-    object DBGrid1: TDBGrid
+    object dbgVenda: TDBGrid
       Left = 0
       Top = 16
       Width = 441
       Height = 145
       Align = alCustom
+      DataSource = dtsVenda
       TabOrder = 0
       TitleFont.Charset = DEFAULT_CHARSET
       TitleFont.Color = clWindowText
       TitleFont.Height = -11
       TitleFont.Name = 'MS Sans Serif'
       TitleFont.Style = []
+      OnKeyPress = dbgVendaKeyPress
     end
   end
   object Panel1: TPanel
@@ -312,7 +318,7 @@ object frmVenda: TfrmVenda
   object pnlBotoes: TPanel
     Left = 0
     Top = 406
-    Width = 452
+    Width = 450
     Height = 77
     Align = alBottom
     TabOrder = 4
@@ -498,13 +504,83 @@ object frmVenda: TfrmVenda
     end
   end
   object cdsVenda: TClientDataSet
+    Active = True
     Aggregates = <>
     Params = <>
     Left = 112
     Top = 208
+    Data = {
+      7C0000009619E0BD0100000018000000060000000000030000007C0002494404
+      000100000000000944657363726963616F010049000000010005574944544802
+      000200190007556E696461646504000100000000000451746465040001000000
+      000005507265636F080004000000000005546F74616C08000400000000000000}
+    object cdsVendaID: TIntegerField
+      DisplayLabel = 'C'#243'digo'
+      DisplayWidth = 7
+      FieldName = 'ID'
+    end
+    object cdsVendaDescricao: TStringField
+      DisplayLabel = 'Descri'#231#227'o'
+      DisplayWidth = 20
+      FieldName = 'Descricao'
+      Size = 25
+    end
+    object cdsVendaUnidade: TIntegerField
+      DisplayWidth = 10
+      FieldName = 'Unidade'
+    end
+    object cdsVendaQtde: TIntegerField
+      DisplayWidth = 10
+      FieldName = 'Qtde'
+    end
+    object cdsVendaPreco: TFloatField
+      DisplayLabel = 'Pre'#231'o'
+      DisplayWidth = 11
+      FieldName = 'Preco'
+    end
+    object cdsVendaTotal: TFloatField
+      DisplayWidth = 7
+      FieldName = 'Total'
+    end
   end
   object dtsVenda: TDataSource
+    DataSet = cdsVenda
     Left = 168
     Top = 208
+  end
+  object cdsCliente: TClientDataSet
+    Active = True
+    Aggregates = <>
+    Params = <>
+    Left = 225
+    Top = 18
+    Data = {
+      6F0000009619E0BD0100000018000000040000000000030000006F0002494404
+      00010000000000044E6F6D650100490000000100055749445448020002006400
+      05417469766F04000100000000000E44657363726963616F417469766F010049
+      00000001000557494454480200020003000000}
+    object cdsClienteID: TIntegerField
+      DisplayWidth = 5
+      FieldName = 'ID'
+    end
+    object cdsClienteNome: TStringField
+      DisplayWidth = 71
+      FieldName = 'Nome'
+      Size = 100
+    end
+    object cdsClienteAtivo: TIntegerField
+      DisplayWidth = 7
+      FieldName = 'Ativo'
+    end
+    object cdsClienteDescricaoAtivo: TStringField
+      DisplayWidth = 20
+      FieldName = 'DescricaoAtivo'
+      Size = 3
+    end
+  end
+  object dtsCliente: TDataSource
+    DataSet = cdsCliente
+    Left = 281
+    Top = 18
   end
 end

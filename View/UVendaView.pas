@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, StdCtrls, ExtCtrls, ComCtrls, DB, DBClient, Grids, DBGrids,
-  UEnumerationUtil, Buttons, UClientesPesqView;
+  UEnumerationUtil, Buttons;
 
 type
   TfrmVenda = class(TForm)
@@ -16,9 +16,8 @@ type
     lblCliente: TLabel;
     edtVenda: TEdit;
     edtData: TEdit;
-    edtCliente: TEdit;
     Produtos: TGroupBox;
-    DBGrid1: TDBGrid;
+    dbgVenda: TDBGrid;
     cdsVenda: TClientDataSet;
     dtsVenda: TDataSource;
     Panel1: TPanel;
@@ -36,6 +35,18 @@ type
     edtCodCliente: TEdit;
     btnCancelar: TBitBtn;
     btnIncluirCliente: TBitBtn;
+    cdsCliente: TClientDataSet;
+    cdsClienteID: TIntegerField;
+    cdsClienteNome: TStringField;
+    cdsClienteAtivo: TIntegerField;
+    cdsClienteDescricaoAtivo: TStringField;
+    dtsCliente: TDataSource;
+    cdsVendaID: TIntegerField;
+    cdsVendaDescricao: TStringField;
+    cdsVendaUnidade: TIntegerField;
+    cdsVendaQtde: TIntegerField;
+    cdsVendaPreco: TFloatField;
+    cdsVendaTotal: TFloatField;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
@@ -49,6 +60,10 @@ type
     procedure btnConsultarClick(Sender: TObject);
     procedure btnPesquisarClick(Sender: TObject);
     procedure btnCancelarClick(Sender: TObject);
+    procedure btnIncluirClienteClick(Sender: TObject);
+    procedure edtCodClienteKeyPress(Sender: TObject; var Key: Char);
+    procedure dbgVendaKeyPress(Sender: TObject; var Key: Char);
+
 
   private
     { Private declarations }
@@ -57,14 +72,17 @@ type
 
 //    Variaveis de Classes
    vEstadoTela : TEstadoTela;
+   edCodCliente: TEdit;
 
    procedure CamposEnabled(pOpcao : Boolean);
    procedure LimpaTela;
    procedure DefineEstadoTela;
+   
 
 
   public
     { Public declarations }
+    
   end;
 
 var
@@ -74,16 +92,17 @@ implementation
 
 {$R *.dfm}
 Uses
-   uMessageUtil, StrUtils;
+   uMessageUtil, StrUtils, UClientesPesqView, UProdutosPesqView;
 
 procedure TfrmVenda.DefineEstadoTela;
 begin
   btnIncluir.Enabled          := (vEstadoTela in [etPadrao]);
   btnAlterar.Enabled          := (vEstadoTela in [etPadrao]);
-//  btnCancelarVenda.Enabled    := (vEstadoTela in [etPadrao]);
+//  btnCancelarVenda.Enabled   := (vEstadoTela in [etPadrao]);
   btnAlterar.Enabled          := (vEstadoTela in [etPadrao]);
   btnConsultar.Enabled        := (vEstadoTela in [etPadrao]);
   btnPesquisar.Enabled        := (vEstadoTela in [etPadrao]);
+  btnIncluirCliente.Enabled   := (vEstadoTela in [etPadrao]);
 
   btnConfirmarVenda.Enabled :=
      vEstadoTela in [etIncluir, etAlterar, etExcluir, etConsultar];
@@ -98,6 +117,8 @@ begin
         edtData.Text := DateToStr(Date());
         stbBarraStatus.Panels[0].Text := EmptyStr;
         stbBarraStatus.Panels[1].Text := EmptyStr;
+        btnIncluirCliente.Enabled := False;
+        dbgVenda.Enabled := False;
 
         if (frmVenda <> nil) and
             (frmVenda.Active) and
@@ -112,7 +133,9 @@ begin
         stbBarraStatus.Panels[0].Text := 'Inclusão';
         CamposEnabled(True);
         edtVenda.Enabled := False;
-
+        edtData.Enabled  := False;
+        btnIncluirCliente.Enabled := True;
+        dbgVenda.Enabled := True;
         if edtCodCliente.CanFocus then
            edtCodCliente.SetFocus;
     end;
@@ -128,13 +151,15 @@ begin
         edtVenda.Enabled      := False;
         btnAlterar.Enabled     := False;
         btnConfirmarVenda.Enabled   := True;
-
+        btnIncluirCliente.Enabled := True;
+        dbgVenda.Enabled := True;
      end
      else
      begin
 
        lblVenda.Enabled := True;
        edtVenda.Enabled := True;
+
 
        if(edtVenda.CanFocus) then
           edtVenda.SetFocus;
@@ -160,6 +185,7 @@ begin
     begin
      stbBarraStatus.Panels[0].Text := 'Consulta';
      CamposEnabled(False);
+    
 
      if (edtVenda.Text <> EmptyStr) then
      begin
@@ -167,6 +193,7 @@ begin
        btnAlterar.Enabled   := True;
        btnCancelar.Enabled   := True;
        btnConfirmarVenda.Enabled := False;
+       btnIncluirCliente.Enabled := True;
 
         if(btnAlterar.CanFocus) then
           btnAlterar.SetFocus;
@@ -281,8 +308,9 @@ end;
 procedure TfrmVenda.FormShow(Sender: TObject);
 begin
    DefineEstadoTela;
-   edtData.Text := DateToStr(Date());
-
+//   edtData.Text := DateToStr(Date());
+  
+//   btnIncluirCliente.Enabled := False;
    if(btnIncluir.CanFocus) then
        btnIncluir.SetFocus;
 
@@ -329,4 +357,27 @@ begin
    vEstadoTela := etPadrao;
    DefineEstadoTela;
 end;
+procedure TfrmVenda.btnIncluirClienteClick(Sender: TObject);
+begin
+//   stbBarraStatus.Panels[0].Text := 'Pesquisa';
+   if (frmClientesPesq = nil) then
+      frmClientesPesq := TfrmClientesPesq.Create(Application);
+      frmClientesPesq.ShowModal;
+end;
+
+procedure TfrmVenda.edtCodClienteKeyPress(Sender: TObject; var Key: Char);
+begin
+  if Key = #13 then
+
+    btnIncluirClienteClick(Sender);
+end;
+procedure TfrmVenda.dbgVendaKeyPress(Sender: TObject; var Key: Char);
+begin
+   if Key = #13 then
+
+   if (frmProdutosPesq = nil) then
+      frmProdutosPesq := TfrmProdutosPesq.Create(Application);
+      frmProdutosPesq.ShowModal;
+end;
+
 end.

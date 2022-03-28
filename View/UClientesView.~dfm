@@ -445,8 +445,8 @@ object frmClientes: TfrmClientes
       OnExit = edtCPFCNPJExit
     end
     object edtNome: TEdit
-      Left = 48
-      Top = 64
+      Left = 47
+      Top = 63
       Width = 545
       Height = 21
       CharCase = ecUpperCase
