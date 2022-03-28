@@ -1,6 +1,6 @@
 object frmVenda: TfrmVenda
-  Left = 432
-  Top = 155
+  Left = 698
+  Top = 213
   Width = 466
   Height = 546
   Caption = 'Venda'
@@ -73,38 +73,11 @@ object frmVenda: TfrmVenda
       Font.Style = [fsBold]
       ParentFont = False
     end
-    object edtVenda: TEdit
-      Left = 15
-      Top = 27
-      Width = 52
-      Height = 21
-      TabOrder = 0
-    end
-    object edtData: TEdit
-      Left = 124
-      Top = 27
-      Width = 69
-      Height = 21
-      CharCase = ecUpperCase
-      Enabled = False
-      TabOrder = 1
-    end
-    object edtCliente: TEdit
-      Left = 122
+    object btnIncluirCliente: TSpeedButton
+      Left = 93
       Top = 72
-      Width = 292
-      Height = 21
-      MaxLength = 6
-      TabOrder = 4
-    end
-    object btnIncluirCliente: TBitBtn
-      Left = 96
-      Top = 72
-      Width = 22
+      Width = 26
       Height = 22
-      Enabled = False
-      TabOrder = 3
-      OnClick = btnIncluirClienteClick
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100
         18000000000000030000C40E0000C40E00000000000000000000FFFFFFFFFFFF
@@ -132,12 +105,37 @@ object frmVenda: TfrmVenda
         F9FBF945854538A75E7FE1B8A9FFECB9FFFBB9FFFBA9FFEC7FE1B838A75E4585
         45F9FBF9FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFB7CDB767A567247C3228
         8637288637247C3267A567B7CDB7FFFFFFFFFFFFFFFFFFFFFFFF}
+      OnClick = btnIncluirClienteClick
+    end
+    object edtVenda: TEdit
+      Left = 15
+      Top = 27
+      Width = 52
+      Height = 21
+      TabOrder = 0
+    end
+    object edtData: TEdit
+      Left = 124
+      Top = 27
+      Width = 69
+      Height = 21
+      CharCase = ecUpperCase
+      Enabled = False
+      TabOrder = 1
+    end
+    object edtCliente: TEdit
+      Left = 122
+      Top = 72
+      Width = 292
+      Height = 21
+      MaxLength = 6
+      TabOrder = 3
     end
     object edtCodCliente: TEdit
       Left = 60
-      Top = 73
+      Top = 72
       Width = 29
-      Height = 21
+      Height = 22
       CharCase = ecUpperCase
       Enabled = False
       TabOrder = 2

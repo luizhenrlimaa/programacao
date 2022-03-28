@@ -34,7 +34,6 @@ type
     btnSair: TBitBtn;
     edtCodCliente: TEdit;
     btnCancelar: TBitBtn;
-    btnIncluirCliente: TBitBtn;
     cdsCliente: TClientDataSet;
     cdsClienteID: TIntegerField;
     cdsClienteNome: TStringField;
@@ -47,6 +46,7 @@ type
     cdsVendaQtde: TIntegerField;
     cdsVendaPreco: TFloatField;
     cdsVendaTotal: TFloatField;
+    btnIncluirCliente: TSpeedButton;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
@@ -60,9 +60,9 @@ type
     procedure btnConsultarClick(Sender: TObject);
     procedure btnPesquisarClick(Sender: TObject);
     procedure btnCancelarClick(Sender: TObject);
-    procedure btnIncluirClienteClick(Sender: TObject);
     procedure edtCodClienteKeyPress(Sender: TObject; var Key: Char);
     procedure dbgVendaKeyPress(Sender: TObject; var Key: Char);
+    procedure btnIncluirClienteClick(Sender: TObject);
 
 
   private
@@ -81,8 +81,7 @@ type
 
 
   public
-    { Public declarations }
-    
+
   end;
 
 var
@@ -207,34 +206,15 @@ begin
           edtVenda.SetFocus;
      end;
     end;
-//    etPesquisar:
-//    begin
+    etPesquisar:
+    begin
 //       stbBarraStatus.Panels[0].Text := 'Pesquisa';
-//
-//       if (frmProdutosPesq = nil) then
-//           frmProdutosPesq := TfrmProdutosPesq.Create(Application);
-//
-//       frmProdutosPesq.ShowModal;
-//
-//       if (frmProdutosPesq.mProdutoID <> 0) then
-//       begin
-//          edtVenda.Text := IntToStr(frmProdutosPesq.mProdutoID);
-//          vEstadoTela    := etConsultar;
-//          ProcessaConsulta;
-//       end
-//       else
-//       begin
-//          vEstadoTela := etPadrao;
-//          DefineEstadoTela;
-//       end;
-//
-//       frmProdutosPesq.mProdutoID := 0;
-//       frmProdutosPesq.mProdutoDescricao := EmptyStr;
-//
-//       if edtDescricao.CanFocus then
-//          edtDescricao.SetFocus;
-//
-//    end;
+
+       if (frmClientesPesq = nil) then
+         frmClientesPesq := TfrmClientesPesq.Create(Application);
+         frmClientesPesq.ShowModal;
+
+    end;
  end;
 end;
 
@@ -357,13 +337,6 @@ begin
    vEstadoTela := etPadrao;
    DefineEstadoTela;
 end;
-procedure TfrmVenda.btnIncluirClienteClick(Sender: TObject);
-begin
-//   stbBarraStatus.Panels[0].Text := 'Pesquisa';
-   if (frmClientesPesq = nil) then
-      frmClientesPesq := TfrmClientesPesq.Create(Application);
-      frmClientesPesq.ShowModal;
-end;
 
 procedure TfrmVenda.edtCodClienteKeyPress(Sender: TObject; var Key: Char);
 begin
@@ -378,6 +351,13 @@ begin
    if (frmProdutosPesq = nil) then
       frmProdutosPesq := TfrmProdutosPesq.Create(Application);
       frmProdutosPesq.ShowModal;
+end;
+procedure TfrmVenda.btnIncluirClienteClick(Sender: TObject);
+begin
+ //   stbBarraStatus.Panels[0].Text := 'Pesquisa';
+
+   vEstadoTela := etPesquisar;
+   DefineEstadoTela;
 end;
 
 end.
