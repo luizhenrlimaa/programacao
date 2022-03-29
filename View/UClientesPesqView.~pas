@@ -34,9 +34,6 @@ type
     BtnExportar: TBitBtn;
     svdDiretorio: TSaveDialog;
     Excel: TExcelApplication;
-    qCliente: TQuery;
-    qClienteCODCLIENTE: TIntegerField;
-    qClienteNOME: TStringField;
     dsClienteGrupo: TDataSource;
     procedure FormKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
@@ -68,8 +65,6 @@ type
 
 var
   frmClientesPesq: TfrmClientesPesq;
-  mCodCliente,
-  mNome : String;
 
 
 
@@ -132,7 +127,7 @@ begin
    if not (cdsCliente.IsEmpty) then
    begin
       mClienteID       := cdsClienteID.Value;
-      mClienteNome     := cdsClienteNome .Value;
+      mClienteNome     := cdsClienteNome.Value;
       Self.ModalResult := mrOk;
       LimparTela;
       Close;
@@ -212,9 +207,6 @@ procedure TfrmClientesPesq.btnConfirmarClick(Sender: TObject);
 begin
    mClienteID := 0;
    mClienteNome := EmptyStr;
-
-   mCodCliente :=  cdsClienteID.AsString;
-   mNome := cdsClienteNome.AsString;
 
    ProcessaConfirmacao;
 end;

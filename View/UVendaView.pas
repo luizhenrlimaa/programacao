@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, StdCtrls, ExtCtrls, ComCtrls, DB, DBClient, Grids, DBGrids,
-  UEnumerationUtil, Buttons, DBTables;
+  UEnumerationUtil, Buttons, DBTables, UClientesView, UCliente, UPessoaController;
 
 type
   TfrmVenda = class(TForm)
@@ -61,7 +61,6 @@ type
     procedure btnConsultarClick(Sender: TObject);
     procedure btnPesquisarClick(Sender: TObject);
     procedure btnCancelarClick(Sender: TObject);
-//    procedure edtCodClienteKeyPress(Sender: TObject; var Key: Char);
     procedure dbgVendaKeyPress(Sender: TObject; var Key: Char);
     procedure edtCodClienteChange(Sender: TObject);
     procedure edtClienteEnter(Sender: TObject);
@@ -75,11 +74,15 @@ type
       Shift: TShiftState);
     procedure btnIncluirClienteClick(Sender: TObject);
 
+    function ProcessaConsulta    : Boolean;
+
 
   private
     { Private declarations }
 
    vKey : Word;
+   vObjCliente : TCliente;
+
 
 //    Variaveis de Classes
    vEstadoTela : TEstadoTela;
@@ -399,10 +402,16 @@ begin
              if frmClientesPesq = nil then
                 frmClientesPesq := TfrmClientesPesq.Create(Application);
 //             pCentralizaFormulario(FFiltroFabr);
-             frmClientesPesq.ShowModal;
-             edtCodCliente.Text     := UClientesPesqView.mCodCliente;
-             edtCliente.Text        := UClientesPesqView.mNome;
-             vKey := 0;
+                frmClientesPesq.ShowModal;
+
+                if (frmClientesPesq.mClienteID <> 0) then
+                begin
+                   edtCodCliente.Text     := IntToStr(frmClientesPesq.mClienteID);
+                   edtCliente.Text        := frmClientesPesq.mClienteNome;
+                   ProcessaConsulta;
+                end;
+
+                vKey := 0;
          end;
       end;
       stbBarraStatus.Panels[1].Text := '';
@@ -426,9 +435,32 @@ end;
 
 procedure TfrmVenda.btnIncluirClienteClick(Sender: TObject);
 begin
-  if frmClientesPesq = nil then
-      frmClientesPesq := TfrmClientesPesq.Create(Application);
-   frmClientesPesq.Show;
+    CodClienteExit2;
+end;
+
+function TfrmVenda.ProcessaConsulta: Boolean;
+begin
+   try
+       Result := False;
+
+       if (edtCodCliente.Text = EmptyStr) then
+       begin
+            TMessageUtil.Alerta('Código do cliente não pode ficar em branco');
+
+            if (edtCodCliente.CanFocus) then
+                edtCodCliente.SetFocus;
+            Exit;
+       end;
+    Result := True;
+
+   except
+      on E:Exception do
+      begin
+        Raise Exception.Create(
+        'Falha ao consultar os dados do cliente [View]: '#13+
+        e.Message);
+      end;
+   end;
 end;
 
 end.

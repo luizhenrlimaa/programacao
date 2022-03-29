@@ -380,19 +380,7 @@ object frmClientesPesq: TfrmClientesPesq
     Left = 128
     Top = 208
   end
-  object qCliente: TQuery
-    DatabaseName = 'RESULTH'
-    Left = 385
-    Top = 9
-    object qClienteCODCLIENTE: TIntegerField
-      FieldName = 'CODCLIENTE'
-    end
-    object qClienteNOME: TStringField
-      FieldName = 'NOME'
-    end
-  end
   object dsClienteGrupo: TDataSource
-    DataSet = qCliente
     Left = 417
     Top = 9
   end

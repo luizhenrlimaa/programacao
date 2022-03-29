@@ -143,9 +143,6 @@ object frmVenda: TfrmVenda
       Height = 21
       MaxLength = 6
       TabOrder = 3
-      OnChange = edtCodClienteChange
-      OnEnter = edtClienteEnter
-      OnKeyDown = edtClienteKeyDown
     end
   end
   object Produtos: TGroupBox
