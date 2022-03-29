@@ -250,6 +250,7 @@ object frmVenda: TfrmVenda
       Height = 25
       Caption = '&Limpar'
       TabOrder = 1
+      OnClick = btnLimparClick
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100
         18000000000000030000C40E0000C40E00000000000000000000FFFFFFFFFFFF
@@ -548,40 +549,5 @@ object frmVenda: TfrmVenda
     DataSet = cdsVenda
     Left = 168
     Top = 208
-  end
-  object cdsCliente: TClientDataSet
-    Active = True
-    Aggregates = <>
-    Params = <>
-    Left = 225
-    Top = 18
-    Data = {
-      6F0000009619E0BD0100000018000000040000000000030000006F0002494404
-      00010000000000044E6F6D650100490000000100055749445448020002006400
-      05417469766F04000100000000000E44657363726963616F417469766F010049
-      00000001000557494454480200020003000000}
-    object cdsClienteID: TIntegerField
-      DisplayWidth = 5
-      FieldName = 'ID'
-    end
-    object cdsClienteNome: TStringField
-      DisplayWidth = 71
-      FieldName = 'Nome'
-      Size = 100
-    end
-    object cdsClienteAtivo: TIntegerField
-      DisplayWidth = 7
-      FieldName = 'Ativo'
-    end
-    object cdsClienteDescricaoAtivo: TStringField
-      DisplayWidth = 20
-      FieldName = 'DescricaoAtivo'
-      Size = 3
-    end
-  end
-  object dtsCliente: TDataSource
-    DataSet = cdsCliente
-    Left = 281
-    Top = 18
   end
 end

@@ -34,12 +34,6 @@ type
     btnSair: TBitBtn;
     edtCodCliente: TEdit;
     btnCancelar: TBitBtn;
-    cdsCliente: TClientDataSet;
-    cdsClienteID: TIntegerField;
-    cdsClienteNome: TStringField;
-    cdsClienteAtivo: TIntegerField;
-    cdsClienteDescricaoAtivo: TStringField;
-    dtsCliente: TDataSource;
     cdsVendaID: TIntegerField;
     cdsVendaDescricao: TStringField;
     cdsVendaUnidade: TIntegerField;
@@ -66,15 +60,23 @@ type
     procedure edtClienteEnter(Sender: TObject);
     procedure edtCodClienteEnter(Sender: TObject);
     procedure edtCodClienteExit(Sender: TObject);
-
-    function  CodClienteExit2 : Boolean;
     procedure edtClienteKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
     procedure edtCodClienteKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
     procedure btnIncluirClienteClick(Sender: TObject);
+    procedure btnLimparClick(Sender: TObject);
+    procedure LimparTela;
+
+
 
     function ProcessaConsulta    : Boolean;
+    function CodClienteExit2     : Boolean;
+
+
+
+
+
 
 
   private
@@ -461,6 +463,29 @@ begin
         e.Message);
       end;
    end;
+end;
+
+procedure TfrmVenda.btnLimparClick(Sender: TObject);
+begin
+   LimparTela;
+   edtData.Text := DateToStr(Date());
+end;
+
+procedure TfrmVenda.LimparTela;
+var
+i: Integer;
+begin
+ for i:= 0 to pred(ComponentCount) do
+  begin
+    if (Components[i] is TEdit) then
+       (Components[i] as TEdit).Text := EmptyStr;
+  end;
+
+   if(not cdsVenda.IsEmpty) then
+       cdsVenda.EmptyDataSet;
+
+   if (edtCodCliente.CanFocus) then
+      edtCodCliente.SetFocus ;
 end;
 
 end.
