@@ -6,7 +6,7 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, StdCtrls, Buttons, ExtCtrls, ComCtrls, DB, DBClient, Grids,
   DBGrids, uMessageUtil, UPessoa, UPessoaController, UClassFuncoes,
-  OleServer, ExcelXP;
+  OleServer, ExcelXP, DBTables;
   
 
 type
@@ -34,6 +34,10 @@ type
     BtnExportar: TBitBtn;
     svdDiretorio: TSaveDialog;
     Excel: TExcelApplication;
+    qCliente: TQuery;
+    qClienteCODCLIENTE: TIntegerField;
+    qClienteNOME: TStringField;
+    dsClienteGrupo: TDataSource;
     procedure FormKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
     procedure btnFiltrarClick(Sender: TObject);
@@ -55,14 +59,19 @@ type
     procedure PreenchePlanilha;
 
   public
-
+                                  
     mClienteID : Integer;
     mClienteNome : string;
+   
     { Public declarations }
   end;
 
 var
   frmClientesPesq: TfrmClientesPesq;
+  mCodCliente,
+  mNome : String;
+
+
 
 implementation
 
@@ -201,9 +210,13 @@ end;
 
 procedure TfrmClientesPesq.btnConfirmarClick(Sender: TObject);
 begin
-    mClienteID := 0;
-    mClienteNome := EmptyStr;
-    ProcessaConfirmacao;
+   mClienteID := 0;
+   mClienteNome := EmptyStr;
+
+   mCodCliente :=  cdsClienteID.AsString;
+   mNome := cdsClienteNome.AsString;
+
+   ProcessaConfirmacao;
 end;
 
 procedure TfrmClientesPesq.btnLimparClick(Sender: TObject);

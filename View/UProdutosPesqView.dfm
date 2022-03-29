@@ -1,6 +1,6 @@
 object frmProdutosPesq: TfrmProdutosPesq
-  Left = 479
-  Top = 231
+  Left = 423
+  Top = 282
   Width = 597
   Height = 328
   Caption = 'Pesquisa de Produto'
@@ -234,7 +234,27 @@ object frmProdutosPesq: TfrmProdutosPesq
   object cdsProduto: TClientDataSet
     Active = True
     Aggregates = <>
+    FieldDefs = <
+      item
+        Name = 'ID'
+        DataType = ftInteger
+      end
+      item
+        Name = 'Descricao'
+        DataType = ftString
+        Size = 100
+      end
+      item
+        Name = 'Estoque'
+        DataType = ftInteger
+      end
+      item
+        Name = 'PrecoVenda'
+        DataType = ftFloat
+      end>
+    IndexDefs = <>
     Params = <>
+    StoreDefs = True
     BeforeDelete = cdsProdutoBeforeDelete
     Left = 104
     Top = 153
@@ -242,7 +262,7 @@ object frmProdutosPesq: TfrmProdutosPesq
       660000009619E0BD010000001800000004000000000003000000660002494404
       000100000000000944657363726963616F010049000000010005574944544802
       0002006400074573746F71756504000100000000000A507265636F56656E6461
-      04000100000000000000}
+      08000400000000000000}
     object cdsProdutoID: TIntegerField
       DisplayWidth = 11
       FieldName = 'ID'
@@ -258,10 +278,9 @@ object frmProdutosPesq: TfrmProdutosPesq
       FieldName = 'Estoque'
     end
     object cdsProdutoPrecoVenda: TFloatField
+      Alignment = taLeftJustify
       DisplayLabel = 'Pre'#231'o'
-      FieldKind = fkCalculated
       FieldName = 'PrecoVenda'
-      Calculated = True
     end
   end
   object dtsProduto: TDataSource

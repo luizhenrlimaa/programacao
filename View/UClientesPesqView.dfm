@@ -1,6 +1,6 @@
 object frmClientesPesq: TfrmClientesPesq
-  Left = 461
-  Top = 270
+  Left = 503
+  Top = 244
   Width = 570
   Height = 305
   Caption = 'Pesquisa de Cliente'
@@ -379,5 +379,21 @@ object frmClientesPesq: TfrmClientesPesq
     AutoQuit = False
     Left = 128
     Top = 208
+  end
+  object qCliente: TQuery
+    DatabaseName = 'RESULTH'
+    Left = 385
+    Top = 9
+    object qClienteCODCLIENTE: TIntegerField
+      FieldName = 'CODCLIENTE'
+    end
+    object qClienteNOME: TStringField
+      FieldName = 'NOME'
+    end
+  end
+  object dsClienteGrupo: TDataSource
+    DataSet = qCliente
+    Left = 417
+    Top = 9
   end
 end

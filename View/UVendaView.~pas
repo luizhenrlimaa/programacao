@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, StdCtrls, ExtCtrls, ComCtrls, DB, DBClient, Grids, DBGrids,
-  UEnumerationUtil, Buttons;
+  UEnumerationUtil, Buttons, DBTables;
 
 type
   TfrmVenda = class(TForm)
@@ -47,6 +47,7 @@ type
     cdsVendaPreco: TFloatField;
     cdsVendaTotal: TFloatField;
     btnIncluirCliente: TSpeedButton;
+    edtCliente: TEdit;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
@@ -60,8 +61,18 @@ type
     procedure btnConsultarClick(Sender: TObject);
     procedure btnPesquisarClick(Sender: TObject);
     procedure btnCancelarClick(Sender: TObject);
-    procedure edtCodClienteKeyPress(Sender: TObject; var Key: Char);
+//    procedure edtCodClienteKeyPress(Sender: TObject; var Key: Char);
     procedure dbgVendaKeyPress(Sender: TObject; var Key: Char);
+    procedure edtCodClienteChange(Sender: TObject);
+    procedure edtClienteEnter(Sender: TObject);
+    procedure edtCodClienteEnter(Sender: TObject);
+    procedure edtCodClienteExit(Sender: TObject);
+
+    function  CodClienteExit2 : Boolean;
+    procedure edtClienteKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure edtCodClienteKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
     procedure btnIncluirClienteClick(Sender: TObject);
 
 
@@ -72,12 +83,12 @@ type
 
 //    Variaveis de Classes
    vEstadoTela : TEstadoTela;
-   edCodCliente: TEdit;
+//   edCodCliente: TEdit;
 
    procedure CamposEnabled(pOpcao : Boolean);
    procedure LimpaTela;
    procedure DefineEstadoTela;
-   
+
 
 
   public
@@ -338,12 +349,12 @@ begin
    DefineEstadoTela;
 end;
 
-procedure TfrmVenda.edtCodClienteKeyPress(Sender: TObject; var Key: Char);
-begin
-  if Key = #13 then
-
-    btnIncluirClienteClick(Sender);
-end;
+//procedure TfrmVenda.edtCodClienteKeyPress(Sender: TObject; var Key: Char);
+//begin
+//  if Key = #13 then
+//
+//    btnIncluirClienteClick(Sender);
+//end;
 procedure TfrmVenda.dbgVendaKeyPress(Sender: TObject; var Key: Char);
 begin
    if Key = #13 then
@@ -352,12 +363,72 @@ begin
       frmProdutosPesq := TfrmProdutosPesq.Create(Application);
       frmProdutosPesq.ShowModal;
 end;
+
+procedure TfrmVenda.edtCodClienteChange(Sender: TObject);
+begin
+    if edtCodCliente.Text = '' Then
+      edtCliente.Clear;
+end;
+
+procedure TfrmVenda.edtClienteEnter(Sender: TObject);
+begin
+ stbBarraStatus.Panels[1].Text := 'Clique no botão ao lado para incluir um Cliente.';
+end;
+
+procedure TfrmVenda.edtCodClienteEnter(Sender: TObject);
+begin
+ stbBarraStatus.Panels[1].Text := 'Clique no botão ao lado para incluir um Cliente.';
+end;
+
+procedure TfrmVenda.edtCodClienteExit(Sender: TObject);
+begin
+ stbBarraStatus.Panels[1].Text := '';
+   If vKey = 13 Then
+      CodClienteExit2;
+end;
+
+function TfrmVenda.CodClienteExit2: Boolean;
+begin
+   Result := False;
+   if edtCodCliente.Enabled then
+   begin
+
+      if edtCodCliente.Text = '' then
+      begin
+         begin
+             if frmClientesPesq = nil then
+                frmClientesPesq := TfrmClientesPesq.Create(Application);
+//             pCentralizaFormulario(FFiltroFabr);
+             frmClientesPesq.ShowModal;
+             edtCodCliente.Text     := UClientesPesqView.mCodCliente;
+             edtCliente.Text        := UClientesPesqView.mNome;
+             vKey := 0;
+         end;
+      end;
+      stbBarraStatus.Panels[1].Text := '';
+      Result := True;
+   end;
+end;
+
+procedure TfrmVenda.edtClienteKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+   begin
+    if (vKey = VK_F2) And (btnIncluirCliente.Enabled) then
+      btnIncluirCliente.Click;
+   end;
+
+procedure TfrmVenda.edtCodClienteKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+   if (Key = VK_F2) and (btnIncluirCliente.Enabled) Then
+      btnIncluirCliente.Click;
+end;
+
 procedure TfrmVenda.btnIncluirClienteClick(Sender: TObject);
 begin
- //   stbBarraStatus.Panels[0].Text := 'Pesquisa';
-
-   vEstadoTela := etPesquisar;
-   DefineEstadoTela;
+  if frmClientesPesq = nil then
+      frmClientesPesq := TfrmClientesPesq.Create(Application);
+   frmClientesPesq.Show;
 end;
 
 end.

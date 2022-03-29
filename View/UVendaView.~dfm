@@ -1,6 +1,6 @@
 object frmVenda: TfrmVenda
-  Left = 698
-  Top = 213
+  Left = 676
+  Top = 89
   Width = 466
   Height = 546
   Caption = 'Venda'
@@ -123,6 +123,19 @@ object frmVenda: TfrmVenda
       Enabled = False
       TabOrder = 1
     end
+    object edtCodCliente: TEdit
+      Left = 60
+      Top = 72
+      Width = 29
+      Height = 21
+      CharCase = ecUpperCase
+      Enabled = False
+      TabOrder = 2
+      OnChange = edtCodClienteChange
+      OnEnter = edtCodClienteEnter
+      OnExit = edtCodClienteExit
+      OnKeyDown = edtCodClienteKeyDown
+    end
     object edtCliente: TEdit
       Left = 122
       Top = 72
@@ -130,16 +143,9 @@ object frmVenda: TfrmVenda
       Height = 21
       MaxLength = 6
       TabOrder = 3
-    end
-    object edtCodCliente: TEdit
-      Left = 60
-      Top = 72
-      Width = 29
-      Height = 22
-      CharCase = ecUpperCase
-      Enabled = False
-      TabOrder = 2
-      OnKeyPress = edtCodClienteKeyPress
+      OnChange = edtCodClienteChange
+      OnEnter = edtClienteEnter
+      OnKeyDown = edtClienteKeyDown
     end
   end
   object Produtos: TGroupBox
