@@ -165,7 +165,7 @@ object frmVenda: TfrmVenda
       TitleFont.Height = -11
       TitleFont.Name = 'MS Sans Serif'
       TitleFont.Style = []
-      OnKeyPress = dbgVendaKeyPress
+      OnExit = dbgVendaExit
     end
   end
   object Panel1: TPanel
@@ -517,32 +517,42 @@ object frmVenda: TfrmVenda
       000200190007556E696461646504000100000000000451746465040001000000
       000005507265636F080004000000000005546F74616C08000400000000000000}
     object cdsVendaID: TIntegerField
+      Alignment = taCenter
       DisplayLabel = 'C'#243'digo'
       DisplayWidth = 7
       FieldName = 'ID'
     end
     object cdsVendaDescricao: TStringField
+      Alignment = taCenter
       DisplayLabel = 'Descri'#231#227'o'
       DisplayWidth = 20
       FieldName = 'Descricao'
       Size = 25
     end
     object cdsVendaUnidade: TIntegerField
+      Alignment = taCenter
       DisplayWidth = 10
       FieldName = 'Unidade'
     end
     object cdsVendaQtde: TIntegerField
+      Alignment = taCenter
       DisplayWidth = 10
       FieldName = 'Qtde'
     end
     object cdsVendaPreco: TFloatField
+      Alignment = taCenter
       DisplayLabel = 'Pre'#231'o'
       DisplayWidth = 11
       FieldName = 'Preco'
+      DisplayFormat = ',0.00;-,0.00'
+      EditFormat = ',0.00;-,0.00'
     end
     object cdsVendaTotal: TFloatField
+      Alignment = taCenter
       DisplayWidth = 7
       FieldName = 'Total'
+      DisplayFormat = ',0.00;-,0.00'
+      EditFormat = ',0.00;-,0.00'
     end
   end
   object dtsVenda: TDataSource

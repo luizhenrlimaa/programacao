@@ -56,7 +56,7 @@ type
     procedure btnConsultarClick(Sender: TObject);
     procedure btnPesquisarClick(Sender: TObject);
     procedure btnCancelarClick(Sender: TObject);
-    procedure dbgVendaKeyPress(Sender: TObject; var Key: Char);
+//    procedure dbgVendaKeyPress(Sender: TObject; var Key: Char);
     procedure edtCodClienteChange(Sender: TObject);
     procedure edtClienteEnter(Sender: TObject);
     procedure edtCodClienteEnter(Sender: TObject);
@@ -68,11 +68,13 @@ type
     procedure btnIncluirClienteClick(Sender: TObject);
     procedure btnLimparClick(Sender: TObject);
     procedure LimparTela;
+    procedure dbgVendaExit(Sender: TObject);
 
 
     function ProcessaConsulta    : Boolean;
     function CodClienteExit2     : Boolean;
-
+    function CodProdutoExit2     : Boolean;
+  
 
 
   private
@@ -89,7 +91,6 @@ type
    procedure CamposEnabled(pOpcao : Boolean);
    procedure LimpaTela;
    procedure DefineEstadoTela;
-
 
 
   public
@@ -356,14 +357,14 @@ end;
 //
 //    btnIncluirClienteClick(Sender);
 //end;
-procedure TfrmVenda.dbgVendaKeyPress(Sender: TObject; var Key: Char);
-begin
-   if Key = #13 then
-
-   if (frmProdutosPesq = nil) then
-      frmProdutosPesq := TfrmProdutosPesq.Create(Application);
-      frmProdutosPesq.ShowModal;
-end;
+//procedure TfrmVenda.dbgVendaKeyPress(Sender: TObject; var Key: Char);
+//begin
+//   if Key = #13 then
+//
+//   if (frmProdutosPesq = nil) then
+//      frmProdutosPesq := TfrmProdutosPesq.Create(Application);
+//      frmProdutosPesq.ShowModal;
+//end;
 
 procedure TfrmVenda.edtCodClienteChange(Sender: TObject);
 begin
@@ -488,4 +489,41 @@ begin
    if (edtCodCliente.CanFocus) then
       edtCodCliente.SetFocus ;
 end;
+procedure TfrmVenda.dbgVendaExit(Sender: TObject);
+begin
+ if vKey = VK_RETURN then
+   CodProdutoExit2;
+//   ProcessaConsulta;
+
+   vKey := VK_CLEAR;
+end;
+
+function TfrmVenda.CodProdutoExit2: Boolean;
+begin
+   begin
+     if frmProdutosPesq = nil then
+      frmProdutosPesq := TfrmProdutosPesq.Create(Application);
+  //   pCentralizaFormulario(FFiltroFabr);
+      frmProdutosPesq.ShowModal;
+
+     if (frmProdutosPesq.mProdutoID <> 0) then
+     begin
+        cdsVenda.Insert;
+        cdsVendaID.Text            := IntToStr(frmProdutosPesq.mProdutoID);
+        cdsVendaDescricao.Text     := frmProdutosPesq.mProdutoDescricao;
+        cdsVendaQtde.Value         := 1;
+        cdsVendaPreco.Text         := FloatToStr(frmProdutosPesq.mProdutoPreco);
+        cdsVendaTotal.Value        := cdsVendaPreco.Value * cdsVendaQtde.Value;
+        cdsVenda.Post;
+  //      edtCliente.Text          := frmClientesPesq.mClienteNome;
+  //      ProcessaConsulta;
+     end;
+
+     vKey := 0;
+   end;
+end;
 end.
+
+
+                                
+
