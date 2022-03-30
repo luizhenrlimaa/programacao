@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, ComCtrls, ExtCtrls, Grids, DBGrids, StdCtrls, Buttons, uMessageUtil,
-  UProduto, UProdutoController, UClassFuncoes,OleServer, DB, DBClient;
+  UProduto, UProdutoController, UClassFuncoes,OleServer, DB, DBClient, StrUtils;
 
 type
   TfrmProdutosPesq = class(TForm)
@@ -35,6 +35,9 @@ type
     procedure btnSairClick(Sender: TObject);
     procedure btnFiltrarClick(Sender: TObject);
     procedure cdsProdutoBeforeDelete(DataSet: TDataSet);
+    procedure dbgProdutoTitleClick(Column: TColumn);
+
+
   private
     { Private declarations }
      vKey : Word;
@@ -66,7 +69,7 @@ procedure TfrmProdutosPesq.FormKeyDown(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 begin
  vKey := Key;
-
+ 
    case vKey of
       VK_RETURN:
       begin
@@ -158,7 +161,6 @@ begin
 end;
 end;
 
-
 procedure TfrmProdutosPesq.ProcessaPesquisa;
 var
   xListaProduto : TColProduto;
@@ -215,6 +217,7 @@ begin
     end;
  end;
 end;
+
 procedure TfrmProdutosPesq.btnFiltrarClick(Sender: TObject);
 begin
     mProdutoID        := 0;
@@ -227,6 +230,11 @@ end;
 procedure TfrmProdutosPesq.cdsProdutoBeforeDelete(DataSet: TDataSet);
 begin
    Abort;
+end;
+
+procedure TfrmProdutosPesq.dbgProdutoTitleClick(Column: TColumn);
+begin
+   cdsProduto.IndexFieldNames := Column.FieldName;
 end;
 
 end.

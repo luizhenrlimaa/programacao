@@ -1,3 +1,4 @@
+
 unit UVendaView;
 
 interface
@@ -69,13 +70,8 @@ type
     procedure LimparTela;
 
 
-
     function ProcessaConsulta    : Boolean;
     function CodClienteExit2     : Boolean;
-
-
-
-
 
 
 
@@ -387,9 +383,11 @@ end;
 
 procedure TfrmVenda.edtCodClienteExit(Sender: TObject);
 begin
- stbBarraStatus.Panels[1].Text := '';
-   If vKey = 13 Then
-      CodClienteExit2;
+   if vKey = VK_RETURN then
+   CodClienteExit2;
+   ProcessaConsulta;
+
+   vKey := VK_CLEAR;
 end;
 
 function TfrmVenda.CodClienteExit2: Boolean;
@@ -417,6 +415,8 @@ begin
          end;
       end;
       stbBarraStatus.Panels[1].Text := '';
+      if (dbgVenda.CanFocus) then
+          dbgVenda.SetFocus;
       Result := True;
    end;
 end;
@@ -453,6 +453,7 @@ begin
                 edtCodCliente.SetFocus;
             Exit;
        end;
+
     Result := True;
 
    except
@@ -487,5 +488,4 @@ begin
    if (edtCodCliente.CanFocus) then
       edtCodCliente.SetFocus ;
 end;
-
 end.

@@ -229,6 +229,7 @@ object frmProdutosPesq: TfrmProdutosPesq
       TitleFont.Name = 'MS Sans Serif'
       TitleFont.Style = []
       OnDblClick = dbgProdutoDblClick
+      OnTitleClick = dbgProdutoTitleClick
     end
   end
   object cdsProduto: TClientDataSet
@@ -281,6 +282,8 @@ object frmProdutosPesq: TfrmProdutosPesq
       Alignment = taLeftJustify
       DisplayLabel = 'Pre'#231'o'
       FieldName = 'PrecoVenda'
+      DisplayFormat = ',0.00;-,0.00'
+      EditFormat = ',0.00;-,0.00'
     end
   end
   object dtsProduto: TDataSource

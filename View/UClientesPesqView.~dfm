@@ -307,6 +307,7 @@ object frmClientesPesq: TfrmClientesPesq
         TitleFont.Style = []
         OnDblClick = dbgClienteDblClick
         OnKeyDown = dbgClienteKeyDown
+        OnTitleClick = dbgClienteTitleClick
         Columns = <
           item
             Expanded = False

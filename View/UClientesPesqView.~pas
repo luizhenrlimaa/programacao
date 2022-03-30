@@ -46,6 +46,7 @@ type
     procedure dbgClienteKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
     procedure BtnExportarClick(Sender: TObject);
+    procedure dbgClienteTitleClick(Column: TColumn);
   private
     { Private declarations }
     vKey : Word;
@@ -319,6 +320,11 @@ begin
        xExcel := Unassigned;
 
    end;
+end;
+
+procedure TfrmClientesPesq.dbgClienteTitleClick(Column: TColumn);
+begin
+    cdsCliente.IndexFieldNames := Column.FieldName;
 end;
 
 end.
