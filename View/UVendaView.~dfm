@@ -165,7 +165,7 @@ object frmVenda: TfrmVenda
       TitleFont.Height = -11
       TitleFont.Name = 'MS Sans Serif'
       TitleFont.Style = []
-      OnExit = dbgVendaExit
+      OnKeyPress = dbgVendaKeyPress
     end
   end
   object Panel1: TPanel

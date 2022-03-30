@@ -56,7 +56,6 @@ type
     procedure btnConsultarClick(Sender: TObject);
     procedure btnPesquisarClick(Sender: TObject);
     procedure btnCancelarClick(Sender: TObject);
-//    procedure dbgVendaKeyPress(Sender: TObject; var Key: Char);
     procedure edtCodClienteChange(Sender: TObject);
     procedure edtClienteEnter(Sender: TObject);
     procedure edtCodClienteEnter(Sender: TObject);
@@ -68,14 +67,12 @@ type
     procedure btnIncluirClienteClick(Sender: TObject);
     procedure btnLimparClick(Sender: TObject);
     procedure LimparTela;
-    procedure dbgVendaExit(Sender: TObject);
+    procedure dbgVendaKeyPress(Sender: TObject; var Key: Char);
 
 
     function ProcessaConsulta    : Boolean;
     function CodClienteExit2     : Boolean;
     function CodProdutoExit2     : Boolean;
-  
-
 
   private
     { Private declarations }
@@ -240,7 +237,7 @@ end;
 procedure TfrmVenda.FormKeyDown(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 begin
-vKey := Key;
+   vKey := Key;
 
    case vKey of
       VK_RETURN: // Correspondente a tecla <enter>
@@ -351,21 +348,6 @@ begin
    DefineEstadoTela;
 end;
 
-//procedure TfrmVenda.edtCodClienteKeyPress(Sender: TObject; var Key: Char);
-//begin
-//  if Key = #13 then
-//
-//    btnIncluirClienteClick(Sender);
-//end;
-//procedure TfrmVenda.dbgVendaKeyPress(Sender: TObject; var Key: Char);
-//begin
-//   if Key = #13 then
-//
-//   if (frmProdutosPesq = nil) then
-//      frmProdutosPesq := TfrmProdutosPesq.Create(Application);
-//      frmProdutosPesq.ShowModal;
-//end;
-
 procedure TfrmVenda.edtCodClienteChange(Sender: TObject);
 begin
     if edtCodCliente.Text = '' Then
@@ -397,7 +379,7 @@ begin
    if edtCodCliente.Enabled then
    begin
 
-      if edtCodCliente.Text = '' then
+      if (edtCodCliente.Text = '') then
       begin
          begin
              if frmClientesPesq = nil then
@@ -489,18 +471,18 @@ begin
    if (edtCodCliente.CanFocus) then
       edtCodCliente.SetFocus ;
 end;
-procedure TfrmVenda.dbgVendaExit(Sender: TObject);
-begin
- if vKey = VK_RETURN then
-   CodProdutoExit2;
+//procedure TfrmVenda.dbgVendaExit(Sender: TObject);
+//begin
+// if vKey = VK_RETURN then
+//   CodProdutoExit2;
 //   ProcessaConsulta;
-
-   vKey := VK_CLEAR;
-end;
+//
+//   vKey := VK_CLEAR;
+//end;
 
 function TfrmVenda.CodProdutoExit2: Boolean;
 begin
-   begin
+begin
      if frmProdutosPesq = nil then
       frmProdutosPesq := TfrmProdutosPesq.Create(Application);
   //   pCentralizaFormulario(FFiltroFabr);
@@ -513,15 +495,29 @@ begin
         cdsVendaDescricao.Text     := frmProdutosPesq.mProdutoDescricao;
         cdsVendaQtde.Value         := 1;
         cdsVendaPreco.Text         := FloatToStr(frmProdutosPesq.mProdutoPreco);
-        cdsVendaTotal.Value        := cdsVendaPreco.Value * cdsVendaQtde.Value;
+        if (vKey = 13) and (dbgVenda.SelectedIndex = 3) then
+         cdsVendaTotal.Value        := cdsVendaPreco.Value * cdsVendaQtde.Value;
+
         cdsVenda.Post;
   //      edtCliente.Text          := frmClientesPesq.mClienteNome;
   //      ProcessaConsulta;
+
      end;
 
      vKey := 0;
-   end;
 end;
+end;
+
+
+procedure TfrmVenda.dbgVendaKeyPress(Sender: TObject; var Key: Char);
+begin
+    if (vKey = 13) and (dbgVenda.SelectedIndex = 0)  then
+   begin
+      CodProdutoExit2;
+   end;
+   vKey := VK_CLEAR;
+end;
+
 end.
 
 
