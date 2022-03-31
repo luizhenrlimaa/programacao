@@ -265,21 +265,24 @@ object frmProdutosPesq: TfrmProdutosPesq
       0002006400074573746F71756504000100000000000A507265636F56656E6461
       08000400000000000000}
     object cdsProdutoID: TIntegerField
+      Alignment = taCenter
       DisplayWidth = 11
       FieldName = 'ID'
     end
     object cdsProdutoDescricao: TStringField
+      Alignment = taCenter
       DisplayLabel = 'Descri'#231#227'o'
       DisplayWidth = 61
       FieldName = 'Descricao'
       Size = 100
     end
     object cdsProdutoEstoque: TIntegerField
+      Alignment = taCenter
       DisplayWidth = 9
       FieldName = 'Estoque'
     end
     object cdsProdutoPrecoVenda: TFloatField
-      Alignment = taLeftJustify
+      Alignment = taCenter
       DisplayLabel = 'Pre'#231'o'
       FieldName = 'PrecoVenda'
       DisplayFormat = ',0.00;-,0.00'

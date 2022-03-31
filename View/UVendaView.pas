@@ -68,7 +68,7 @@ type
     procedure btnLimparClick(Sender: TObject);
     procedure LimparTela;
     procedure dbgVendaKeyPress(Sender: TObject; var Key: Char);
-
+    procedure carregaDadosTela;
 
     function ProcessaConsulta    : Boolean;
     function CodClienteExit2     : Boolean;
@@ -293,6 +293,8 @@ begin
       if (Components[i] is TEdit)   then
       (Components[i] as TEdit).Text := EmptyStr;
   end;
+   if(vObjCliente <> nil) then
+   FreeAndNil(vObjCliente);
 end;
 
 procedure TfrmVenda.FormShow(Sender: TObject);
@@ -437,6 +439,24 @@ begin
             Exit;
        end;
 
+       vObjCliente :=
+         TCliente(TPessoaController.getInstancia.BuscaPessoa(
+            StrToIntDef(edtCodCliente.Text, 0)));
+
+       if (vObjCliente <> nil) then
+            CarregaDadosTela
+       else
+       begin
+            TMessageUtil.Alerta(
+                'Nenhum cliente encontrado para o código informado.');
+            LimpaTela;
+
+            if (edtCodCliente.CanFocus) then
+                edtCodCliente.SetFocus;
+
+            Exit;
+       end;
+
     Result := True;
 
    except
@@ -517,6 +537,19 @@ begin
    end;
    vKey := VK_CLEAR;
 end;
+
+procedure TfrmVenda.carregaDadosTela;
+var
+  i : Integer;
+
+begin
+  if (vObjCliente = nil) then
+     Exit;
+
+  edtCodCliente.Text          := IntToStr(vObjCliente.Id);
+  edtCliente.Text             := vObjCliente.Nome;
+end;
+
 
 end.
 
