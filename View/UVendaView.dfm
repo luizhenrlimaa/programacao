@@ -530,8 +530,6 @@ object frmVenda: TfrmVenda
       Size = 25
     end
     object cdsVendaUnidade: TIntegerField
-      Alignment = taCenter
-      DisplayWidth = 10
       FieldName = 'Unidade'
     end
     object cdsVendaQtde: TIntegerField

@@ -37,12 +37,13 @@ type
     btnCancelar: TBitBtn;
     cdsVendaID: TIntegerField;
     cdsVendaDescricao: TStringField;
-    cdsVendaUnidade: TIntegerField;
     cdsVendaQtde: TIntegerField;
     cdsVendaPreco: TFloatField;
     cdsVendaTotal: TFloatField;
     btnIncluirCliente: TSpeedButton;
     edtCliente: TEdit;
+    cdsVendaUnidade: TIntegerField;
+
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
@@ -70,7 +71,7 @@ type
     procedure dbgVendaKeyPress(Sender: TObject; var Key: Char);
     procedure carregaDadosTela;
 
-    function ProcessaConsulta    : Boolean;
+    function ProcessaConsultaCliente    : Boolean;
     function CodClienteExit2     : Boolean;
     function CodProdutoExit2     : Boolean;
 
@@ -370,7 +371,7 @@ procedure TfrmVenda.edtCodClienteExit(Sender: TObject);
 begin
    if vKey = VK_RETURN then
    CodClienteExit2;
-   ProcessaConsulta;
+   ProcessaConsultaCliente;
 
    vKey := VK_CLEAR;
 end;
@@ -393,7 +394,7 @@ begin
                 begin
                    edtCodCliente.Text     := IntToStr(frmClientesPesq.mClienteID);
                    edtCliente.Text        := frmClientesPesq.mClienteNome;
-                   ProcessaConsulta;
+                   ProcessaConsultaCliente;
                 end;
 
                 vKey := 0;
@@ -425,7 +426,7 @@ begin
     CodClienteExit2;
 end;
 
-function TfrmVenda.ProcessaConsulta: Boolean;
+function TfrmVenda.ProcessaConsultaCliente: Boolean;
 begin
    try
        Result := False;
@@ -515,8 +516,7 @@ begin
         cdsVendaDescricao.Text     := frmProdutosPesq.mProdutoDescricao;
         cdsVendaQtde.Value         := 1;
         cdsVendaPreco.Text         := FloatToStr(frmProdutosPesq.mProdutoPreco);
-        if (vKey = 13) and (dbgVenda.SelectedIndex = 3) then
-         cdsVendaTotal.Value        := cdsVendaPreco.Value * cdsVendaQtde.Value;
+        cdsVendaTotal.Value        := cdsVendaPreco.Value * cdsVendaQtde.Value;
 
         cdsVenda.Post;
   //      edtCliente.Text          := frmClientesPesq.mClienteNome;
@@ -528,14 +528,24 @@ begin
 end;
 end;
 
-
 procedure TfrmVenda.dbgVendaKeyPress(Sender: TObject; var Key: Char);
 begin
-    if (vKey = 13) and (dbgVenda.SelectedIndex = 0)  then
+   if (vKey = 13) and (dbgVenda.SelectedIndex = 0)  then
    begin
       CodProdutoExit2;
    end;
+   if (vKey = 13) and (dbgVenda.SelectedIndex = 3) then
+   begin
+     if (cdsVendaQtde.Value <> 1) then
+
+       cdsVendaTotal.Value  := cdsVendaQtde.Value * cdsVendaPreco.Value
+
+     else
+       cdsVendaTotal.Value  :=  cdsVendaPreco.Value;
+
+   end;
    vKey := VK_CLEAR;
+
 end;
 
 procedure TfrmVenda.carregaDadosTela;
@@ -549,7 +559,6 @@ begin
   edtCodCliente.Text          := IntToStr(vObjCliente.Id);
   edtCliente.Text             := vObjCliente.Nome;
 end;
-
 
 end.
 
