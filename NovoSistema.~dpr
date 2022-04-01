@@ -32,7 +32,11 @@ uses
   UProdutoCad in 'Model\UProdutoCad.pas',
   UProdutoController in 'Controller\UProdutoController.pas',
   UProdutosPesqView in 'View\UProdutosPesqView.pas' {frmProdutosPesq},
-  UVendaView in 'View\UVendaView.pas' {frmVenda};
+  UVendaView in 'View\UVendaView.pas' {frmVenda},
+  UVenda_ItemCad in 'Model\UVenda_ItemCad.pas',
+  UVenda_Item in 'Model\UVenda_Item.pas',
+  UVenda_ItemController in 'Controller\UVenda_ItemController.pas',
+  UVenda_ItemDAO in 'Model\UVenda_ItemDAO.pas';
 
 {$R *.res}
 

@@ -214,6 +214,7 @@ object frmVenda: TfrmVenda
       Height = 25
       Caption = 'C&onfirmar'
       TabOrder = 2
+      OnClick = btnConfirmarVendaClick
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100
         18000000000000030000C40E0000C40E00000000000000000000FFFFFFFFFFFF
@@ -508,14 +509,44 @@ object frmVenda: TfrmVenda
   object cdsVenda: TClientDataSet
     Active = True
     Aggregates = <>
+    FieldDefs = <
+      item
+        Name = 'ID'
+        DataType = ftInteger
+      end
+      item
+        Name = 'Descricao'
+        DataType = ftString
+        Size = 25
+      end
+      item
+        Name = 'Unidade'
+        DataType = ftString
+        Size = 20
+      end
+      item
+        Name = 'Qtde'
+        DataType = ftInteger
+      end
+      item
+        Name = 'Preco'
+        DataType = ftFloat
+      end
+      item
+        Name = 'Total'
+        DataType = ftFloat
+      end>
+    IndexDefs = <>
     Params = <>
+    StoreDefs = True
     Left = 112
     Top = 208
     Data = {
-      7C0000009619E0BD0100000018000000060000000000030000007C0002494404
+      880000009619E0BD010000001800000006000000000003000000880002494404
       000100000000000944657363726963616F010049000000010005574944544802
-      000200190007556E696461646504000100000000000451746465040001000000
-      000005507265636F080004000000000005546F74616C08000400000000000000}
+      000200190007556E696461646501004900000001000557494454480200020014
+      000451746465040001000000000005507265636F080004000000000005546F74
+      616C08000400000000000000}
     object cdsVendaID: TIntegerField
       Alignment = taCenter
       DisplayLabel = 'C'#243'digo'
@@ -529,7 +560,8 @@ object frmVenda: TfrmVenda
       FieldName = 'Descricao'
       Size = 25
     end
-    object cdsVendaUnidade: TIntegerField
+    object cdsVendaUnidade: TStringField
+      Alignment = taCenter
       FieldName = 'Unidade'
     end
     object cdsVendaQtde: TIntegerField
