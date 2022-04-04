@@ -6,7 +6,8 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, StdCtrls, ExtCtrls, ComCtrls, DB, DBClient, Grids, DBGrids,
   UEnumerationUtil, Buttons, DBTables, UClientesView, UCliente, UPessoaController,
-  UVenda_Item , UVenda_ItemController, UVenda_ItemCad;
+  UVenda_Item , UVenda_ItemController, UVenda_ItemCad, UVenda, UVendaController,
+  UVendaCad;
 
 type
   TfrmVenda = class(TForm)
@@ -73,6 +74,7 @@ type
     function ProcessaInclusao           : Boolean;
     function ProcessaVenda_Item         : Boolean;
     function ProcessaItem               : Boolean;
+    function ProcessaVenda              : Boolean;
 
     function ProcessaConsultaCliente    : Boolean;
     function CodClienteExit2            : Boolean;
@@ -87,7 +89,9 @@ type
    vKey           : Word;
    vObjCliente    : TCliente;
    vObjItem_Venda : TVenda_ItemCad;
-   vObjColVenda :   TColVenda_Item;
+   vObjVenda      : TVendaCad;
+   vObjColVenda   : TColVenda_Item;
+   vObjCol        : TColVenda;
 
 
 //    Variaveis de Classes
@@ -537,7 +541,7 @@ begin
    end;
 
 
-   edtTotal.Text :=  'R$' + ' ' + cdsVendaTotal.Text;
+   edtTotal.Text :=  cdsVendaTotal.Text;
 
    vKey := VK_CLEAR;
 
@@ -566,7 +570,7 @@ begin
 
   try
       case vEstadoTela of
-        etIncluir:   Result := ProcessaInclusao;
+          etIncluir:   Result := ProcessaInclusao;
 //        etAlterar:   Result := ProcessaAlteracao;
 //        etExcluir:   Result := ProcessaExclusao;
 //        etConsultar: Result := ProcessaConsulta;
@@ -591,7 +595,7 @@ begin
      if ProcessaVenda_Item then
      begin
        TMessageUtil.Informacao('Venda realizada com sucesso.'#13+
-       'Venda cadastrada: '+ IntToStr(vObjItem_Venda.Id_Venda));
+       'Venda cadastrada: '+ IntToStr(vObjVenda.Id));
        vEstadoTela := etPadrao;
        DefineEstadoTela;
        DefineEstadoTela;
@@ -619,8 +623,18 @@ begin
 //           Gravação no BD
           TVenda_ItemController.getInstancia.GravaVenda_Item(vObjItem_Venda, vObjColVenda);
 
+         
+      end;
+
+      if(ProcessaVenda) then
+      begin
+//           Gravação no BD
+          TVendaController.getInstancia.GravaVenda(vObjVenda, vObjCol);
+
           Result := True;
       end;
+
+
 
    except
        on E : Exception do
@@ -653,6 +667,7 @@ begin
       if (vObjItem_Venda = nil) then
          Exit;
 
+       
         vObjItem_Venda.Id_Produto                   := cdsVendaID.Value;
         vObjItem_Venda.Quantidade                   := cdsVendaQtde.Value;
         vObjItem_Venda.UnidadeSaida                 := cdsVendaUnidade.Value;
@@ -670,6 +685,44 @@ begin
        end;
 
    end;
+end;
+
+function TfrmVenda.ProcessaVenda: Boolean;
+begin
+   try
+       Result := False;
+
+//     if not ValidaCliente then
+//            Exit;
+     if (vObjCol <> nil) then
+        FreeAndNil(vObjCol);
+
+      vObjCol := TColVenda.Create;
+
+      if vEstadoTela = etIncluir then
+      begin
+        if vObjVenda = nil then
+           vObjVenda := TVendaCad.Create;
+      end;
+
+      if (vObjVenda = nil) then
+         Exit;
+
+        vObjVenda.Id_Cliente                   := StrToInt(edtCodCliente.Text);
+        vObjVenda.DataVenda                    := edtData.Text;
+        vObjVenda.TotalVenda                   := StrToFloat(edtTotal.Text);
+
+       Result := True;
+   except
+       on E : Exception do
+       begin
+          Raise Exception.Create(
+          'Falha ao processar os dados da Venda [View]'#13+
+          e.Message);
+       end;
+
+   end;
+
 end;
 
 end.
