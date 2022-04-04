@@ -80,6 +80,8 @@ type
     function CodClienteExit2            : Boolean;
     function CodProdutoExit2            : Boolean;
     procedure btnConfirmarVendaClick(Sender: TObject);
+  
+    
 
 
 //    procedure edtTotalChange(Sender: TObject);
@@ -525,12 +527,13 @@ begin
 end;
 
 procedure TfrmVenda.dbgVendaKeyPress(Sender: TObject; var Key: Char);
+Var
+  vValor : Real;
 begin
    if (vKey = 13) and (dbgVenda.SelectedIndex = 0)  then
    begin
       CodProdutoExit2;
    end;
-
 
    if (vKey = 13) and (dbgVenda.SelectedIndex = 3) then
    begin
@@ -540,16 +543,16 @@ begin
 
      else
        cdsVendaTotal.Value  := cdsVendaPreco.Value;
-
-     if (cdsVendaQtde.Value < 1) then
-        cdsVendaQtde.Value := 1;
    end;
 
-
-   edtTotal.Text :=  cdsVendaTotal.Text;
-
-   vKey := VK_CLEAR;
-
+    vValor := 0;
+    cdsVenda.First;
+    while not cdsVenda.Eof Do
+    begin
+     vValor := vValor + cdsVenda.FieldByName('Total').AsFloat;
+     cdsVenda.Next;
+    end;
+    edtTotal.Text := FormatFloat('##0.00',vValor);
 end;
 
 procedure TfrmVenda.carregaDadosTela;
@@ -730,7 +733,6 @@ begin
    end;
 
 end;
-
 end.
 
 
