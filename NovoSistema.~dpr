@@ -36,7 +36,11 @@ uses
   UVenda_ItemCad in 'Model\UVenda_ItemCad.pas',
   UVenda_Item in 'Model\UVenda_Item.pas',
   UVenda_ItemController in 'Controller\UVenda_ItemController.pas',
-  UVenda_ItemDAO in 'Model\UVenda_ItemDAO.pas';
+  UVenda_ItemDAO in 'Model\UVenda_ItemDAO.pas',
+  UVenda in 'Model\UVenda.pas',
+  UVendaController in 'Controller\UVendaController.pas',
+  UVendaDAO in 'Model\UVendaDAO.pas',
+  UVendaCad in 'Model\UVendaCad.pas';
 
 {$R *.res}
 
