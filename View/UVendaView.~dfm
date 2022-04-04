@@ -556,36 +556,37 @@ object frmVenda: TfrmVenda
     object cdsVendaID: TIntegerField
       Alignment = taCenter
       DisplayLabel = 'C'#243'digo'
-      DisplayWidth = 7
+      DisplayWidth = 9
       FieldName = 'ID'
     end
     object cdsVendaDescricao: TStringField
       Alignment = taCenter
       DisplayLabel = 'Descri'#231#227'o'
-      DisplayWidth = 20
+      DisplayWidth = 21
       FieldName = 'Descricao'
       Size = 25
     end
     object cdsVendaUnidade: TStringField
       Alignment = taCenter
+      DisplayWidth = 9
       FieldName = 'Unidade'
     end
     object cdsVendaQtde: TIntegerField
       Alignment = taCenter
-      DisplayWidth = 10
+      DisplayWidth = 9
       FieldName = 'Qtde'
     end
     object cdsVendaPreco: TFloatField
       Alignment = taCenter
       DisplayLabel = 'Pre'#231'o'
-      DisplayWidth = 11
+      DisplayWidth = 8
       FieldName = 'Preco'
       DisplayFormat = ',0.00;-,0.00'
       EditFormat = ',0.00;-,0.00'
     end
     object cdsVendaTotal: TFloatField
       Alignment = taCenter
-      DisplayWidth = 7
+      DisplayWidth = 9
       FieldName = 'Total'
       DisplayFormat = ',0.00;-,0.00'
       EditFormat = ',0.00;-,0.00'

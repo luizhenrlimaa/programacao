@@ -81,6 +81,7 @@ type
     function CodProdutoExit2            : Boolean;
     procedure btnConfirmarVendaClick(Sender: TObject);
 
+
 //    procedure edtTotalChange(Sender: TObject);
 
   private
@@ -658,6 +659,7 @@ begin
 
       vObjColVenda := TColVenda_Item.Create;
 
+
       if vEstadoTela = etIncluir then
       begin
         if vObjItem_Venda = nil then
@@ -667,7 +669,6 @@ begin
       if (vObjItem_Venda = nil) then
          Exit;
 
-       
         vObjItem_Venda.Id_Produto                   := cdsVendaID.Value;
         vObjItem_Venda.Quantidade                   := cdsVendaQtde.Value;
         vObjItem_Venda.UnidadeSaida                 := cdsVendaUnidade.Value;
@@ -709,7 +710,7 @@ begin
          Exit;
 
         vObjVenda.Id_Cliente                   := StrToInt(edtCodCliente.Text);
-        vObjVenda.DataVenda                    := edtData.Text;
+        vObjVenda.DataVenda                    := StrToDate(edtData.Text);
         vObjVenda.TotalVenda                   := StrToFloat(edtTotal.Text);
 
        Result := True;
