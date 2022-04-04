@@ -111,6 +111,7 @@ type
 var
   frmVenda: TfrmVenda;
 
+
 implementation
 
 {$R *.dfm}
@@ -539,6 +540,9 @@ begin
 
      else
        cdsVendaTotal.Value  := cdsVendaPreco.Value;
+
+     if (cdsVendaQtde.Value < 1) then
+        cdsVendaQtde.Value := 1;
    end;
 
 
@@ -650,6 +654,7 @@ end;
 function TfrmVenda.ProcessaItem: Boolean;
 begin
    try
+
        Result := False;
 
 //     if not ValidaCliente then
@@ -666,7 +671,7 @@ begin
            vObjItem_Venda := TVenda_ItemCad.Create;
       end;
 
-      if (vObjItem_Venda = nil) then
+      if (vObjItem_Venda = nil)  then
          Exit;
 
         vObjItem_Venda.Id_Produto                   := cdsVendaID.Value;
