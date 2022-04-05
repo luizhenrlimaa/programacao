@@ -80,6 +80,8 @@ type
     function CodClienteExit2            : Boolean;
     function CodProdutoExit2            : Boolean;
     procedure btnConfirmarVendaClick(Sender: TObject);
+    procedure dbgVendaKeyDown(Sender: TObject; var vKey: Word;
+      Shift: TShiftState);
   
     
 
@@ -733,6 +735,33 @@ begin
    end;
 
 end;
+
+procedure TfrmVenda.dbgVendaKeyDown(Sender: TObject; var vKey: Word;
+  Shift: TShiftState);
+
+var
+  vValor: Real;
+begin
+
+   vValor := 0;
+
+   if vKey = VK_DELETE then
+   begin
+     if MessageDlg('Deseja excluir esse item?',mtConfirmation,[mbYes,mbNo],0)=mrYes then
+      begin
+         cdsVenda.Delete;
+      end;
+
+      cdsVenda.First;
+      while not cdsVenda.Eof Do
+      begin
+       vValor := vValor + cdsVenda.FieldByName('Total').AsFloat;
+       cdsVenda.Next;
+      end;
+      edtTotal.Text := FormatFloat('##0.00',vValor);
+   end;
+end;
+
 end.
 
 
