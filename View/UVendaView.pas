@@ -493,8 +493,18 @@ begin
     if(vObjCliente <> nil) then
       FreeAndNil(vObjCliente);
 
-   if (edtCodCliente.CanFocus) then
-      edtCodCliente.SetFocus ;
+   if(vObjItem_Venda <> nil) then
+      FreeAndNil(vObjItem_Venda);
+
+   if(vObjColVenda <> nil) then
+      FreeAndNil(vObjColVenda);
+
+   if(vObjVenda <> nil) then
+      FreeAndNil(vObjVenda);
+
+   if(vObjCol <> nil) then
+      FreeAndNil(vObjCol);
+
 end;
 
 
@@ -628,15 +638,8 @@ function TfrmVenda.ProcessaVenda_Item: Boolean;
 begin
    try
        Result := False;
-     if(ProcessaItem) then
-      begin
-//           Gravação no BD
-          TVenda_ItemController.getInstancia.GravaVenda_Item(vObjItem_Venda, vObjColVenda);
 
-         
-      end;
-
-      if(ProcessaVenda) then
+     if(ProcessaVenda) then
       begin
 //           Gravação no BD
           TVendaController.getInstancia.GravaVenda(vObjVenda, vObjCol);
@@ -645,6 +648,11 @@ begin
       end;
 
 
+     if(ProcessaItem) then
+      begin
+//           Gravação no BD
+          TVenda_ItemController.getInstancia.GravaVenda_Item(vObjItem_Venda, vObjColVenda);
+      end;
 
    except
        on E : Exception do
@@ -653,48 +661,6 @@ begin
               'Falha ao gravar os dados do cliente [View]: '#13+
               e.Message);
        end;
-   end;
-end;
-
-function TfrmVenda.ProcessaItem: Boolean;
-begin
-   try
-
-       Result := False;
-
-//     if not ValidaCliente then
-//            Exit;
-     if (vObjColVenda <> nil) then
-        FreeAndNil(vObjColVenda);
-
-      vObjColVenda := TColVenda_Item.Create;
-
-
-      if vEstadoTela = etIncluir then
-      begin
-        if vObjItem_Venda = nil then
-           vObjItem_Venda := TVenda_ItemCad.Create;
-      end;
-
-      if (vObjItem_Venda = nil)  then
-         Exit;
-
-        vObjItem_Venda.Id_Produto                   := cdsVendaID.Value;
-        vObjItem_Venda.Quantidade                   := cdsVendaQtde.Value;
-        vObjItem_Venda.UnidadeSaida                 := cdsVendaUnidade.Value;
-        vObjItem_Venda.ValorUnitario                := cdsVendaPreco.Value;
-        vObjItem_Venda.TotalItem                    := cdsVendaTotal.Value;
-
-
-       Result := True;
-   except
-       on E : Exception do
-       begin
-          Raise Exception.Create(
-          'Falha ao processar os dados da Venda [View]'#13+
-          e.Message);
-       end;
-
    end;
 end;
 
@@ -734,6 +700,49 @@ begin
 
    end;
 
+end;
+
+function TfrmVenda.ProcessaItem: Boolean;
+begin
+   try
+
+       Result := False;
+
+//     if not ValidaCliente then
+//            Exit;
+     if (vObjColVenda <> nil) then
+        FreeAndNil(vObjColVenda);
+
+      vObjColVenda := TColVenda_Item.Create;
+
+
+      if vEstadoTela = etIncluir then
+      begin
+        if vObjItem_Venda = nil then
+           vObjItem_Venda := TVenda_ItemCad.Create;
+      end;
+
+      if (vObjItem_Venda = nil) and (vObjVenda <> nil)  then
+         Exit;
+
+        vObjItem_Venda.Id_Venda                     := vObjVenda.Id;
+        vObjItem_Venda.Id_Produto                   := cdsVendaID.Value;
+        vObjItem_Venda.Quantidade                   := cdsVendaQtde.Value;
+        vObjItem_Venda.UnidadeSaida                 := cdsVendaUnidade.Value;
+        vObjItem_Venda.ValorUnitario                := cdsVendaPreco.Value;
+        vObjItem_Venda.TotalItem                    := cdsVendaTotal.Value;
+
+
+       Result := True;
+   except
+       on E : Exception do
+       begin
+          Raise Exception.Create(
+          'Falha ao processar os dados da Venda [View]'#13+
+          e.Message);
+       end;
+
+   end;
 end;
 
 procedure TfrmVenda.dbgVendaKeyDown(Sender: TObject; var vKey: Word;

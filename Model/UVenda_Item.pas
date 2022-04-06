@@ -2,7 +2,7 @@ unit UVenda_Item;
 
 interface
 
-uses SysUtils, Classes;
+uses SysUtils, Classes , UVenda;
 
 type
     TVenda_Item = Class(TPersistent)
