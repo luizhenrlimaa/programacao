@@ -33,6 +33,7 @@ type
 
     TColVenda_Item = class(TList)
       public
+        
            function   Retorna (pIndex : Integer) : TVenda_Item;
            procedure  Adiciona(pVenda_Item : TVenda_Item);
     end;

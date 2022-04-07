@@ -7,7 +7,7 @@ uses
   Dialogs, StdCtrls, ExtCtrls, ComCtrls, DB, DBClient, Grids, DBGrids,
   UEnumerationUtil, Buttons, DBTables, UClientesView, UCliente, UPessoaController,
   UVenda_Item , UVenda_ItemController, UVenda_ItemCad, UVenda, UVendaController,
-  UVendaCad;
+  UVendaCad, UProdutoCad , UProdutoController, UProduto;
 
 type
   TfrmVenda = class(TForm)
@@ -69,9 +69,11 @@ type
     procedure btnLimparClick(Sender: TObject);
     procedure dbgVendaKeyPress(Sender: TObject; var Key: Char);
     procedure carregaDadosTela;
+    procedure carregaDadosCliente;
 
     function ProcessaConfirmacao        : Boolean;
     function ProcessaInclusao           : Boolean;
+    function ProcessaConsulta           : Boolean;
     function ProcessaVenda_Item         : Boolean;
     function ProcessaItem               : Boolean;
     function ProcessaVenda              : Boolean;
@@ -82,6 +84,7 @@ type
     procedure btnConfirmarVendaClick(Sender: TObject);
     procedure dbgVendaKeyDown(Sender: TObject; var vKey: Word;
       Shift: TShiftState);
+    procedure edtVendaExit(Sender: TObject);
   
     
 
@@ -97,6 +100,7 @@ type
    vObjVenda      : TVendaCad;
    vObjColVenda   : TColVenda_Item;
    vObjCol        : TColVenda;
+   vObjProdutoCad : TColProduto;
 
 
 //    Variaveis de Classes
@@ -349,6 +353,7 @@ begin
    vEstadoTela := etPadrao;
    DefineEstadoTela;
    LimparTela;
+   edtData.Text := DateToStr(Date());
 end;
 
 procedure TfrmVenda.edtCodClienteChange(Sender: TObject);
@@ -445,7 +450,7 @@ begin
             StrToIntDef(edtCodCliente.Text, 0)));
 
        if (vObjCliente <> nil) then
-            CarregaDadosTela
+            carregaDadosCliente
        else
        begin
             TMessageUtil.Alerta(
@@ -572,11 +577,29 @@ var
   i : Integer;
 
 begin
-  if (vObjCliente = nil) then
-     Exit;
 
-  edtCodCliente.Text          := IntToStr(vObjCliente.Id);
-  edtCliente.Text             := vObjCliente.Nome;
+   if (vObjVenda <> nil) then
+
+   edtCodCliente.Text :=   IntToStr(vObjVenda.Id_Cliente);
+   edtVenda.Text      :=   IntToStr(vObjVenda.Id);
+   edtData.Text       :=   DateToStr(vObjVenda.DataVenda);
+   edtTotal.Text      :=   FloatToStr(vObjVenda.TotalVenda);
+
+
+  if (vObjColVenda <> nil) then
+   begin
+    for  i:= 0 to pred(vObjColVenda.Count) do
+    begin
+     cdsVenda.Edit;
+     cdsVendaID.Value       :=  vObjColVenda.Retorna(i).Id_Produto;
+     cdsVendaUnidade.Text   :=  vObjColVenda.Retorna(i).UnidadeSaida;
+     cdsVendaQtde.Text      :=  FloatToStr(vObjColVenda.Retorna(i).Quantidade);
+     cdsVendaPreco.Value    :=  vObjColVenda.Retorna(i).ValorUnitario;
+     cdsVendaTotal.Value    :=  cdsVendaPreco.Value * cdsVendaQtde.Value;
+     cdsVenda.Next;
+    end;
+   end;
+
 end;
 
 procedure TfrmVenda.btnConfirmarVendaClick(Sender: TObject);
@@ -593,7 +616,7 @@ begin
           etIncluir:   Result := ProcessaInclusao;
 //        etAlterar:   Result := ProcessaAlteracao;
 //        etExcluir:   Result := ProcessaExclusao;
-//        etConsultar: Result := ProcessaConsulta;
+          etConsultar: Result := ProcessaConsulta;
       end;
 
       if not Result then
@@ -769,6 +792,82 @@ begin
       end;
       edtTotal.Text := FormatFloat('##0.00',vValor);
    end;
+end;
+
+procedure TfrmVenda.carregaDadosCliente;
+var
+  i : Integer;
+
+begin
+  if (vObjCliente = nil) then
+     Exit;
+
+  edtCodCliente.Text          := IntToStr(vObjCliente.Id);
+  edtCliente.Text             := vObjCliente.Nome;
+end;
+function TfrmVenda.ProcessaConsulta: Boolean;
+begin
+  try
+     Result := False;
+
+       if (edtVenda.Text = EmptyStr) then
+       begin
+            TMessageUtil.Alerta('Código da venda não pode ficar em branco');
+
+            if (btnConfirmarVenda.CanFocus) then
+                btnConfirmarVenda.SetFocus;
+
+            Exit;
+       end;
+
+   vObjVenda :=
+      TVendaCad(TVendaController.getInstancia.BuscaVenda(
+            StrToIntDef(edtVenda.Text, 0)));
+
+   vObjCliente :=
+         TCliente(TPessoaController.getInstancia.BuscaPessoa(
+            StrToIntDef(edtCodCliente.Text, 0)));
+
+   vObjColVenda :=
+        TVendaController.getInstancia.BuscaVenda_Item(
+            StrToIntDef(edtVenda.Text, 0));
+
+
+
+
+      if (vObjVenda <> nil)  then
+        CarregaDadosTela
+      else
+      begin
+        TMessageUtil.Alerta(
+            'Nenhuma venda encontrado para o código informado.');
+        LimparTela;
+
+        if (edtVenda.CanFocus) then
+            edtVenda.SetFocus;
+
+        Exit;
+      end;
+
+          DefineEstadoTela;
+          Result := True;
+
+  except
+      on E:Exception do
+      begin
+        Raise Exception.Create(
+        'Falha ao consultar os dados da Venda [View]: '#13+
+        e.Message);
+      end;
+  end;
+end;
+
+procedure TfrmVenda.edtVendaExit(Sender: TObject);
+begin
+  if vKey = VK_RETURN then
+   ProcessaConsulta;
+
+   vKey := VK_CLEAR;
 end;
 
 end.

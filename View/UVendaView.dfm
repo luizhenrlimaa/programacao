@@ -113,6 +113,7 @@ object frmVenda: TfrmVenda
       Width = 52
       Height = 21
       TabOrder = 0
+      OnExit = edtVendaExit
     end
     object edtData: TEdit
       Left = 124

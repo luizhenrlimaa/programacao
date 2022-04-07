@@ -13,10 +13,10 @@ type
                       pColVenda_Item : TColVenda_Item) : Boolean;
         function ExcluiVenda_Item(
                       pVenda_Item : TVenda_Item) : Boolean;
-        function BuscaVenda_Item(pID : Integer) : TVenda_Item;
+        function BuscaVenda_Item(pID_Venda : Integer) : TColVenda_Item;
         function PesquisaVenda_Item(pNome : string) : TColVenda_Item;
         function RetornaCondicaoVenda_Item(
-                   pID: Integer;
+                   pID_Venda: Integer;
                    pRelacionada : Boolean = False) : String;
 
       published
@@ -31,7 +31,7 @@ var
   _instance: TVenda_ItemController;
 
 
-function TVenda_ItemController.BuscaVenda_Item(pID: Integer): TVenda_Item;
+function TVenda_ItemController.BuscaVenda_Item(pID_Venda: Integer): TColVenda_Item;
 var
   XVenda_ItemDAO : TVenda_ItemDAO;
 begin
@@ -40,7 +40,7 @@ begin
        Result := nil;
 
        XVenda_ItemDAO := TVenda_ItemDAO.Create(TConexao.getInstance.getConn);
-       Result         := XVenda_ItemDAO.Retorna(RetornaCondicaoVenda_Item(pID));
+       Result         := XVenda_ItemDAO.RetornaLista(RetornaCondicaoVenda_Item(pID_Venda));
 
     finally
       if(XVenda_ItemDAO <> nil) then
@@ -192,20 +192,20 @@ begin
 end;
 
 function TVenda_ItemController.RetornaCondicaoVenda_Item(
-  pID: Integer; pRelacionada : Boolean): String;
+  pID_Venda: Integer; pRelacionada : Boolean): String;
 var
   xChave : string;
 
 begin
   if (pRelacionada) then
-      xChave := 'ID'
+      xChave := 'ID_VENDA'
 
   else
       xChave := 'ID';
 
   Result :=
   'WHERE                                                  '#13+
-  '  '+xChave+ ' = '+ QuotedStr(IntToStr(pID))+         ' '#13;
+  '  '+xChave+ ' = '+ QuotedStr(IntToStr(pID_Venda))+         ' '#13;
 end;
 
 end.
