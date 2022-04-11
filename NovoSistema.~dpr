@@ -40,7 +40,8 @@ uses
   UVenda in 'Model\UVenda.pas',
   UVendaController in 'Controller\UVendaController.pas',
   UVendaDAO in 'Model\UVendaDAO.pas',
-  UVendaCad in 'Model\UVendaCad.pas';
+  UVendaCad in 'Model\UVendaCad.pas',
+  UVendaPesqView in 'View\UVendaPesqView.pas' {frmVendaPesq};
 
 {$R *.res}
 

@@ -15,7 +15,7 @@ type
                       pVenda : TVenda) : Boolean;
         function BuscaVenda(pID : Integer) : TVenda;
         function BuscaVenda_Item(pID_Venda : Integer) : TColVenda_Item;
-        function PesquisaVenda(pNome : string) : TColVenda;
+        function PesquisaVenda(pVenda : string) : TColVenda;
         function RetornaCondicaoVenda(
                    pID: Integer;
                    pRelacionada : Boolean = False) : String;
@@ -188,20 +188,20 @@ begin
     end;
 end;
 
-function TVendaController.PesquisaVenda(pNome: string): TColVenda;
+function TVendaController.PesquisaVenda(pVenda: string): TColVenda;
 var
   XVendaDAO  : TVendaDAO;
-  xCondicao   : string;
+  xCondicao  : string;
 begin
   try
       try
         Result := nil;
         XVendaDAO := TVendaDAO.Create(TConexao.get.getConn);
 
-        xCondicao :=  IfThen(pNome <> EmptyStr,
-                  'WHERE                                        '#13+
-                  '    (DESCRICAO LIKE UPPER(''%'+ pNome +'%''))'#13+
-                  'ORDER BY DESCRICAO, ID', EmptyStr);
+        xCondicao :=  IfThen(pVenda <> EmptyStr,
+                  'WHERE                     '#13+
+                  '    (ID LIKE UPPER(pVenda)'#13+
+                  'ORDER BY ID, ID', EmptyStr);
 
         Result := XVendaDAO.RetornaLista(xCondicao);
 

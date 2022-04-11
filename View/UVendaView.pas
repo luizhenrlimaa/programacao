@@ -72,6 +72,7 @@ type
     procedure carregaDadosCliente;
 
     function ProcessaConfirmacao        : Boolean;
+    function ProcessaAlteracao          : Boolean;
     function ProcessaInclusao           : Boolean;
     function ProcessaConsulta           : Boolean;
     function ProcessaVenda_Item         : Boolean;
@@ -124,7 +125,8 @@ implementation
 
 {$R *.dfm}
 Uses
-   uMessageUtil, StrUtils, UClientesPesqView, UProdutosPesqView;
+   uMessageUtil, StrUtils, UClientesPesqView, UProdutosPesqView,
+   UVendaPesqView;
 
 procedure TfrmVenda.DefineEstadoTela;
 begin
@@ -181,11 +183,15 @@ begin
      begin
         CamposEnabled(True);
 
-        edtVenda.Enabled      := False;
-        btnAlterar.Enabled     := False;
-        btnConfirmarVenda.Enabled   := True;
+        edtVenda.Enabled          := False;
+        btnAlterar.Enabled        := False;
+        btnConfirmarVenda.Enabled := True;
         btnIncluirCliente.Enabled := True;
-        dbgVenda.Enabled := True;
+        dbgVenda.Enabled          := True;
+        edtData.Enabled           := False;
+        edtTotal.Enabled          := False;
+        edtCodCliente.Enabled     := False;
+        edtCliente.Enabled        := False;
      end
      else
      begin
@@ -233,6 +239,7 @@ begin
      end
      else
      begin
+
        lblVenda.Enabled := True;
        edtVenda.Enabled := True;
 
@@ -242,13 +249,32 @@ begin
     end;
     etPesquisar:
     begin
-//       stbBarraStatus.Panels[0].Text := 'Pesquisa';
+       stbBarraStatus.Panels[0].Text := 'Pesquisa';
 
-       if (frmClientesPesq = nil) then
-         frmClientesPesq := TfrmClientesPesq.Create(Application);
-         frmClientesPesq.ShowModal;
+       if (frmVendaPesq = nil) then
+           frmVendaPesq := TfrmVendaPesq.Create(Application);
 
-    end;
+       frmVendaPesq.ShowModal;
+
+       if (frmVendaPesq.mVendaID <> 0) then
+       begin
+          edtVenda.Text := IntToStr(frmVendaPesq.mVendaID);
+          vEstadoTela    := etConsultar;
+          ProcessaConsulta;
+       end
+       else
+       begin
+          vEstadoTela := etPadrao;
+          DefineEstadoTela;
+       end;
+
+       frmVendaPesq.mVendaID            := 0;
+       frmVendaPesq.mVendaCliente       := 0;
+       frmVendaPesq.mVendaData          := EmptyStr;
+       frmVendaPesq.mVendaTotal         := 0;
+
+
+     end;
  end;
 end;
 
@@ -519,7 +545,6 @@ begin
 
      if frmProdutosPesq = nil then
       frmProdutosPesq := TfrmProdutosPesq.Create(Application);
-  //   pCentralizaFormulario(FFiltroFabr);
       frmProdutosPesq.ShowModal;
 
      if (frmProdutosPesq.mProdutoID <> 0) then
@@ -583,7 +608,8 @@ begin
    edtCodCliente.Text :=   IntToStr(vObjVenda.Id_Cliente);
    edtVenda.Text      :=   IntToStr(vObjVenda.Id);
    edtData.Text       :=   DateToStr(vObjVenda.DataVenda);
-   edtTotal.Text      :=   FloatToStr(vObjVenda.TotalVenda);
+   edtTotal.Text      :=  'R$ ' + FormatFloat('##0.00',vObjVenda.TotalVenda);
+
 
 
   if (vObjColVenda <> nil) then
@@ -614,7 +640,7 @@ begin
   try
       case vEstadoTela of
           etIncluir:   Result := ProcessaInclusao;
-//        etAlterar:   Result := ProcessaAlteracao;
+          etAlterar:   Result := ProcessaAlteracao;
 //        etExcluir:   Result := ProcessaExclusao;
           etConsultar: Result := ProcessaConsulta;
       end;
@@ -692,8 +718,6 @@ begin
    try
        Result := False;
 
-//     if not ValidaCliente then
-//            Exit;
      if (vObjCol <> nil) then
         FreeAndNil(vObjCol);
 
@@ -703,6 +727,12 @@ begin
       begin
         if vObjVenda = nil then
            vObjVenda := TVendaCad.Create;
+      end
+      else
+      if  vEstadoTela = etAlterar then
+      begin
+         if (vObjVenda = nil) then
+            Exit;
       end;
 
       if (vObjVenda = nil) then
@@ -731,8 +761,7 @@ begin
 
        Result := False;
 
-//     if not ValidaCliente then
-//            Exit;
+
      if (vObjColVenda <> nil) then
         FreeAndNil(vObjColVenda);
 
@@ -743,10 +772,18 @@ begin
       begin
         if vObjItem_Venda = nil then
            vObjItem_Venda := TVenda_ItemCad.Create;
+      end
+      else
+      if  vEstadoTela = etAlterar then
+      begin
+         if (vObjItem_Venda = nil) then
+            Exit;
       end;
+
 
       if (vObjItem_Venda = nil) and (vObjVenda <> nil)  then
          Exit;
+
 
         vObjItem_Venda.Id_Venda                     := vObjVenda.Id;
         vObjItem_Venda.Id_Produto                   := cdsVendaID.Value;
@@ -754,6 +791,7 @@ begin
         vObjItem_Venda.UnidadeSaida                 := cdsVendaUnidade.Value;
         vObjItem_Venda.ValorUnitario                := cdsVendaPreco.Value;
         vObjItem_Venda.TotalItem                    := cdsVendaTotal.Value;
+
 
 
        Result := True;
@@ -833,8 +871,6 @@ begin
             StrToIntDef(edtVenda.Text, 0));
 
 
-
-
       if (vObjVenda <> nil)  then
         CarregaDadosTela
       else
@@ -868,6 +904,31 @@ begin
    ProcessaConsulta;
 
    vKey := VK_CLEAR;
+end;
+
+function TfrmVenda.ProcessaAlteracao: Boolean;
+begin
+ try
+    Result := False;
+
+    if ProcessaVenda_Item  then
+    begin
+      TMessageUtil.Informacao('Dados alterados com sucesso.');
+
+      vEstadoTela := etPadrao;
+      DefineEstadoTela;
+      Result := True;
+
+    end;
+
+ except
+     on E:Exception do
+      begin
+        Raise Exception.Create(
+        'Falha ao alterar os dados do produto [View]: '#13+
+        e.Message);
+      end;
+ end;
 end;
 
 end.
