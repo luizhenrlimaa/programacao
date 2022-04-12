@@ -37,6 +37,7 @@ type
     procedure U1Click(Sender: TObject);
     procedure P1Click(Sender: TObject);
     procedure menVendasClick(Sender: TObject);
+    procedure menRelVendasClick(Sender: TObject);
 
 
 
@@ -157,4 +158,18 @@ begin
         Screen.Cursor := crDefault;
   end;
 end;
+procedure TfrmPrincipal.menRelVendasClick(Sender: TObject);
+begin
+  try
+       Screen.Cursor := crHourGlass;
+
+       if frmVendaPesq  = nil then
+          frmVendaPesq := TfrmVendaPesq.Create(Application);
+
+       frmVendaPesq.Show;
+  finally
+        Screen.Cursor := crDefault;
+  end;
+end;
+
 end.

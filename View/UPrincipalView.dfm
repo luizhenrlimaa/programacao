@@ -887,6 +887,7 @@ object frmPrincipal: TfrmPrincipal
       Caption = 'Relat'#243'rios'
       object menRelVendas: TMenuItem
         Caption = 'Vendas'
+        OnClick = menRelVendasClick
       end
     end
     object menMovimentos: TMenuItem
