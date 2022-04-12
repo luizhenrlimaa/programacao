@@ -148,6 +148,7 @@ object frmVendaPesq: TfrmVendaPesq
       Height = 176
       Align = alClient
       DataSource = dtsVenda
+      Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit]
       TabOrder = 0
       TitleFont.Charset = DEFAULT_CHARSET
       TitleFont.Color = clWindowText
