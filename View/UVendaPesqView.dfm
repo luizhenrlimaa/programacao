@@ -305,8 +305,9 @@ object frmVendaPesq: TfrmVendaPesq
       FieldName = 'Data'
     end
     object cdsVendaTotal: TFloatField
-      Alignment = taCenter
+      Alignment = taLeftJustify
       FieldName = 'Total'
+      DisplayFormat = 'R$ #,###0.00 '
     end
   end
 end

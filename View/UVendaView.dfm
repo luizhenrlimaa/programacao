@@ -577,18 +577,18 @@ object frmVenda: TfrmVenda
       FieldName = 'Qtde'
     end
     object cdsVendaPreco: TFloatField
-      Alignment = taCenter
+      Alignment = taLeftJustify
       DisplayLabel = 'Pre'#231'o'
       DisplayWidth = 12
       FieldName = 'Preco'
-      DisplayFormat = ',0.00;-,0.00'
+      DisplayFormat = 'R$ ,0.00;-,0.00'
       EditFormat = ',0.00;-,0.00'
     end
     object cdsVendaTotal: TFloatField
-      Alignment = taCenter
+      Alignment = taLeftJustify
       DisplayWidth = 13
       FieldName = 'Total'
-      DisplayFormat = ',0.00;-,0.00'
+      DisplayFormat = 'R$ ,0.00;-,0.00'
       EditFormat = ',0.00;-,0.00'
     end
   end

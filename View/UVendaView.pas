@@ -532,6 +532,7 @@ function TfrmVenda.CodProdutoExit2: Boolean;
 begin
  begin
 
+     // Abrir formulário de produto ao pressionar enter no código no Grid
      if (vKey = 13) and (dbgVenda.SelectedIndex = 0)  then
      begin
          if frmProdutosPesq = nil then
@@ -563,11 +564,14 @@ procedure TfrmVenda.dbgVendaKeyPress(Sender: TObject; var Key: Char);
 Var
   vValor : Real;
 begin
+
+   // Chamando função  CodProdutoExit2  ao pressionar enter no código no Grid de Venda
    if (vKey = 13) and (dbgVenda.SelectedIndex = 0)  then
    begin
       CodProdutoExit2;
    end;
 
+  // Alterando a quantidade no Grid de Venda
    if (vKey = 13) and (dbgVenda.SelectedIndex = 3) then
    begin
      if (cdsVendaQtde.Value >= 1) then
@@ -578,6 +582,7 @@ begin
        cdsVendaTotal.Value  := cdsVendaPreco.Value;
    end;
 
+    // Calculando valor total da Venda
     vValor := 0;
     cdsVenda.First;
     while not cdsVenda.Eof Do
@@ -594,6 +599,7 @@ var
 
 begin
 
+   // Carregando dados do cabecalho referente a Venda e ao Cliente
    if (vObjVenda <> nil) then
 
    edtCodCliente.Text :=   IntToStr(vObjVenda.Id_Cliente);
@@ -603,7 +609,7 @@ begin
 
    ProcessaConsultaCliente;
 
-
+  // Carregando dados do Grid referende ao produto 
   if (vObjColVenda <> nil) then
    begin
     for  i:= 0 to pred(vObjColVenda.Count) do
@@ -938,8 +944,6 @@ begin
 
 
        end;
-
-    Result := True;
 
    except
       on E:Exception do
