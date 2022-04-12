@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, StdCtrls, Menus, ComCtrls, ExtCtrls, jpeg, pngimage ;
+  Dialogs, StdCtrls, Menus, ComCtrls, ExtCtrls, jpeg, pngimage, UVendaPesqView ;
 
 type
   TfrmPrincipal = class(TForm)  // Nome da Classe
@@ -157,5 +157,4 @@ begin
         Screen.Cursor := crDefault;
   end;
 end;
-
 end.

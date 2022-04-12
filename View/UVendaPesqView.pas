@@ -6,7 +6,7 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, DB, DBClient, Grids, DBGrids, StdCtrls, Buttons, ExtCtrls,
   uMessageUtil, UVenda , UVendaController, UClassFuncoes,OleServer, UCliente,
-  UPessoaController;
+  UPessoaController, ExcelXP;
 
 type
   TfrmVendaPesq = class(TForm)
@@ -27,6 +27,9 @@ type
     cdsVendaData: TDateField;
     cdsVendaTotal: TFloatField;
     cdsVendaCliente: TStringField;
+    BtnExportar: TBitBtn;
+    Excel: TExcelApplication;
+    svdDiretorio: TSaveDialog;
     procedure FormKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
     procedure btnSairClick(Sender: TObject);
@@ -38,6 +41,8 @@ type
     procedure btnConfirmarClick(Sender: TObject);
     procedure btnFiltrarClick(Sender: TObject);
     procedure cdsVendaBeforeDelete(DataSet: TDataSet);
+    procedure BtnExportarClick(Sender: TObject);
+    procedure PreenchePlanilha;
 
   private
 
@@ -48,6 +53,8 @@ type
     procedure LimparTela;
     procedure ProcessaPesquisa;
     procedure ProcessaConfirmacao;
+
+
 
     procedure carregaDadosCliente;
 
@@ -292,6 +299,92 @@ begin
         'Falha ao consultar os dados do cliente [View]: '#13+
         e.Message);
       end;
+   end;
+end;
+
+procedure TfrmVendaPesq.BtnExportarClick(Sender: TObject);
+begin
+    PreenchePlanilha;
+end;
+
+procedure TfrmVendaPesq.PreenchePlanilha;
+var
+  xExcel     : Variant;
+  xIndiceCab : Integer;
+  xCaminho   : string;
+
+begin
+  xIndiceCab     := 1;
+  xCaminho       := 'ListagemVenda_'+ DateTimeToStr(Now) + '.xls';
+
+  xCaminho       := TFuncoes.Troca(xCaminho, '/', '');
+  xCaminho       := TFuncoes.Troca(xCaminho, ':', '');
+
+  svdDiretorio.FileName := xCaminho;
+
+  if(not svdDiretorio.Execute)then
+    Exit;
+
+  xCaminho := svdDiretorio.FileName;
+
+   try
+       xExcel := CreateOleObject('Excel.Application');
+       xExcel.Application.Visible := False;
+
+       xExcel.WorkBooks.Add(Null);
+
+       xExcel.ActiveSheet.Rows[2].Select;
+       xExcel.ActiveWindow.FreezePanes  := True;
+
+// Cabeçalho
+       xExcel.Range['A1','A1'].ColumnWidth := 10.00;
+       xExcel.Range['B1','B1'].ColumnWidth := 100.00;
+       xExcel.Range['C1','C1'].ColumnWidth := 10.00;
+       xExcel.Range['D1','D1'].ColumnWidth := 10.00;
+
+       xExcel.Range['E1','F1'].MergeCells                   := True; //Mesclar células
+
+       xExcel.Range['A1','D1'].Interior.ColorIndex          := 16;  //Cinza escuro
+       xExcel.Range['A1','D1'].Font.Bold                    := True; //Negrito
+       xExcel.Range['A1','D1'].Font.Name                    := 'Arial'; //Tipo fonte
+       xExcel.Range['A1','D1'].Font.Size                    := 12; //Tamanho da fonte
+       xExcel.Range['A1','D1'].HorizontalAlignment          := xlCenter; //Alinhamento
+
+//       Titulo
+       xExcel.Range['A1','A1'].Value                        := 'ID';
+       xExcel.Range['B1','B1'].Value                        := 'Cliente';
+       xExcel.Range['C1','C1'].Value                        := 'Data';
+       xExcel.Range['D1','D1'].Value                        := 'Total';
+
+       cdsVenda.First;
+       while not cdsVenda.Eof do
+       begin
+         Inc(xIndiceCab);
+         xExcel.Range['A'+IntToStr(xIndiceCab),'A'+IntToStr(xIndiceCab)].Value :=
+            cdsVendaID.AsString;
+
+         xExcel.Range['B'+IntToStr(xIndiceCab),'B'+IntToStr(xIndiceCab)].Value :=
+            cdsVendaCliente.Value;
+
+         xExcel.Range['C'+IntToStr(xIndiceCab),'C'+IntToStr(xIndiceCab)].Value :=
+            cdsVendaData.Value;
+
+         xExcel.Range['D'+IntToStr(xIndiceCab),'D'+IntToStr(xIndiceCab)].Value :=
+            cdsVendaTotal.Value;
+
+         cdsVenda.Next;
+       end;
+       if  FileExists(xCaminho)then
+           DeleteFile(xCaminho);
+
+       xExcel.WorkBooks[1].Worksheets[1].Activate;
+       xExcel.ActiveWorkBook.SaveAs(xCaminho);
+
+       xExcel.Application.Visible  := True;
+   finally
+
+       xExcel := Unassigned;
+
    end;
 end;
 
