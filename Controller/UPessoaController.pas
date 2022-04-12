@@ -17,13 +17,10 @@ type
         function BuscaPessoa(pID : Integer) : TPessoa;
         function PesquisaPessoa(pNome : string) : TColPessoa;
         function BuscaEnderecoPessoa (pID_Pessoa : Integer) : TColEndereco;
-        function BuscaPessoaCliente  (pID_Cliente: Integer) : TColPessoa;
         function RetornaCondicaoPessoa(
                    pID_Pessoa: Integer;
                    pRelacionada : Boolean = False) : String;
-        function RetornaCondicaoCliente(
-                   pID_Cliente: Integer;
-                   pRelacionada : Boolean = False) : String;
+
 
       published
         class function getInstancia : TPessoaController;
@@ -97,38 +94,6 @@ begin
             e.Message);
         end;
   end;
-end;
-
-function TPessoaController.BuscaPessoaCliente(
-  pID_Cliente: Integer): TColPessoa;
-var
-  XVendaDAO : TVendaDAO;
-begin
-  try
-    try
-       Result := nil;
-
-       XVendaDAO :=
-            TVendaDAO.Create(TConexao.getInstance.getConn);
-
-       Result :=
-            XVendaDAO.RetornaLista(RetornaCondicaoCliente(pID_Cliente, True));
-
-    finally
-      if(XVendaDAO <> nil) then
-       FreeAndNil(XVendaDAO);
-
-
-    end;
-  except
-    on E : Exception do
-    begin
-      Raise Exception.Create(
-        'Falha ao retornar dados do endereço da pessoa [Controller]'#13+
-        e.Message);
-    end;
-  end;
-
 end;
 
 constructor TPessoaController.Create;
@@ -278,24 +243,6 @@ begin
    end;
 
 end;
-
-function TPessoaController.RetornaCondicaoCliente(pID_Cliente: Integer;
-  pRelacionada: Boolean): String;
-var
-  xChave : string;
-
-begin
-  if (pRelacionada) then
-      xChave := 'ID_Cliente'
-
-  else
-      xChave := 'ID';
-
-  Result :=
-  'WHERE                                                 '#13+
-  '  '+xChave+ ' = '+ QuotedStr(IntToStr(pID_Cliente))+ ' '#13;
-end;
-
 
 function TPessoaController.RetornaCondicaoPessoa(
   pID_Pessoa: Integer; pRelacionada : Boolean): String;

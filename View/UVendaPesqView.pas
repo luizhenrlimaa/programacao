@@ -5,7 +5,8 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, DB, DBClient, Grids, DBGrids, StdCtrls, Buttons, ExtCtrls,
-  uMessageUtil, UVenda , UVendaController, UClassFuncoes,OleServer;
+  uMessageUtil, UVenda , UVendaController, UClassFuncoes,OleServer, UCliente,
+  UPessoaController;
 
 type
   TfrmVendaPesq = class(TForm)
@@ -41,11 +42,16 @@ type
   private
 
     vKey : Word;
+    vObjCliente    : TCliente;
 
 
     procedure LimparTela;
     procedure ProcessaPesquisa;
     procedure ProcessaConfirmacao;
+
+    procedure carregaDadosCliente;
+
+    function ProcessaConsultaCliente    : Boolean;
 
   public
     { Public declarations }
@@ -204,10 +210,12 @@ begin
             for xAux := 0 to pred(xListaVenda.Count) do
             begin
                cdsVenda.Append;
+
                cdsVendaID.Value             := xListaVenda.Retorna(xAux).Id;
                cdsVendaCliente.Value        := IntToStr(xListaVenda.Retorna(xAux).Id_Cliente);
                cdsVendaData.Value           := xListaVenda.Retorna(xAux).DataVenda;
                cdsVendaTotal.Value          :=  xListaVenda.Retorna(xAux).TotalVenda;
+               ProcessaConsultaCliente;
 
                cdsVenda.Post;
              end;
@@ -244,6 +252,47 @@ end;
 procedure TfrmVendaPesq.cdsVendaBeforeDelete(DataSet: TDataSet);
 begin
    Abort;
+end;
+
+procedure TfrmVendaPesq.carregaDadosCliente;
+begin
+   if (vObjCliente = nil) then
+     Exit;
+
+   cdsVendaCliente.Text := vObjCliente.Nome;
+
+end;
+
+function TfrmVendaPesq.ProcessaConsultaCliente: Boolean;
+begin
+   try
+       Result := False;
+
+
+       vObjCliente :=
+         TCliente(TPessoaController.getInstancia.BuscaPessoa(
+              StrToIntDef(cdsVendaCliente.Text, 0)));
+
+       if (vObjCliente <> nil) then
+            carregaDadosCliente
+       else
+       begin
+            TMessageUtil.Alerta(
+                'Nenhuma venda encontrada para o código informado.');
+            LimparTela;
+
+       end;
+
+    Result := True;
+
+   except
+      on E:Exception do
+      begin
+        Raise Exception.Create(
+        'Falha ao consultar os dados do cliente [View]: '#13+
+        e.Message);
+      end;
+   end;
 end;
 
 end.
