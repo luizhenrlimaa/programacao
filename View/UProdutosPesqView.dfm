@@ -282,10 +282,10 @@ object frmProdutosPesq: TfrmProdutosPesq
       FieldName = 'Estoque'
     end
     object cdsProdutoPrecoVenda: TFloatField
-      Alignment = taCenter
+      Alignment = taLeftJustify
       DisplayLabel = 'Pre'#231'o'
       FieldName = 'PrecoVenda'
-      DisplayFormat = ',0.00;-,0.00'
+      DisplayFormat = 'R$ #,###0.00 '
       EditFormat = ',0.00;-,0.00'
     end
   end

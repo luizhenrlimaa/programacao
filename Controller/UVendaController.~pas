@@ -9,8 +9,8 @@ type
       public
         constructor Create;
         function GravaVenda(
-                      pVenda : TVenda;
-                      pColVenda : TColVenda) : Boolean;
+                       pVenda : TVenda;
+                       pColVenda_Item : TColVenda_Item) : Boolean;
         function ExcluiVenda(
                       pVenda : TVenda) : Boolean;
         function BuscaVenda(pID : Integer) : TVenda;
@@ -145,10 +145,11 @@ end;
 
 function TVendaController.GravaVenda(
            pVenda : TVenda;
-                      pColVenda : TColVenda) : Boolean;
+                     pColVenda_Item : TColVenda_Item) : Boolean;
 var
-   XVendaDAO   : TVendaDAO;
-   xAux          : Integer;
+   XVendaDAO      : TVendaDAO;
+   XVenda_ItemDAO : TVenda_ItemDAO;
+   xAux           : Integer;
 begin
     try
         try
@@ -159,18 +160,25 @@ begin
             XVendaDAO   :=
               TVendaDAO.Create(TConexao.get.getConn);
 
+            XVenda_ItemDAO :=
+              TVenda_ItemDAO.Create(TConexao.get.getConn);
+
 
             if pVenda.Id = 0 then
             begin
                XVendaDAO.Insere(pVenda);
 
-             for xAux := 0 to pred(pColVenda.Count) do
-                pColVenda.Retorna(xAux).Id := pVenda.Id;
-                XVendaDAO.InsereLista(pColVenda)
+             for xAux := 0 to pred(pColVenda_Item.Count) do
+                pColVenda_Item.Retorna(xAux).Id_Venda := pVenda.Id;
+
+
+                XVenda_ItemDAO.InsereLista(pColVenda_Item)
             end
             else
             begin
-               XVendaDAO.Atualiza(pVenda, RetornaCondicaoVenda(pVenda.Id));
+               XVendaDAO.Atualiza(pVenda, RetornaCondicaoVenda(pVenda.id));
+               XVenda_ItemDAO.Deleta(RetornaCondicaoVenda(pVenda.Id, True));
+               XVenda_ItemDAO.InsereLista(pColVenda_Item);
             end;
 
             TConexao.get.confirmaTransacao;

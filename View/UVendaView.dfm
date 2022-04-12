@@ -1,6 +1,6 @@
 object frmVenda: TfrmVenda
-  Left = 560
-  Top = 89
+  Left = 901
+  Top = 134
   Width = 539
   Height = 546
   Caption = 'Venda'
@@ -72,7 +72,7 @@ object frmVenda: TfrmVenda
       ParentFont = False
     end
     object btnIncluirCliente: TSpeedButton
-      Left = 95
+      Left = 98
       Top = 72
       Width = 26
       Height = 22
@@ -123,10 +123,10 @@ object frmVenda: TfrmVenda
       TabOrder = 1
     end
     object edtCodCliente: TEdit
-      Left = 60
-      Top = 72
+      Left = 68
+      Top = 73
       Width = 29
-      Height = 21
+      Height = 22
       CharCase = ecUpperCase
       Enabled = False
       TabOrder = 2
@@ -139,7 +139,7 @@ object frmVenda: TfrmVenda
       Left = 127
       Top = 72
       Width = 359
-      Height = 21
+      Height = 22
       MaxLength = 6
       TabOrder = 3
     end

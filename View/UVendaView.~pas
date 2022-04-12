@@ -5,9 +5,9 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, StdCtrls, ExtCtrls, ComCtrls, DB, DBClient, Grids, DBGrids,
-  UEnumerationUtil, Buttons, DBTables, UClientesView, UCliente, UPessoaController,
-  UVenda_Item , UVenda_ItemController, UVenda_ItemCad, UVenda, UVendaController,
-  UVendaCad, UProdutoCad , UProdutoController, UProduto, UPessoa;
+  UEnumerationUtil, Buttons, DBTables, UClientesView, UCliente,
+  UPessoaController, UProduto, UVendaCad, UVenda_Item, UVendaController,
+  UProdutoController;
 
 type
   TfrmVenda = class(TForm)
@@ -76,14 +76,12 @@ type
   private
 
 //    Variaveis de Classes
-   vEstadoTela : TEstadoTela;
+   vEstadoTela    : TEstadoTela;
    vKey           : Word;
    vObjCliente    : TCliente;
    vObjProduto    : TProduto;
-   vObjItem_Venda : TVenda_ItemCad;
    vObjVenda      : TVendaCad;
    vObjColVenda   : TColVenda_Item;
-   vObjCol        : TColVenda;
 
 
    procedure CamposEnabled(pOpcao : Boolean);
@@ -395,7 +393,7 @@ begin
    if vKey = VK_RETURN then
    CodClienteExit2;
    ProcessaConsultaCliente;
-
+   edtData.Text := DateToStr(Date());
    vKey := VK_CLEAR;
 end;
 
@@ -515,17 +513,12 @@ begin
     if(vObjCliente <> nil) then
       FreeAndNil(vObjCliente);
 
-    if(vObjItem_Venda <> nil) then
-      FreeAndNil(vObjItem_Venda);
-
     if(vObjColVenda <> nil) then
       FreeAndNil(vObjColVenda);
 
     if(vObjVenda <> nil) then
       FreeAndNil(vObjVenda);
 
-    if(vObjCol <> nil) then
-      FreeAndNil(vObjCol);
 end;
 
 function TfrmVenda.CodProdutoExit2: Boolean;
@@ -535,9 +528,9 @@ begin
      // Abrir formulário de produto ao pressionar enter no código no Grid
      if (vKey = 13) and (dbgVenda.SelectedIndex = 0)  then
      begin
-         if frmProdutosPesq = nil then
-      frmProdutosPesq := TfrmProdutosPesq.Create(Application);
-      frmProdutosPesq.ShowModal;
+        if frmProdutosPesq = nil then
+        frmProdutosPesq := TfrmProdutosPesq.Create(Application);
+        frmProdutosPesq.ShowModal;
      end;
 
      if (frmProdutosPesq.mProdutoID <> 0) then
@@ -574,11 +567,11 @@ begin
   // Alterando a quantidade no Grid de Venda
    if (vKey = 13) and (dbgVenda.SelectedIndex = 3) then
    begin
-     if (cdsVendaQtde.Value >= 1) then
+      if (cdsVendaQtde.Value >= 1) then
 
-       cdsVendaTotal.Value  := cdsVendaQtde.Value * cdsVendaPreco.Value
+         cdsVendaTotal.Value  := cdsVendaQtde.Value * cdsVendaPreco.Value
 
-     else
+      else
        cdsVendaTotal.Value  := cdsVendaPreco.Value;
    end;
 
@@ -587,8 +580,8 @@ begin
     cdsVenda.First;
     while not cdsVenda.Eof Do
     begin
-     vValor := vValor + cdsVenda.FieldByName('Total').AsFloat;
-     cdsVenda.Next;
+       vValor := vValor + cdsVenda.FieldByName('Total').AsFloat;
+       cdsVenda.Next;
     end;
     edtTotal.Text := FormatFloat('##0.00',vValor);
 end;
@@ -687,20 +680,15 @@ begin
    try
        Result := False;
 
-     if(ProcessaVenda) then
+     if(ProcessaVenda) and
+        (ProcessaItem) then
       begin
 //           Gravação no BD
-          TVendaController.getInstancia.GravaVenda(vObjVenda, vObjCol);
+          TVendaController.getInstancia.GravaVenda(vObjVenda, vObjColVenda);
 
           Result := True;
       end;
 
-
-     if(ProcessaItem) then
-      begin
-//           Gravação no BD
-          TVenda_ItemController.getInstancia.GravaVenda_Item(vObjItem_Venda, vObjColVenda);
-      end;
 
    except
        on E : Exception do
@@ -716,11 +704,6 @@ function TfrmVenda.ProcessaVenda: Boolean;
 begin
    try
        Result := False;
-
-     if (vObjCol <> nil) then
-        FreeAndNil(vObjCol);
-
-      vObjCol := TColVenda.Create;
 
       if vEstadoTela = etIncluir then
       begin
@@ -755,10 +738,16 @@ begin
 end;
 
 function TfrmVenda.ProcessaItem: Boolean;
+var
+  xVenda_Item : TVenda_Item;
+  xID_Item : Integer;
 begin
    try
 
        Result := False;
+
+       xVenda_Item := nil;
+       xID_Item := 0;
 
 
      if (vObjColVenda <> nil) then
@@ -767,29 +756,20 @@ begin
       vObjColVenda := TColVenda_Item.Create;
 
 
-      if vEstadoTela = etIncluir then
-      begin
-        if vObjItem_Venda = nil then
-           vObjItem_Venda := TVenda_ItemCad.Create;
-      end
-      else
-      if  vEstadoTela = etAlterar then
-      begin
-         if (vObjItem_Venda = nil) then
-            Exit;
-      end;
+
+      if vEstadoTela = etAlterar then
+         xID_Item := StrToIntDef(edtVenda.Text , 0);
+
+      xVenda_Item                   := TVenda_Item.Create;
+      xVenda_Item.Id_Venda          := xID_Item;
+      xVenda_Item.Id_Produto        := cdsVendaID.Value;
+      xVenda_Item.Quantidade        := cdsVendaQtde.Value;
+      xVenda_Item.UnidadeSaida      := cdsVendaUnidade.Value;
+      xVenda_Item.ValorUnitario     := cdsVendaPreco.Value;
+      xVenda_Item.TotalItem         := cdsVendaTotal.Value;
 
 
-      if (vObjItem_Venda = nil) and (vObjVenda <> nil)  then
-         Exit;
-
-
-        vObjItem_Venda.Id_Venda                     := vObjVenda.Id;
-        vObjItem_Venda.Id_Produto                   := cdsVendaID.Value;
-        vObjItem_Venda.Quantidade                   := cdsVendaQtde.Value;
-        vObjItem_Venda.UnidadeSaida                 := cdsVendaUnidade.Value;
-        vObjItem_Venda.ValorUnitario                := cdsVendaPreco.Value;
-        vObjItem_Venda.TotalItem                    := cdsVendaTotal.Value;
+      vObjColVenda.Add(xVenda_Item);
 
 
        Result := True;
@@ -835,13 +815,13 @@ begin
    if (vObjCliente = nil) then
      Exit;
 
-  edtCodCliente.Text          := IntToStr(vObjCliente.Id);
-  edtCliente.Text             := vObjCliente.Nome;
+   edtCodCliente.Text          := IntToStr(vObjCliente.Id);
+   edtCliente.Text             := vObjCliente.Nome;
 end;
 
 function TfrmVenda.ProcessaConsulta: Boolean;
 begin
-  try
+   try
      Result := False;
 
        if (edtVenda.Text = EmptyStr) then
@@ -863,7 +843,6 @@ begin
             StrToIntDef(edtVenda.Text, 0));
 
 
-
       if (vObjVenda <> nil)  then
         CarregaDadosTela
       else
@@ -877,18 +856,18 @@ begin
 
         Exit;
       end;
-
           DefineEstadoTela;
           Result := True;
 
-  except
+   except
+
       on E:Exception do
       begin
         Raise Exception.Create(
         'Falha ao consultar os dados da Venda [View]: '#13+
         e.Message);
       end;
-  end;
+   end;
 end;
 
 procedure TfrmVenda.edtVendaExit(Sender: TObject);
