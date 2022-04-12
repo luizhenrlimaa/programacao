@@ -25,7 +25,7 @@ type
     cdsVendaID: TIntegerField;
     cdsVendaData: TDateField;
     cdsVendaTotal: TFloatField;
-    cdsVendaCliente: TIntegerField;
+    cdsVendaCliente: TStringField;
     procedure FormKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
     procedure btnSairClick(Sender: TObject);
@@ -45,17 +45,15 @@ type
       procedure ProcessaPesquisa;
       procedure ProcessaConfirmacao;
 
-      
   public
     { Public declarations }
 
     mVendaID               : Integer;
-    mVendaCliente          : Integer;
+    mVendaCliente          : string;
     mVendaData             : string;
     mVendaTotal            : Double;
 
   end;
-
 var
   frmVendaPesq: TfrmVendaPesq;
 
@@ -147,7 +145,7 @@ begin
    if not (cdsVenda.IsEmpty) then
    begin
       mVendaID         := cdsVendaID.Value;
-      mVendaCliente    := cdsVendaCliente.Value;
+      mVendaCliente    := cdsVendaCliente.Text;
       mVendaData       := cdsVendaData.Text;
       mVendaTotal      := cdsVendaTotal.Value;
 
@@ -168,7 +166,7 @@ procedure TfrmVendaPesq.btnConfirmarClick(Sender: TObject);
 begin
 
    mVendaID                := 0;
-   mVendaCliente           := 0;
+   mVendaCliente           := EmptyStr;
    mVendaData              := EmptyStr;
    mVendaTotal             := 0;
    ProcessaConfirmacao;
@@ -177,7 +175,7 @@ end;
 procedure TfrmVendaPesq.btnFiltrarClick(Sender: TObject);
 begin
     mVendaID                := 0;
-    mVendaCliente           := 0;
+    mVendaCliente           := EmptyStr;
     mVendaData              := EmptyStr;
     mVendaTotal             := 0;
 
@@ -205,9 +203,9 @@ begin
             begin
                cdsVenda.Append;
                cdsVendaID.Value             := xListaVenda.Retorna(xAux).Id;
-               cdsVendaCliente.Value        := xListaVenda.Retorna(xAux).Id_Cliente;
+               cdsVendaCliente.Value        := IntToStr(xListaVenda.Retorna(xAux).Id_Cliente);
                cdsVendaData.Value           := xListaVenda.Retorna(xAux).DataVenda;
-               cdsVendaTotal.Value          := xListaVenda.Retorna(xAux).TotalVenda;
+               cdsVendaTotal.Value           := xListaVenda.Retorna(xAux).TotalVenda;
                cdsVenda.Post;
              end;
           end;

@@ -1,7 +1,7 @@
 object frmVendaPesq: TfrmVendaPesq
   Left = 417
   Top = 202
-  Width = 414
+  Width = 480
   Height = 345
   Caption = 'Pesquisa de Venda'
   Color = clBtnFace
@@ -19,14 +19,14 @@ object frmVendaPesq: TfrmVendaPesq
   object pnlBotoes: TPanel
     Left = 0
     Top = 259
-    Width = 398
+    Width = 464
     Height = 47
     Align = alBottom
     Caption = #39
     TabOrder = 0
     object btnConfirmar: TBitBtn
-      Left = 121
-      Top = 8
+      Left = 192
+      Top = 12
       Width = 77
       Height = 25
       Caption = 'C&onfirmar'
@@ -61,8 +61,8 @@ object frmVendaPesq: TfrmVendaPesq
         8637288637247C3267A567B7CDB7FFFFFFFFFFFFFFFFFFFFFFFF}
     end
     object btnLimpar: TBitBtn
-      Left = 205
-      Top = 8
+      Left = 286
+      Top = 12
       Width = 75
       Height = 25
       Caption = '&Limpar'
@@ -97,8 +97,8 @@ object frmVendaPesq: TfrmVendaPesq
         AF8DC2AA84AA9161A98B5DFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF}
     end
     object btnSair: TBitBtn
-      Left = 285
-      Top = 8
+      Left = 379
+      Top = 12
       Width = 75
       Height = 25
       Caption = '&Sair'
@@ -136,7 +136,7 @@ object frmVendaPesq: TfrmVendaPesq
   object grbGrid: TGroupBox
     Left = 0
     Top = 72
-    Width = 393
+    Width = 457
     Height = 193
     Align = alCustom
     Caption = 'Resultado da Busca'
@@ -144,7 +144,7 @@ object frmVendaPesq: TfrmVendaPesq
     object dbgVenda: TDBGrid
       Left = 2
       Top = 15
-      Width = 389
+      Width = 453
       Height = 176
       Align = alClient
       DataSource = dtsVenda
@@ -167,13 +167,13 @@ object frmVendaPesq: TfrmVendaPesq
         item
           Expanded = False
           FieldName = 'Cliente'
-          Width = 112
+          Width = 247
           Visible = True
         end
         item
           Expanded = False
           FieldName = 'Data'
-          Width = 112
+          Width = 75
           Visible = True
         end
         item
@@ -187,37 +187,37 @@ object frmVendaPesq: TfrmVendaPesq
   object grbFiltrar: TGroupBox
     Left = 0
     Top = 0
-    Width = 393
+    Width = 457
     Height = 65
     Align = alCustom
     Caption = 'Filtrar'
     TabOrder = 2
     object lblNome: TLabel
-      Left = 24
+      Left = 18
       Top = 40
-      Width = 11
+      Width = 32
       Height = 13
-      Caption = 'ID'
+      Caption = 'Cliente'
     end
     object lblInfo: TLabel
       Left = 56
       Top = 8
       Width = 227
-      Height = 21
+      Height = 13
       Caption = 'Digite parte ou todo conte'#250'do a ser pesquisado '
     end
     object edtNome: TEdit
-      Left = 56
+      Left = 60
       Top = 35
-      Width = 81
+      Width = 294
       Height = 21
       CharCase = ecUpperCase
       TabOrder = 0
     end
     object btnFiltrar: TBitBtn
-      Left = 265
-      Top = 29
-      Width = 77
+      Left = 366
+      Top = 32
+      Width = 80
       Height = 25
       Caption = '&Filtrar'
       TabOrder = 1
@@ -266,7 +266,8 @@ object frmVendaPesq: TfrmVendaPesq
       end
       item
         Name = 'Cliente'
-        DataType = ftInteger
+        DataType = ftString
+        Size = 20
       end
       item
         Name = 'Data'
@@ -283,15 +284,14 @@ object frmVendaPesq: TfrmVendaPesq
     Left = 176
     Top = 208
     Data = {
-      500000009619E0BD010000001800000004000000000003000000500002494404
-      0001000000000007436C69656E74650400010000000000044461746104000600
-      0000000005546F74616C08000400000000000000}
+      5C0000009619E0BD0100000018000000040000000000030000005C0002494404
+      0001000000000007436C69656E74650100490000000100055749445448020002
+      0014000444617461040006000000000005546F74616C08000400000000000000}
     object cdsVendaID: TIntegerField
       Alignment = taCenter
       FieldName = 'ID'
     end
-    object cdsVendaCliente: TIntegerField
-      Alignment = taCenter
+    object cdsVendaCliente: TStringField
       FieldName = 'Cliente'
     end
     object cdsVendaData: TDateField

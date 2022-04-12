@@ -2,7 +2,7 @@ unit UVendaController;
 
 interface
 
-uses SysUtils, Math, StrUtils, UConexao, UVenda, UVenda_Item;
+uses SysUtils, Math, StrUtils, UConexao, UVenda, UVenda_Item, UPessoa;
 
 type
   TVendaController = class
@@ -23,13 +23,14 @@ type
                    pID_Venda: Integer;
                    pRelacionada : Boolean = False) : String;
 
+
       published
         class function getInstancia : TVendaController;
   end;
 
 implementation
 
-uses UVendaDAO, UVenda_ItemDAO;
+uses UVendaDAO, UVenda_ItemDAO, UPessoaDAO;
 
 var
   _instance: TVendaController;
@@ -44,7 +45,7 @@ begin
        Result := nil;
 
        XVendaDAO := TVendaDAO.Create(TConexao.getInstance.getConn);
-       Result         := XVendaDAO.Retorna(RetornaCondicaoVenda(pID));
+       Result    := XVendaDAO.Retorna(RetornaCondicaoVenda(pID));
 
     finally
       if(XVendaDAO <> nil) then

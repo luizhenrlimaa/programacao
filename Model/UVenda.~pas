@@ -38,10 +38,10 @@ implementation
 
 constructor TVenda.Create;
 begin
-  Self.Id                      := 0;
-  Self.Id_Cliente              := 0;
-  Self.DataVenda               := 0;
-  Self.TotalVenda              := 0;
+  Self.vId                      := 0;
+  Self.vId_Cliente              := 0;
+  Self.vDataVenda               := 0;
+  Self.vTotalVenda              := 0;
 end;
 
 procedure TColVenda.Adiciona(pVenda: TVenda);

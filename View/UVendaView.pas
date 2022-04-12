@@ -7,7 +7,7 @@ uses
   Dialogs, StdCtrls, ExtCtrls, ComCtrls, DB, DBClient, Grids, DBGrids,
   UEnumerationUtil, Buttons, DBTables, UClientesView, UCliente, UPessoaController,
   UVenda_Item , UVenda_ItemController, UVenda_ItemCad, UVenda, UVendaController,
-  UVendaCad, UProdutoCad , UProdutoController, UProduto;
+  UVendaCad, UProdutoCad , UProdutoController, UProduto, UPessoa;
 
 type
   TfrmVenda = class(TForm)
@@ -68,6 +68,8 @@ type
     procedure btnIncluirClienteClick(Sender: TObject);
     procedure btnLimparClick(Sender: TObject);
     procedure dbgVendaKeyPress(Sender: TObject; var Key: Char);
+
+
     procedure carregaDadosTela;
     procedure carregaDadosCliente;
 
@@ -101,12 +103,13 @@ type
    vObjVenda      : TVendaCad;
    vObjColVenda   : TColVenda_Item;
    vObjCol        : TColVenda;
-   vObjProdutoCad : TColProduto;
+
+
 
 
 //    Variaveis de Classes
    vEstadoTela : TEstadoTela;
-//   edCodCliente: TEdit;
+
 
    procedure CamposEnabled(pOpcao : Boolean);
    procedure LimparTela;
@@ -269,12 +272,10 @@ begin
        end;
 
        frmVendaPesq.mVendaID            := 0;
-       frmVendaPesq.mVendaCliente       := 0;
+       frmVendaPesq.mVendaCliente       := EmptyStr;
        frmVendaPesq.mVendaData          := EmptyStr;
        frmVendaPesq.mVendaTotal         := 0;
-
-
-     end;
+    end;
  end;
 end;
 
@@ -524,20 +525,20 @@ begin
     if(vObjCliente <> nil) then
       FreeAndNil(vObjCliente);
 
-   if(vObjItem_Venda <> nil) then
+    if(vObjItem_Venda <> nil) then
       FreeAndNil(vObjItem_Venda);
 
-   if(vObjColVenda <> nil) then
+    if(vObjColVenda <> nil) then
       FreeAndNil(vObjColVenda);
 
-   if(vObjVenda <> nil) then
+    if(vObjVenda <> nil) then
       FreeAndNil(vObjVenda);
 
-   if(vObjCol <> nil) then
+    if(vObjCol <> nil) then
       FreeAndNil(vObjCol);
 
-end;
 
+end;
 
 function TfrmVenda.CodProdutoExit2: Boolean;
 begin
@@ -564,7 +565,8 @@ begin
      end;
 
      vKey := 0;
- 
+
+     Result := True;
  end;
 end;
 
@@ -609,7 +611,7 @@ begin
    edtVenda.Text      :=   IntToStr(vObjVenda.Id);
    edtData.Text       :=   DateToStr(vObjVenda.DataVenda);
    edtTotal.Text      :=  'R$ ' + FormatFloat('##0.00',vObjVenda.TotalVenda);
-
+   ProcessaConsultaCliente;
 
 
   if (vObjColVenda <> nil) then
@@ -625,6 +627,7 @@ begin
      cdsVenda.Next;
     end;
    end;
+
 
 end;
 
@@ -833,9 +836,6 @@ begin
 end;
 
 procedure TfrmVenda.carregaDadosCliente;
-var
-  i : Integer;
-
 begin
   if (vObjCliente = nil) then
      Exit;
@@ -862,13 +862,10 @@ begin
       TVendaCad(TVendaController.getInstancia.BuscaVenda(
             StrToIntDef(edtVenda.Text, 0)));
 
-   vObjCliente :=
-         TCliente(TPessoaController.getInstancia.BuscaPessoa(
-            StrToIntDef(edtCodCliente.Text, 0)));
-
    vObjColVenda :=
         TVendaController.getInstancia.BuscaVenda_Item(
             StrToIntDef(edtVenda.Text, 0));
+
 
 
       if (vObjVenda <> nil)  then
