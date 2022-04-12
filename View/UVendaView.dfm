@@ -1,7 +1,7 @@
 object frmVenda: TfrmVenda
-  Left = 676
+  Left = 560
   Top = 89
-  Width = 466
+  Width = 539
   Height = 546
   Caption = 'Venda'
   Color = clBtnFace
@@ -22,7 +22,7 @@ object frmVenda: TfrmVenda
   object stbBarraStatus: TStatusBar
     Left = 0
     Top = 483
-    Width = 450
+    Width = 523
     Height = 24
     Panels = <
       item
@@ -35,7 +35,7 @@ object frmVenda: TfrmVenda
   object pnlPrincipal: TPanel
     Left = -5
     Top = 0
-    Width = 454
+    Width = 526
     Height = 109
     TabOrder = 1
     object lblVenda: TLabel
@@ -46,7 +46,7 @@ object frmVenda: TfrmVenda
       Caption = 'N'#186'. Venda'
     end
     object lblData: TLabel
-      Left = 125
+      Left = 130
       Top = 7
       Width = 28
       Height = 13
@@ -72,7 +72,7 @@ object frmVenda: TfrmVenda
       ParentFont = False
     end
     object btnIncluirCliente: TSpeedButton
-      Left = 93
+      Left = 95
       Top = 72
       Width = 26
       Height = 22
@@ -114,7 +114,7 @@ object frmVenda: TfrmVenda
       OnExit = edtVendaExit
     end
     object edtData: TEdit
-      Left = 124
+      Left = 128
       Top = 27
       Width = 69
       Height = 21
@@ -136,9 +136,9 @@ object frmVenda: TfrmVenda
       OnKeyDown = edtCodClienteKeyDown
     end
     object edtCliente: TEdit
-      Left = 122
+      Left = 127
       Top = 72
-      Width = 292
+      Width = 359
       Height = 21
       MaxLength = 6
       TabOrder = 3
@@ -147,16 +147,16 @@ object frmVenda: TfrmVenda
   object Produtos: TGroupBox
     Left = 0
     Top = 112
-    Width = 449
+    Width = 521
     Height = 161
     Caption = 'Produtos'
     TabOrder = 2
     object dbgVenda: TDBGrid
-      Left = 0
-      Top = 16
-      Width = 441
-      Height = 145
-      Align = alCustom
+      Left = 2
+      Top = 15
+      Width = 517
+      Height = 144
+      Align = alClient
       DataSource = dtsVenda
       TabOrder = 0
       TitleFont.Charset = DEFAULT_CHARSET
@@ -171,7 +171,7 @@ object frmVenda: TfrmVenda
   object Panel1: TPanel
     Left = -5
     Top = 272
-    Width = 454
+    Width = 526
     Height = 129
     TabOrder = 3
     object Label1: TLabel
@@ -188,8 +188,8 @@ object frmVenda: TfrmVenda
       ParentFont = False
     end
     object lblFinalizar: TLabel
-      Left = 245
-      Top = 7
+      Left = 290
+      Top = 11
       Width = 126
       Height = 20
       Caption = 'Finalizar Venda'
@@ -214,8 +214,8 @@ object frmVenda: TfrmVenda
       TabOrder = 0
     end
     object btnConfirmarVenda: TBitBtn
-      Left = 274
-      Top = 56
+      Left = 319
+      Top = 59
       Width = 77
       Height = 24
       Caption = 'C&onfirmar'
@@ -251,8 +251,8 @@ object frmVenda: TfrmVenda
       Spacing = 2
     end
     object btnLimpar: TBitBtn
-      Left = 188
-      Top = 54
+      Left = 209
+      Top = 58
       Width = 75
       Height = 25
       Caption = '&Limpar'
@@ -287,8 +287,8 @@ object frmVenda: TfrmVenda
         AF8DC2AA84AA9161A98B5DFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF}
     end
     object btnCancelar: TBitBtn
-      Left = 363
-      Top = 55
+      Left = 428
+      Top = 58
       Width = 75
       Height = 25
       Caption = '&Cancelar'
@@ -327,7 +327,7 @@ object frmVenda: TfrmVenda
   object pnlBotoes: TPanel
     Left = 0
     Top = 406
-    Width = 450
+    Width = 523
     Height = 77
     Align = alBottom
     TabOrder = 4
@@ -476,7 +476,7 @@ object frmVenda: TfrmVenda
         A780BBA077A890608D652DFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF}
     end
     object btnSair: TBitBtn
-      Left = 360
+      Left = 438
       Top = 40
       Width = 75
       Height = 25
@@ -556,37 +556,37 @@ object frmVenda: TfrmVenda
     object cdsVendaID: TIntegerField
       Alignment = taCenter
       DisplayLabel = 'C'#243'digo'
-      DisplayWidth = 11
+      DisplayWidth = 8
       FieldName = 'ID'
     end
     object cdsVendaDescricao: TStringField
       Alignment = taCenter
       DisplayLabel = 'Descri'#231#227'o'
-      DisplayWidth = 17
+      DisplayWidth = 30
       FieldName = 'Descricao'
       Size = 25
     end
     object cdsVendaUnidade: TStringField
       Alignment = taCenter
-      DisplayWidth = 11
+      DisplayWidth = 9
       FieldName = 'Unidade'
     end
     object cdsVendaQtde: TIntegerField
       Alignment = taCenter
-      DisplayWidth = 7
+      DisplayWidth = 6
       FieldName = 'Qtde'
     end
     object cdsVendaPreco: TFloatField
       Alignment = taCenter
       DisplayLabel = 'Pre'#231'o'
-      DisplayWidth = 10
+      DisplayWidth = 12
       FieldName = 'Preco'
       DisplayFormat = ',0.00;-,0.00'
       EditFormat = ',0.00;-,0.00'
     end
     object cdsVendaTotal: TFloatField
       Alignment = taCenter
-      DisplayWidth = 11
+      DisplayWidth = 13
       FieldName = 'Total'
       DisplayFormat = ',0.00;-,0.00'
       EditFormat = ',0.00;-,0.00'

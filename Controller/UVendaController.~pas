@@ -200,8 +200,8 @@ begin
         XVendaDAO := TVendaDAO.Create(TConexao.get.getConn);
 
         xCondicao :=  IfThen(pVenda <> EmptyStr,
-                  'WHERE                     '#13+
-                  '    (ID LIKE UPPER(pVenda)'#13+
+                  'WHERE                                        '#13+
+                  '    (ID LIKE UPPER(''%'+ pVenda +'%''))'#13+
                   'ORDER BY ID, ID', EmptyStr);
 
         Result := XVendaDAO.RetornaLista(xCondicao);

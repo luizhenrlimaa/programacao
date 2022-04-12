@@ -39,11 +39,13 @@ type
     procedure cdsVendaBeforeDelete(DataSet: TDataSet);
 
   private
+
     vKey : Word;
 
-      procedure LimparTela;
-      procedure ProcessaPesquisa;
-      procedure ProcessaConfirmacao;
+
+    procedure LimparTela;
+    procedure ProcessaPesquisa;
+    procedure ProcessaConfirmacao;
 
   public
     { Public declarations }
@@ -205,7 +207,8 @@ begin
                cdsVendaID.Value             := xListaVenda.Retorna(xAux).Id;
                cdsVendaCliente.Value        := IntToStr(xListaVenda.Retorna(xAux).Id_Cliente);
                cdsVendaData.Value           := xListaVenda.Retorna(xAux).DataVenda;
-               cdsVendaTotal.Value           := xListaVenda.Retorna(xAux).TotalVenda;
+               cdsVendaTotal.Value          :=  xListaVenda.Retorna(xAux).TotalVenda;
+
                cdsVenda.Post;
              end;
           end;

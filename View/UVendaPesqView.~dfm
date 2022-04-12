@@ -193,21 +193,27 @@ object frmVendaPesq: TfrmVendaPesq
     Caption = 'Filtrar'
     TabOrder = 2
     object lblNome: TLabel
-      Left = 18
-      Top = 40
-      Width = 32
+      Left = 5
+      Top = 38
+      Width = 54
       Height = 13
-      Caption = 'Cliente'
+      Caption = 'ID Venda'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'MS Sans Serif'
+      Font.Style = [fsBold]
+      ParentFont = False
     end
     object lblInfo: TLabel
-      Left = 56
-      Top = 8
+      Left = 63
+      Top = 10
       Width = 227
       Height = 13
       Caption = 'Digite parte ou todo conte'#250'do a ser pesquisado '
     end
     object edtNome: TEdit
-      Left = 60
+      Left = 63
       Top = 35
       Width = 294
       Height = 21
