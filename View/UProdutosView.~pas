@@ -290,6 +290,12 @@ begin
       if (Components[i] is TEdit)  then
       (Components[i] as TEdit).Text := EmptyStr;
   end;
+  
+    if(vObjProdutoCad <> nil) then
+      FreeAndNil(vObjProdutoCad);
+
+    if(vObjColProduto <> nil) then
+      FreeAndNil(vObjColProduto);
 end;
 
 procedure TfrmProduto.FormShow(Sender: TObject);
