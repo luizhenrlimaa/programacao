@@ -760,16 +760,24 @@ begin
       if vEstadoTela = etAlterar then
          xID_Item := StrToIntDef(edtVenda.Text , 0);
 
-      xVenda_Item                   := TVenda_Item.Create;
-      xVenda_Item.Id_Venda          := xID_Item;
-      xVenda_Item.Id_Produto        := cdsVendaID.Value;
-      xVenda_Item.Quantidade        := cdsVendaQtde.Value;
-      xVenda_Item.UnidadeSaida      := cdsVendaUnidade.Value;
-      xVenda_Item.ValorUnitario     := cdsVendaPreco.Value;
-      xVenda_Item.TotalItem         := cdsVendaTotal.Value;
+      cdsVenda.First;
+      while not cdsVenda.Eof Do
+      begin
+         xVenda_Item                   := TVenda_Item.Create;
+
+         xVenda_Item.Id_Venda          := xID_Item;
+         xVenda_Item.Id_Produto        := cdsVendaID.Value;
+         xVenda_Item.Quantidade        := cdsVendaQtde.Value;
+         xVenda_Item.UnidadeSaida      := cdsVendaUnidade.Value;
+         xVenda_Item.ValorUnitario     := cdsVendaPreco.Value;
+         xVenda_Item.TotalItem         := cdsVendaTotal.Value;
+         vObjColVenda.Add(xVenda_Item);
+         cdsVenda.Next;
+      end;
 
 
-      vObjColVenda.Add(xVenda_Item);
+
+
 
 
        Result := True;
@@ -838,9 +846,13 @@ begin
       TVendaCad(TVendaController.getInstancia.BuscaVenda(
             StrToIntDef(edtVenda.Text, 0)));
 
-     vObjColVenda :=
+
+      vObjColVenda :=
         TVendaController.getInstancia.BuscaVenda_Item(
-            StrToIntDef(edtVenda.Text, 0));
+              StrToIntDef(edtVenda.Text, 0));
+        
+
+
 
 
       if (vObjVenda <> nil)  then
