@@ -598,7 +598,7 @@ begin
        cdsVendaPreco.Value    :=  vObjColVenda.Retorna(i).ValorUnitario;
        cdsVendaTotal.Value    :=  cdsVendaPreco.Value * cdsVendaQtde.Value;
        ProcessaConsultaProduto;
-       cdsVenda.Next;
+       cdsVenda.Append;
     end;
    end;
 end;
