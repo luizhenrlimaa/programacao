@@ -1,6 +1,6 @@
 object frmVenda: TfrmVenda
-  Left = 901
-  Top = 134
+  Left = 596
+  Top = 131
   Width = 539
   Height = 546
   Caption = 'Venda'
@@ -126,7 +126,7 @@ object frmVenda: TfrmVenda
       Left = 68
       Top = 73
       Width = 29
-      Height = 22
+      Height = 21
       CharCase = ecUpperCase
       Enabled = False
       TabOrder = 2
@@ -139,7 +139,7 @@ object frmVenda: TfrmVenda
       Left = 127
       Top = 72
       Width = 359
-      Height = 22
+      Height = 21
       MaxLength = 6
       TabOrder = 3
     end

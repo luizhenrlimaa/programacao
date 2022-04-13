@@ -66,6 +66,7 @@ end;
 function TVendaController.BuscaVenda_Item(pID_Venda: Integer): TColVenda_Item;
 var
   XVenda_ItemDAO : TVenda_ItemDAO;
+
 begin
    try
     try
@@ -87,7 +88,6 @@ begin
             e.Message);
         end;
    end;
-
 end;
 
 constructor TVendaController.Create;
@@ -97,7 +97,7 @@ end;
 
 function TVendaController.ExcluiVenda(pVenda: TVenda): Boolean;
 var
-  XVendaDAO   : TVendaDAO;
+   XVendaDAO   : TVendaDAO;
 begin
   try
     try
