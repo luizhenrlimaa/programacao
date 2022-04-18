@@ -44,6 +44,7 @@ type
     btnIncluirCliente: TSpeedButton;
     edtCliente: TEdit;
     cdsVendaUnidade: TStringField;
+    cdsVendaID_Venda: TIntegerField;
 
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormKeyDown(Sender: TObject; var Key: Word;
@@ -82,16 +83,19 @@ type
    vObjProduto    : TProduto;
    vObjVenda      : TVendaCad;
    vObjColVenda   : TColVenda_Item;
+   vObjItem       : TVenda_Item;
+
 
 
    procedure CamposEnabled(pOpcao : Boolean);
    procedure LimparTela;
    procedure DefineEstadoTela;
 
-   
+
    procedure carregaDadosTela;
    procedure carregaDadosCliente;
    procedure carregaDadosProduto;
+
 
 
 
@@ -592,6 +596,8 @@ begin
     for  i:= 0 to pred(vObjColVenda.Count) do
     begin
        cdsVenda.Edit;
+
+       cdsVendaID_Venda.Value :=  vObjColVenda.Retorna(i).Id;
        cdsVendaID.Value       :=  vObjColVenda.Retorna(i).Id_Produto;
        cdsVendaUnidade.Text   :=  vObjColVenda.Retorna(i).UnidadeSaida;
        cdsVendaQtde.Text      :=  FloatToStr(vObjColVenda.Retorna(i).Quantidade);
@@ -734,23 +740,54 @@ begin
 
       vObjColVenda := TColVenda_Item.Create;
 
+      if vEstadoTela = etIncluir then
+      begin
+          cdsVenda.First;
+
+         while not cdsVenda.Eof Do
+         begin
+            xVenda_Item                   := TVenda_Item.Create;
+
+            xVenda_Item.Id                := cdsVendaID_Venda.Value;
+            xVenda_Item.Id_Venda          := xID_Item;
+            xVenda_Item.Id_Produto        := cdsVendaID.Value;
+            xVenda_Item.Quantidade        := cdsVendaQtde.Value;
+            xVenda_Item.UnidadeSaida      := cdsVendaUnidade.Value;
+            xVenda_Item.ValorUnitario     := cdsVendaPreco.Value;
+            xVenda_Item.TotalItem         := cdsVendaTotal.Value;
+            vObjColVenda.Add(xVenda_Item);
+
+            cdsVenda.Next;
+         end;
+      end;
+
       if vEstadoTela = etAlterar then
+      begin
+
          xID_Item := StrToIntDef(edtVenda.Text , 0);
 
-      cdsVenda.First;
+         cdsVenda.First;
 
-      while not cdsVenda.Eof Do
-      begin
-         xVenda_Item                   := TVenda_Item.Create;
+         while not cdsVenda.Eof Do
 
-         xVenda_Item.Id_Venda          := xID_Item;
-         xVenda_Item.Id_Produto        := cdsVendaID.Value;
-         xVenda_Item.Quantidade        := cdsVendaQtde.Value;
-         xVenda_Item.UnidadeSaida      := cdsVendaUnidade.Value;
-         xVenda_Item.ValorUnitario     := cdsVendaPreco.Value;
-         xVenda_Item.TotalItem         := cdsVendaTotal.Value;
-         vObjColVenda.Add(xVenda_Item);
-         cdsVenda.Next;
+         begin
+            xVenda_Item                := TVenda_Item.Create;
+            xVenda_Item.Id_Venda       := xID_Item;
+            cdsVenda.Edit;
+            xVenda_Item.Id              := cdsVendaID_Venda.Value;
+            xVenda_Item.Id_Produto      := cdsVendaID.Value;
+            xVenda_Item.Quantidade      := cdsVendaQtde.Value;
+            xVenda_Item.UnidadeSaida    := cdsVendaUnidade.Value;
+            xVenda_Item.ValorUnitario   := cdsVendaPreco.Value;
+            xVenda_Item.TotalItem       := cdsVendaTotal.Value;
+
+            if (xVenda_Item.Id = 0) then
+                begin
+                 vObjColVenda.Add(xVenda_Item);
+                end;
+
+            cdsVenda.Next;
+         end;
       end;
 
        Result := True;
@@ -918,7 +955,7 @@ procedure TfrmVenda.carregaDadosProduto;
 begin
    if (vObjProduto = nil) then
      Exit;
-     
+
   cdsVendaDescricao.Text     := vObjProduto.Descricao;
 end;
 

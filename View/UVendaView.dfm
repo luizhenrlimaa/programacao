@@ -541,6 +541,10 @@ object frmVenda: TfrmVenda
       item
         Name = 'Total'
         DataType = ftFloat
+      end
+      item
+        Name = 'ID_Venda'
+        DataType = ftInteger
       end>
     IndexDefs = <>
     Params = <>
@@ -548,11 +552,11 @@ object frmVenda: TfrmVenda
     Left = 112
     Top = 208
     Data = {
-      880000009619E0BD010000001800000006000000000003000000880002494404
+      990000009619E0BD010000001800000007000000000003000000990002494404
       000100000000000944657363726963616F010049000000010005574944544802
       000200190007556E696461646501004900000001000557494454480200020014
       000451746465040001000000000005507265636F080004000000000005546F74
-      616C08000400000000000000}
+      616C08000400000000000849445F56656E646104000100000000000000}
     object cdsVendaID: TIntegerField
       Alignment = taCenter
       DisplayLabel = 'C'#243'digo'
@@ -590,6 +594,10 @@ object frmVenda: TfrmVenda
       FieldName = 'Total'
       DisplayFormat = 'R$ ,0.00;-,0.00'
       EditFormat = ',0.00;-,0.00'
+    end
+    object cdsVendaID_Venda: TIntegerField
+      FieldName = 'ID_Venda'
+      Visible = False
     end
   end
   object dtsVenda: TDataSource
