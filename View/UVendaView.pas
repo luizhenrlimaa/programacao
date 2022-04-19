@@ -589,7 +589,7 @@ begin
    edtCodCliente.Text :=   IntToStr(vObjVenda.Id_Cliente);
    edtVenda.Text      :=   IntToStr(vObjVenda.Id);
    edtData.Text       :=   DateToStr(vObjVenda.DataVenda);
-   edtTotal.Text      :=  'R$ ' + FormatFloat('##0.00',vObjVenda.TotalVenda);
+   edtTotal.Text      :=   FormatFloat('##0.00',vObjVenda.TotalVenda);
 
    ProcessaConsultaCliente;
 
