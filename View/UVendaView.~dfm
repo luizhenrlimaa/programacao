@@ -204,10 +204,10 @@ object frmVenda: TfrmVenda
       Left = 23
       Top = 49
       Width = 122
-      Height = 32
+      Height = 37
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clGray
-      Font.Height = -19
+      Font.Height = -23
       Font.Name = 'MS Sans Serif'
       Font.Style = []
       ParentFont = False
