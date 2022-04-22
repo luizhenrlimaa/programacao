@@ -1,7 +1,7 @@
 object frmVenda: TfrmVenda
   Left = 596
   Top = 131
-  Width = 539
+  Width = 540
   Height = 546
   Caption = 'Venda'
   Color = clBtnFace
@@ -22,7 +22,7 @@ object frmVenda: TfrmVenda
   object stbBarraStatus: TStatusBar
     Left = 0
     Top = 483
-    Width = 523
+    Width = 524
     Height = 24
     Panels = <
       item
@@ -158,14 +158,17 @@ object frmVenda: TfrmVenda
       Height = 144
       Align = alClient
       DataSource = dtsVenda
+      Options = [dgEditing, dgTitles, dgIndicator, dgColLines, dgRowLines, dgTabs, dgConfirmDelete, dgCancelOnExit]
       TabOrder = 0
       TitleFont.Charset = DEFAULT_CHARSET
       TitleFont.Color = clWindowText
       TitleFont.Height = -11
       TitleFont.Name = 'MS Sans Serif'
       TitleFont.Style = []
+      OnCellClick = dbgVendaCellClick
       OnKeyDown = dbgVendaKeyDown
       OnKeyPress = dbgVendaKeyPress
+      OnTitleClick = dbgVendaTitleClick
     end
   end
   object Panel1: TPanel
@@ -327,7 +330,7 @@ object frmVenda: TfrmVenda
   object pnlBotoes: TPanel
     Left = 0
     Top = 406
-    Width = 523
+    Width = 524
     Height = 77
     Align = alBottom
     TabOrder = 4

@@ -73,6 +73,9 @@ type
     procedure dbgVendaKeyDown(Sender: TObject; var vKey: Word;
       Shift: TShiftState);
     procedure edtVendaExit(Sender: TObject);
+    procedure dbgVendaTitleClick(Column: TColumn);
+    procedure dbgVendaCellClick(Column: TColumn);
+
 
   private
 
@@ -91,6 +94,7 @@ type
    procedure carregaDadosTela;
    procedure carregaDadosCliente;
    procedure carregaDadosProduto;
+   procedure carregaValorTotal;
 
    function ProcessaConfirmacao        : Boolean;
    function ProcessaAlteracao          : Boolean;
@@ -530,6 +534,7 @@ begin
         cdsVenda.Post;
      end;
 
+     
      Result := True;
  end;
 end;
@@ -545,29 +550,36 @@ begin
       CodProdutoExit2;
    end;
 
-//    Alterando a quantidade no Grid de Venda
+//   carregaValorTotal;
 
-   if (vKey = 13) and (dbgVenda.SelectedIndex = 3) then
+//       Alterando a quantidade no Grid de Venda
+
+   if (vKey = 13) and (dbgVenda.SelectedIndex = 3)  then
    begin
-      cdsVenda.Edit;
+      while not cdsVenda.Eof do
       if (cdsVendaQtde.Value >= 1) then
          begin
+            cdsVenda.Edit;
             cdsVendaTotal.Value  := cdsVendaQtde.Value * cdsVendaPreco.Value;
+            cdsVenda.Next;
+            carregaValorTotal;
          end
       else
          cdsVendaTotal.Value  := cdsVendaPreco.Value;
+         cdsVenda.Next;
+         carregaValorTotal;
    end;
 
    // Calculando valor total da Venda
-    vValor := 0;
-    cdsVenda.First;
-    while not cdsVenda.Eof Do
-    begin
-       cdsVenda.Edit;
-       vValor := vValor + cdsVenda.FieldByName('Total').AsFloat;
-       cdsVenda.Next;
-    end;
-    edtTotal.Text := FormatFloat('##0.00',vValor);
+//    vValor := 0;
+//    cdsVenda.First;
+//    while not cdsVenda.Eof Do
+//    begin
+//       cdsVenda.Edit;
+//       vValor := vValor + cdsVenda.FieldByName('Total').AsFloat;
+//       cdsVenda.Next;
+//    end;
+//    edtTotal.Text := FormatFloat('##0.00',vValor);
 end;
 
 procedure TfrmVenda.carregaDadosTela;
@@ -599,6 +611,7 @@ begin
             cdsVendaPreco.Value    :=  vObjColVenda.Retorna(i).ValorUnitario;
             cdsVendaTotal.Value    :=  cdsVendaPreco.Value * cdsVendaQtde.Value;
             ProcessaConsultaProduto;
+
             cdsVenda.Append;
          end;
       end;
@@ -643,7 +656,6 @@ begin
         vEstadoTela := etPadrao;
         DefineEstadoTela;
         DefineEstadoTela;
-
 
         Result  := True;
      end;
@@ -724,21 +736,19 @@ var
    xID_Item : Integer;
 begin
    try
-
-       Result := False;
-
        xID_Item := 0;
 
 
      if (vObjColVenda <> nil) then
+
         FreeAndNil(vObjColVenda);
 
-      vObjColVenda := TColVenda_Item.Create;
+       vObjColVenda := TColVenda_Item.Create;
 
       if vEstadoTela = etIncluir then
       begin
-          cdsVenda.First;
 
+         cdsVenda.First;
          while not cdsVenda.Eof Do
          begin
             xVenda_Item                   := TVenda_Item.Create;
@@ -766,6 +776,7 @@ begin
          while not cdsVenda.Eof Do
 
          begin
+
             xVenda_Item                 := TVenda_Item.Create;
             xVenda_Item.Id_Venda        := xID_Item;
             cdsVenda.Edit;
@@ -794,7 +805,6 @@ begin
           'Falha ao processar os dados da Venda [View]'#13+
           e.Message);
        end;
-
    end;
 end;
 
@@ -803,19 +813,19 @@ procedure TfrmVenda.dbgVendaKeyDown(Sender: TObject; var vKey: Word;
 var
    vI: Integer;
 begin
-
    if vKey = VK_DELETE then
    begin
       if MessageDlg('Deseja excluir esse item?',mtConfirmation,[mbYes,mbNo],0)=mrYes then
       begin
-//         for vI := dbgVenda.SelectedRows.Count - 1  downto 0 do
+         while not cdsVenda.Eof do
+         for vI:= 0 to cdsVenda.RecordCount - 1 do
          begin
-//            cdsVenda.GotoBookmark(Pointer(dbgVenda.SelectedRows.Items[vI]));
+            cdsVenda.Edit;
             cdsVenda.Delete;
+            cdsVenda.Append;
          end;
       end;
    end;
-
 end;
 
 procedure TfrmVenda.carregaDadosCliente;
@@ -887,27 +897,26 @@ end;
 
 function TfrmVenda.ProcessaAlteracao: Boolean;
 begin
- try
-    Result := False;
+   try
+      Result := False;
 
-    if ProcessaVenda_Item  then
-    begin
-       TMessageUtil.Informacao('Dados alterados com sucesso.');
+      if ProcessaVenda_Item  then
+      begin
+         TMessageUtil.Informacao('Dados alterados com sucesso.');
 
-       vEstadoTela := etPadrao;
-       DefineEstadoTela;
-       Result := True;
+         vEstadoTela := etPadrao;
+         DefineEstadoTela;
+         Result := True;
+      end;
 
-    end;
-
- except
+   except
      on E:Exception do
       begin
          Raise Exception.Create(
          'Falha ao alterar os dados do produto [View]: '#13+
          e.Message);
       end;
- end;
+   end;
 end;
 
 function TfrmVenda.ProcessaConsultaProduto: Boolean;
@@ -944,6 +953,50 @@ begin
      Exit;
 
    cdsVendaDescricao.Text     := vObjProduto.Descricao;
+end;
+
+procedure TfrmVenda.dbgVendaTitleClick(Column: TColumn);
+begin
+   cdsVenda.IndexFieldNames := Column.FieldName;
+end;
+
+procedure TfrmVenda.dbgVendaCellClick(Column: TColumn);
+begin
+   dbgVenda.ReadOnly := False;
+   if dbgVenda.SelectedIndex = 3 then
+      begin
+         dbgVenda.Options := dbgVenda.Options + [dgEditing]
+      end
+   else
+      dbgVenda.Options := dbgVenda.Options - [dgEditing];
+end;
+
+procedure TfrmVenda.carregaValorTotal;
+var
+  vValor : Real;
+begin
+   try
+//  Calculando valor total da Venda
+      vValor := 0;
+      cdsVenda.First;
+      while not cdsVenda.Eof Do
+      begin
+         cdsVenda.Edit;
+         vValor := vValor + cdsVenda.FieldByName('Total').AsFloat;
+         cdsVenda.Next;
+      end;
+      edtTotal.Text := FormatFloat('##0.00',vValor);
+
+   except
+      on E:Exception do
+      begin
+         Raise Exception.Create(
+         'Falha ao calcular o valor total geral [View]: '#13+
+         e.Message);
+      end;
+   end;
+
+
 end;
 
 end.
