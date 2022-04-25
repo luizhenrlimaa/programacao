@@ -941,7 +941,7 @@ begin
    if (length(xAux) = 14) then
    begin
       edtCPFCNPJ.Clear;
-     	TMessageUtil.Alerta('CPF Inválido.');
+     	TMessageUtil.Alerta('CNPJ Inválido.');
    end;
   end;
 end;

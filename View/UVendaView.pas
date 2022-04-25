@@ -526,7 +526,6 @@ begin
         cdsVendaTotal.Value        := cdsVendaPreco.Value * cdsVendaQtde.Value;
 
         cdsVenda.Post;
-
      end;
 
     carregaValorTotal;
@@ -556,9 +555,16 @@ begin
             cdsVenda.Next;
          end
       else
-      cdsVendaTotal.Value  := cdsVendaPreco.Value;
-      carregaValorTotal;
-      cdsVenda.Next;
+      begin
+         TMessageUtil.Alerta(
+                'A quantidade informada deve ser maior ou igual a 1');
+         cdsVenda.Edit;
+         cdsVendaQtde.Value := 1;
+         cdsVendaTotal.Value  := cdsVendaPreco.Value;
+         carregaValorTotal;
+         cdsVenda.Next;
+      end;
+
    end;
 end;
 
@@ -570,12 +576,12 @@ begin
 // Carregando dados do cabecalho referente a Venda e ao Cliente
    if (vObjVenda <> nil) then
      begin
-      edtCodCliente.Text :=   IntToStr(vObjVenda.Id_Cliente);
-      edtVenda.Text      :=   IntToStr(vObjVenda.Id);
-      edtData.Text       :=   DateToStr(vObjVenda.DataVenda);
-      edtTotal.Text      :=   FormatFloat('##0.00',vObjVenda.TotalVenda);
+        edtCodCliente.Text :=   IntToStr(vObjVenda.Id_Cliente);
+        edtVenda.Text      :=   IntToStr(vObjVenda.Id);
+        edtData.Text       :=   DateToStr(vObjVenda.DataVenda);
+        edtTotal.Text      :=   FormatFloat('##0.00',vObjVenda.TotalVenda);
 
-      ProcessaConsultaCliente;
+        ProcessaConsultaCliente;
      end;
 // Carregando dados do Grid referende ao produto
    if (vObjColVenda <> nil) then
@@ -755,7 +761,6 @@ begin
          while not cdsVenda.Eof Do
 
          begin
-
             xVenda_Item                 := TVenda_Item.Create;
             xVenda_Item.Id_Venda        := xID_Item;
             cdsVenda.Edit;
@@ -803,6 +808,7 @@ begin
       end;
    end;
 end;
+
 
 procedure TfrmVenda.carregaDadosCliente;
 begin
