@@ -504,38 +504,37 @@ end;
 
 function TfrmVenda.CodProdutoExit2: Boolean;
 begin
- begin
-
  // Abrir formulário de produto ao pressionar enter no código no Grid
-     if (vKey = 13) and (dbgVenda.SelectedIndex = 0)  then
-     begin
-        if frmProdutosPesq = nil then
-        frmProdutosPesq := TfrmProdutosPesq.Create(Application);
-        frmProdutosPesq.ShowModal;
-     end;
+   if (vKey = 13) and (dbgVenda.SelectedIndex = 0)  then
+   begin
+      if frmProdutosPesq = nil then
+      frmProdutosPesq := TfrmProdutosPesq.Create(Application);
+      frmProdutosPesq.ShowModal;
+   end;
 
-     if (frmProdutosPesq.mProdutoID <> 0) then
-     begin
-        cdsVenda.Insert;
+   if (frmProdutosPesq.mProdutoID <> 0) then
+   begin
+      cdsVenda.Insert;
 
-        cdsVendaID.Text            := IntToStr(frmProdutosPesq.mProdutoID);
-        cdsVendaDescricao.Text     := frmProdutosPesq.mProdutoDescricao;
-        cdsVendaUnidade.Text       := 'UN';
-        cdsVendaQtde.Value         := 1;
-        cdsVendaPreco.Text         := FloatToStr(frmProdutosPesq.mProdutoPreco);
-        cdsVendaTotal.Value        := cdsVendaPreco.Value * cdsVendaQtde.Value;
+      cdsVendaID.Text            := IntToStr(frmProdutosPesq.mProdutoID);
+      cdsVendaDescricao.Text     := frmProdutosPesq.mProdutoDescricao;
+      cdsVendaUnidade.Text       := 'UN';
+      cdsVendaQtde.Value         := 1;
+      cdsVendaPreco.Text         := FloatToStr(frmProdutosPesq.mProdutoPreco);
+      cdsVendaTotal.Value        := cdsVendaPreco.Value * cdsVendaQtde.Value;
 
-        cdsVenda.Post;
-     end;
+      cdsVenda.Post;
+   end;
 
     carregaValorTotal;
      
     Result := True;
- end;
+
 end;
 
 procedure TfrmVenda.dbgVendaKeyPress(Sender: TObject; var Key: Char);
 begin
+
 // Chamando função  CodProdutoExit2  ao pressionar enter no código no Grid de Venda
    if (vKey = 13) and (dbgVenda.SelectedIndex = 0)  then
    begin
@@ -564,7 +563,6 @@ begin
          carregaValorTotal;
          cdsVenda.Next;
       end;
-
    end;
 end;
 
@@ -572,7 +570,6 @@ procedure TfrmVenda.carregaDadosTela;
 var
    i : Integer;
 begin
-
 // Carregando dados do cabecalho referente a Venda e ao Cliente
    if (vObjVenda <> nil) then
      begin
@@ -585,23 +582,23 @@ begin
      end;
 // Carregando dados do Grid referende ao produto
    if (vObjColVenda <> nil) then
+   begin
+      cdsVenda.First;
+      for  i:= 0 to pred(vObjColVenda.Count) do
       begin
-         cdsVenda.First;
-         for  i:= 0 to pred(vObjColVenda.Count) do
-         begin
-            cdsVenda.Edit;
+         cdsVenda.Edit;
 
-            cdsVendaID_Venda.Value :=  vObjColVenda.Retorna(i).Id;
-            cdsVendaID.Value       :=  vObjColVenda.Retorna(i).Id_Produto;
-            cdsVendaUnidade.Text   :=  vObjColVenda.Retorna(i).UnidadeSaida;
-            cdsVendaQtde.Text      :=  FloatToStr(vObjColVenda.Retorna(i).Quantidade);
-            cdsVendaPreco.Value    :=  vObjColVenda.Retorna(i).ValorUnitario;
-            cdsVendaTotal.Value    :=  cdsVendaPreco.Value * cdsVendaQtde.Value;
-            ProcessaConsultaProduto;
+         cdsVendaID_Venda.Value :=  vObjColVenda.Retorna(i).Id;
+         cdsVendaID.Value       :=  vObjColVenda.Retorna(i).Id_Produto;
+         cdsVendaUnidade.Text   :=  vObjColVenda.Retorna(i).UnidadeSaida;
+         cdsVendaQtde.Text      :=  FloatToStr(vObjColVenda.Retorna(i).Quantidade);
+         cdsVendaPreco.Value    :=  vObjColVenda.Retorna(i).ValorUnitario;
+         cdsVendaTotal.Value    :=  cdsVendaPreco.Value * cdsVendaQtde.Value;
+         ProcessaConsultaProduto;
 
-            cdsVenda.Append;
-         end;
+         cdsVenda.Append;
       end;
+   end;
 end;
 
 procedure TfrmVenda.btnConfirmarVendaClick(Sender: TObject);
@@ -611,9 +608,9 @@ end;
 
 function TfrmVenda.ProcessaConfirmacao: Boolean;
 begin
- Result := False;
+   Result := False;
 
-  try
+   try
       case vEstadoTela of
          etIncluir:   Result := ProcessaInclusao;
          etAlterar:   Result := ProcessaAlteracao;
@@ -622,10 +619,10 @@ begin
 
       if not Result then
         Exit;
-  except
+   except
       on E: Exception do
       TMessageUtil.Alerta(E.Message);
-  end;
+   end;
 
    Result := True;
 end;
@@ -633,9 +630,7 @@ end;
 function TfrmVenda.ProcessaInclusao: Boolean;
 begin
    try
-
       Result := False;
-
       if ProcessaVenda_Item then
       begin
          TMessageUtil.Informacao('Venda realizada com sucesso.'#13+
@@ -809,7 +804,6 @@ begin
    end;
 end;
 
-
 procedure TfrmVenda.carregaDadosCliente;
 begin
    if (vObjCliente = nil) then
@@ -818,6 +812,7 @@ begin
    edtCodCliente.Text          := IntToStr(vObjCliente.Id);
    edtCliente.Text             := vObjCliente.Nome;
 end;
+
 
 function TfrmVenda.ProcessaConsulta: Boolean;
 begin
@@ -958,7 +953,7 @@ var
   vValor : Real;
 begin
    try
-//  Calculando valor total da Venda
+   // Calculando valor total da Venda
       vValor := 0;
       cdsVenda.First;
       while not cdsVenda.Eof Do
@@ -968,7 +963,6 @@ begin
          cdsVenda.Next;
       end;
       edtTotal.Text := FormatFloat('##0.00',vValor);
-
    except
       on E:Exception do
       begin
