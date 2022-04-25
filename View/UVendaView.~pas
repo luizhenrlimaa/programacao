@@ -532,9 +532,10 @@ begin
         cdsVendaTotal.Value        := cdsVendaPreco.Value * cdsVendaQtde.Value;
 
         cdsVenda.Post;
+
      end;
 
-     
+    
      Result := True;
  end;
 end;
@@ -549,8 +550,6 @@ begin
    begin
       CodProdutoExit2;
    end;
-
-//   carregaValorTotal;
 
 //       Alterando a quantidade no Grid de Venda
 
@@ -570,16 +569,7 @@ begin
          carregaValorTotal;
    end;
 
-   // Calculando valor total da Venda
-//    vValor := 0;
-//    cdsVenda.First;
-//    while not cdsVenda.Eof Do
-//    begin
-//       cdsVenda.Edit;
-//       vValor := vValor + cdsVenda.FieldByName('Total').AsFloat;
-//       cdsVenda.Next;
-//    end;
-//    edtTotal.Text := FormatFloat('##0.00',vValor);
+
 end;
 
 procedure TfrmVenda.carregaDadosTela;
@@ -761,7 +751,7 @@ begin
             xVenda_Item.ValorUnitario     := cdsVendaPreco.Value;
             xVenda_Item.TotalItem         := cdsVendaTotal.Value;
             vObjColVenda.Add(xVenda_Item);
-
+          
             cdsVenda.Next;
          end;
       end;
@@ -817,15 +807,18 @@ begin
    begin
       if MessageDlg('Deseja excluir esse item?',mtConfirmation,[mbYes,mbNo],0)=mrYes then
       begin
-         while not cdsVenda.Eof do
-         for vI:= 0 to cdsVenda.RecordCount - 1 do
+//         while not cdsVenda.Eof do
+//         for vI:= 0 to cdsVenda.RecordCount - 1 do
          begin
-            cdsVenda.Edit;
+//            cdsVenda.Edit;
             cdsVenda.Delete;
-            cdsVenda.Append;
+            carregaValorTotal;
+//            cdsVenda.Append;
          end;
       end;
    end;
+
+  
 end;
 
 procedure TfrmVenda.carregaDadosCliente;
