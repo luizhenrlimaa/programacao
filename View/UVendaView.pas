@@ -535,26 +535,27 @@ begin
 
      end;
 
-    
+     carregaValorTotal;
+     
      Result := True;
  end;
 end;
 
 procedure TfrmVenda.dbgVendaKeyPress(Sender: TObject; var Key: Char);
-Var
-  vValor : Real;
 begin
 
-   // Chamando função  CodProdutoExit2  ao pressionar enter no código no Grid de Venda
+// Chamando função  CodProdutoExit2  ao pressionar enter no código no Grid de Venda
    if (vKey = 13) and (dbgVenda.SelectedIndex = 0)  then
    begin
       CodProdutoExit2;
    end;
 
-//       Alterando a quantidade no Grid de Venda
+// Alterando a quantidade no Grid de Venda
+
 
    if (vKey = 13) and (dbgVenda.SelectedIndex = 3)  then
    begin
+      cdsVenda.First;
       while not cdsVenda.Eof do
       if (cdsVendaQtde.Value >= 1) then
          begin
@@ -568,8 +569,6 @@ begin
          cdsVenda.Next;
          carregaValorTotal;
    end;
-
-
 end;
 
 procedure TfrmVenda.carregaDadosTela;
@@ -800,8 +799,6 @@ end;
 
 procedure TfrmVenda.dbgVendaKeyDown(Sender: TObject; var vKey: Word;
   Shift: TShiftState);
-var
-   vI: Integer;
 begin
    if vKey = VK_DELETE then
    begin
@@ -817,8 +814,6 @@ begin
          end;
       end;
    end;
-
-  
 end;
 
 procedure TfrmVenda.carregaDadosCliente;
