@@ -787,6 +787,8 @@ end;
 
 procedure TfrmVenda.dbgVendaKeyDown(Sender: TObject; var vKey: Word;
   Shift: TShiftState);
+var
+  vI : Integer;
 begin
    if vKey = VK_DELETE then
    begin
@@ -795,10 +797,10 @@ begin
 //         while not cdsVenda.Eof do
 //         for vI:= 0 to cdsVenda.RecordCount - 1 do
          begin
-//          cdsVenda.Edit;
-            cdsVenda.Delete;
-            carregaValorTotal;
-//          cdsVenda.Append;
+//             cdsVenda.Edit;
+             cdsVenda.Delete;
+//             cdsVenda.Post;
+//             carregaValorTotal;
          end;
       end;
    end;
@@ -812,7 +814,6 @@ begin
    edtCodCliente.Text          := IntToStr(vObjCliente.Id);
    edtCliente.Text             := vObjCliente.Nome;
 end;
-
 
 function TfrmVenda.ProcessaConsulta: Boolean;
 begin
@@ -940,7 +941,7 @@ end;
 procedure TfrmVenda.dbgVendaCellClick(Column: TColumn);
 begin
    dbgVenda.ReadOnly := False;
-   if dbgVenda.SelectedIndex = 3 then
+   if (dbgVenda.SelectedIndex = 3) and  (vEstadoTela = etIncluir) then
       begin
          dbgVenda.Options := dbgVenda.Options + [dgEditing]
       end
