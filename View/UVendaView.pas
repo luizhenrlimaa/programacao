@@ -800,7 +800,7 @@ begin
 //             cdsVenda.Edit;
              cdsVenda.Delete;
 //             cdsVenda.Post;
-//             carregaValorTotal;
+             carregaValorTotal;
          end;
       end;
    end;
