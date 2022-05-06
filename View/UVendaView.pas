@@ -765,7 +765,7 @@ begin
             xVenda_Item.UnidadeSaida    := cdsVendaUnidade.Value;
             xVenda_Item.ValorUnitario   := cdsVendaPreco.Value;
             xVenda_Item.TotalItem       := cdsVendaTotal.Value;
-
+      
             if (xVenda_Item.Id = 0) then
                 begin
                  vObjColVenda.Add(xVenda_Item);
@@ -787,8 +787,8 @@ end;
 
 procedure TfrmVenda.dbgVendaKeyDown(Sender: TObject; var vKey: Word;
   Shift: TShiftState);
-var
-  vI : Integer;
+//var
+//  vI : Integer;
 begin
    if vKey = VK_DELETE then
    begin

@@ -1,5 +1,5 @@
 object frmProduto: TfrmProduto
-  Left = 455
+  Left = 456
   Top = 287
   Width = 460
   Height = 312
@@ -89,20 +89,22 @@ object frmProduto: TfrmProduto
       CharCase = ecUpperCase
       TabOrder = 1
     end
-    object edtPreco: TEdit
-      Left = 92
-      Top = 126
-      Width = 68
-      Height = 21
-      MaxLength = 6
-      TabOrder = 3
-    end
     object edtEstoque: TEdit
       Left = 92
       Top = 87
       Width = 67
       Height = 21
       TabOrder = 2
+    end
+    object edtPreco: TNumEdit
+      Left = 93
+      Top = 128
+      Width = 67
+      Height = 21
+      Alignment = taRightJustify
+      Decimals = 2
+      ShowSeparator = True
+      TabOrder = 3
     end
   end
   object stbBarraStatus: TStatusBar

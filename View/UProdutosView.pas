@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, StdCtrls, Buttons, ComCtrls, ExtCtrls, UEnumerationUtil, UProdutoCad,
-  UProduto, UProdutoController, UClassFuncoes;
+  UProduto, UProdutoController, UClassFuncoes, NumEdit;
 
 type
   TfrmProduto = class(TForm)
@@ -16,7 +16,6 @@ type
     lblPreco: TLabel;
     edtCodigo: TEdit;
     edtDescricao: TEdit;
-    edtPreco: TEdit;
     edtEstoque: TEdit;
     stbBarraStatus: TStatusBar;
     pnlBotoes: TPanel;
@@ -28,6 +27,7 @@ type
     btnConfirmar: TBitBtn;
     btnCancelar: TBitBtn;
     btnSair: TBitBtn;
+    edtPreco: TNumEdit;
     procedure btnSairClick(Sender: TObject);
     procedure FormKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
@@ -115,7 +115,7 @@ begin
         LimpaTela;
         stbBarraStatus.Panels[0].Text := EmptyStr;
         stbBarraStatus.Panels[1].Text := EmptyStr;
-
+        
         if (frmProdutos <> nil) and
             (frmProdutos.Active) and
             (btnIncluir.CanFocus) then
@@ -277,6 +277,9 @@ begin
       // Se o compo for do tipo EDIT
       if (Components[i] is TEdit)  then
       (Components[i] as TEdit).Enabled := pOpcao;
+
+      if (Components[i] is TNumEdit)  then
+      (Components[i] as TNumEdit).Enabled := pOpcao;
    end;
 end;
 
@@ -289,6 +292,9 @@ begin
        // Se o compo for do tipo EDIT
       if (Components[i] is TEdit)  then
       (Components[i] as TEdit).Text := EmptyStr;
+
+      if (Components[i] is TNumEdit)  then
+      (Components[i] as TNumEdit).Text := EmptyStr;
   end;
   
     if(vObjProdutoCad <> nil) then
