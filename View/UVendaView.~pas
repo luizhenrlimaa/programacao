@@ -787,22 +787,45 @@ end;
 
 procedure TfrmVenda.dbgVendaKeyDown(Sender: TObject; var vKey: Word;
   Shift: TShiftState);
-//var
-//  vI : Integer;
+var
+   xVenda_Item : TVenda_Item;
+   xID_Item : Integer;
 begin
    if vKey = VK_DELETE then
+   if vEstadoTela = etAlterar then
    begin
-      if MessageDlg('Deseja excluir esse item?',mtConfirmation,[mbYes,mbNo],0)=mrYes then
+
+      cdsVenda.First;
+      while not cdsVenda.Eof Do
+
       begin
-//         while not cdsVenda.Eof do
-//         for vI:= 0 to cdsVenda.RecordCount - 1 do
+         xVenda_Item                 := TVenda_Item.Create;
+         xVenda_Item.Id_Venda        := xID_Item;
+         cdsVenda.Edit;
+         xVenda_Item.Id              := cdsVendaID_Venda.Value;
+         xVenda_Item.Id_Produto      := cdsVendaID.Value;
+         xVenda_Item.Quantidade      := cdsVendaQtde.Value;
+         xVenda_Item.UnidadeSaida    := cdsVendaUnidade.Value;
+         xVenda_Item.ValorUnitario   := cdsVendaPreco.Value;
+         xVenda_Item.TotalItem       := cdsVendaTotal.Value;
+
+         if MessageDlg('Deseja excluir esse item?',mtConfirmation,[mbYes,mbNo],0)=mrYes then
          begin
-//             cdsVenda.Edit;
-             cdsVenda.Delete;
-//             cdsVenda.Post;
-             carregaValorTotal;
+            begin
+                TVendaController.getInstancia.ExcluiVenda(xVenda_Item);
+                TMessageUtil.Informacao('Item exluído com sucesso.');
+                cdsVenda.Delete;
+            end;
          end;
+            carregaValorTotal;
+            cdsVenda.Next;
       end;
+   end
+   else
+   begin
+      TMessageUtil.Informacao('Item exluído com sucesso.');
+      cdsVenda.Delete;
+      carregaValorTotal;
    end;
 end;
 
