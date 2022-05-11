@@ -544,7 +544,7 @@ begin
 // Alterando a quantidade no Grid de Venda
    if (vKey = 13) and (dbgVenda.SelectedIndex = 3)  then
    begin
-      cdsVenda.First;
+//      cdsVenda.First;
       while not cdsVenda.Eof do
       if (cdsVendaQtde.Value >= 1) then
          begin

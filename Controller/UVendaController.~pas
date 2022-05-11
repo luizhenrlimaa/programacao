@@ -12,7 +12,7 @@ type
                        pVenda : TVenda;
                        pColVenda_Item : TColVenda_Item) : Boolean;
         function ExcluiVenda(
-                      pVenda : TVenda) : Boolean;
+                      pVenda_Item: TVenda_Item) : Boolean;
         function BuscaVenda(pID : Integer) : TVenda;
         function BuscaVenda_Item(pID_Venda : Integer) : TColVenda_Item;
         function PesquisaVenda(pVenda : string) : TColVenda;
@@ -95,9 +95,9 @@ begin
    inherited Create;
 end;
 
-function TVendaController.ExcluiVenda(pVenda: TVenda): Boolean;
+function TVendaController.ExcluiVenda(pVenda_Item: TVenda_Item): Boolean;
 var
-   XVendaDAO   : TVendaDAO;
+   XVenda_ItemDAO   : TVenda_ItemDAO;
 begin
   try
     try
@@ -105,14 +105,14 @@ begin
 
        TConexao.get.iniciaTransacao;
 
-       XVendaDAO := TVendaDAO.Create(TConexao.get.getConn);
+       XVenda_ItemDAO := TVenda_ItemDAO.Create(TConexao.get.getConn);
 
 
-       if(pVenda.Id =0) then
+       if(pVenda_Item.Id =0) then
             Exit
        else
        begin
-         XVendaDAO.Deleta(RetornaCondicaoVenda(pVenda.Id));
+         XVenda_ItemDAO.Deleta(RetornaCondicaoVenda(pVenda_Item.Id));
        end;
 
        TConexao.get.confirmaTransacao;
@@ -120,8 +120,8 @@ begin
        Result := True;
 
     finally
-      if (XVendaDAO <> nil) then
-          FreeAndNil(XVendaDAO);
+      if (XVenda_ItemDAO <> nil) then
+          FreeAndNil(XVenda_ItemDAO);
 
     end;
   except
